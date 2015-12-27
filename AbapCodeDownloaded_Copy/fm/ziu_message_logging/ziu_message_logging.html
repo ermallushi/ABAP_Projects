@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZIU_MESSAGE_LOGGING</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZIU_MESSAGE_LOGGING</h2>
+<h3> Description: Message Logging FM</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION ziu_message_logging.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(I_LOG_OBJECT) TYPE  BALOBJ_D<br />
+*"     REFERENCE(I_EXTNUMBER) TYPE  STRING<br />
+*"  CHANGING<br />
+*"     VALUE(T_LOG_MESSAGE) TYPE  BAL_S_MSG OPTIONAL<br />
+*"  EXCEPTIONS<br />
+*"      LOG_HEADER_INCONSISTENT<br />
+*"      LOGGING_ERROR<br />
+*"----------------------------------------------------------------------<br />
+<br />
+* Author :Ermal Lushi<br />
+<br />
+* DESCRIPTION: This function module is used insert messages in the<br />
+* application log<br />
+<br />
+<br />
+<br />
+***********************************************************************<br />
+******************** CONSTANTS, TYPES, DATA ***************************<br />
+***********************************************************************<br />
+
+<div class="codeComment">*       <a href ="global-ziu_message_logging.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;data:&nbsp;gs_return&nbsp;&nbsp;TYPE&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_bal_log_handle&nbsp;TYPE&nbsp;balloghndl.<br />
+<br />
+CONSTANTS: co_bal_object TYPE balobj_d VALUE 'ZMESSAGE',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_bal_subboj&nbsp;TYPE&nbsp;balsubobj&nbsp;VALUE&nbsp;'ZMESSAGESUB'.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;bal_log_create<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_bal_object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_bal_subboj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_bal_log_handle&nbsp;.<br />
+&nbsp;&nbsp;gs_return-type&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;gs_return-number&nbsp;=&nbsp;'001'.<br />
+&nbsp;&nbsp;gs_return-id&nbsp;&nbsp;=&nbsp;'1'.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;PERFORM&nbsp;MSG_ADD<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_bal_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'4'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*  CONSTANTS: c_message TYPE syst-msgid VALUE 'ZMESSAGE',<br />
+*  c_999 TYPE syst-msgno VALUE '001'.<br />
+*<br />
+*  DATA:<br />
+*  l_log_handle TYPE balloghndl,<br />
+*  l_s_log TYPE bal_s_log,<br />
+*  l_dummy TYPE string,<br />
+*  l_ext_no TYPE bal_s_log-extnumber,<br />
+*  l_s_mdef TYPE bal_s_mdef,<br />
+*  wa_t_log_msg type BAL_S_MSG.<br />
+*<br />
+*  IF t_log_message IS NOT INITIAL.<br />
+*<br />
+*    l_s_log-object = i_log_object.<br />
+*    l_s_log-SUBOBJECT = 'ZMESSAGESUB'.<br />
+*    l_ext_no = i_extnumber.<br />
+*    l_s_log-extnumber = l_ext_no.<br />
+*<br />
+*    l_s_log-extnumber = 'Application Log'.             "#EC NOTEXT<br />
+*    l_s_log-aluser    = sy-uname.<br />
+*    l_s_log-alprog    = sy-repid.<br />
+*    l_s_log-context = t_log_message-context.<br />
+*    break elushi.<br />
+** Create the log with header data<br />
+*    CALL FUNCTION 'BAL_LOG_CREATE'<br />
+*      EXPORTING<br />
+*        i_s_log                 = l_s_log<br />
+**      IMPORTING<br />
+**        e_log_handle            = l_log_handle<br />
+*      EXCEPTIONS<br />
+*        log_header_inconsistent = 1<br />
+*        OTHERS                  = 2.<br />
+*<br />
+*    IF sy-subrc &lt;&gt; 0.<br />
+*      CASE sy-subrc.<br />
+*        WHEN 1.<br />
+*          RAISE log_header_inconsistent.<br />
+*        WHEN OTHERS.<br />
+*          RAISE logging_error.<br />
+*      ENDCASE.<br />
+*    ENDIF.<br />
+*<br />
+*    l_s_mdef-log_handle = l_log_handle.<br />
+*<br />
+** Set the default value<br />
+*    CALL FUNCTION 'BAL_GLB_MSG_DEFAULTS_SET'<br />
+*      EXPORTING<br />
+*        i_s_msg_defaults = l_s_mdef<br />
+*      EXCEPTIONS<br />
+*        OTHERS           = 0.<br />
+*<br />
+*** Loop the message table and write the messages into the log<br />
+**    LOOP AT t_log_message into wa_t_log_msg.<br />
+**<br />
+*** Use the message type ZMESSAGE and msg no 999<br />
+*** Issue the message in a dummy variable<br />
+**      MESSAGE ID c_message TYPE t_log_message-msgty NUMBER c_999<br />
+**      WITH t_log_message-msgv1 t_log_message-msgv2<br />
+**      t_log_message-msgv3 t_log_message-msgv4<br />
+**      INTO l_dummy.<br />
+**<br />
+*** The parameters set by message statement will be used<br />
+*** Add the message in the log<br />
+*    PERFORM msg_add USING l_s_log .<br />
+**    ENDLOOP.<br />
+*<br />
+*<br />
+** save logs in the database<br />
+*    CALL FUNCTION 'BAL_DB_SAVE'<br />
+*      EXPORTING<br />
+*        i_save_all       = 'X'<br />
+*      EXCEPTIONS<br />
+*        log_not_found    = 1<br />
+*        save_not_allowed = 2<br />
+*        numbering_error  = 3<br />
+*        OTHERS           = 4.<br />
+*    IF sy-subrc &lt;&gt; 0.<br />
+*      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno<br />
+*      WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.<br />
+*    ENDIF.<br />
+*<br />
+*  ENDIF.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

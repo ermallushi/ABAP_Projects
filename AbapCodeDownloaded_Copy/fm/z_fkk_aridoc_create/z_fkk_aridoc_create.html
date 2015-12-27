@@ -1,0 +1,1710 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_FKK_ARIDOC_CREATE</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_FKK_ARIDOC_CREATE</h2>
+<h3> Description: Buche FI-CA-Beleg zur Anpassungsanforderungsposition</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_fkk_aridoc_create.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(IS_ARI_ATTR) TYPE  FKK_CRM_ARI_ATTR<br />
+*"     REFERENCE(IT_REFERENCE) TYPE  FKK_CRM_ARI_REF_T OPTIONAL<br />
+*"     REFERENCE(IV_HEADER_GUID) TYPE  GUID<br />
+*"     REFERENCE(IV_HEADER_ID) TYPE  CRMT_OBJECT_ID_DB<br />
+*"     REFERENCE(IV_IS_DISPUTE) TYPE  BOOLE_D OPTIONAL<br />
+*"     REFERENCE(IV_BLDAT) TYPE  BLDAT DEFAULT SY-DATUM<br />
+*"     REFERENCE(IV_BUDAT) TYPE  BUDAT_KK DEFAULT SY-DATUM<br />
+*"  EXPORTING<br />
+*"     REFERENCE(EV_OPBEL) TYPE  OPBEL_KK<br />
+*"     REFERENCE(ET_RETURN) TYPE  BAPIRET2_TAB<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_fkk_aridoc_create.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CONSTANTS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_bus_proces_snd&nbsp;&nbsp;TYPE&nbsp;bapicrmobj-objclass&nbsp;VALUE&nbsp;'BUSPROCESSND',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_response&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapicrmobj-obj_name&nbsp;VALUE&nbsp;'RESPONSE_ARIDOC',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_response_struc&nbsp;&nbsp;TYPE&nbsp;tabname30&nbsp;VALUE&nbsp;'FKK_CRM_ARIDOC_RESPONSE',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out_change_from_r3&nbsp;TYPE&nbsp;char2&nbsp;VALUE&nbsp;'09',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_herkf_a1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;herkf_kk&nbsp;VALUE&nbsp;'A1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_herkf_a2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;herkf_kk&nbsp;VALUE&nbsp;'A2',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_buber_1075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tfk033f-buber&nbsp;VALUE&nbsp;'1075',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_objtyp_credit&nbsp;&nbsp;&nbsp;TYPE&nbsp;swo_objtyp&nbsp;VALUE&nbsp;'BUS2000162',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_objtyp_debit&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;swo_objtyp&nbsp;VALUE&nbsp;'BUS2000167',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_consumer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;consumer&nbsp;VALUE&nbsp;'CRM',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_acadm_01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;acadm_kk&nbsp;VALUE&nbsp;'01',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_acadm_02&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;acadm_kk&nbsp;VALUE&nbsp;'02'.<br />
+<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_tfk033d&nbsp;&nbsp;&nbsp;TYPE&nbsp;tfk033d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkko,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkopk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkopk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkopk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_crmrfcpar&nbsp;TYPE&nbsp;crmrfcpar,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txjcd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;txjcd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_acadm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;acadm_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;boole_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_string&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop_template&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr&nbsp;&nbsp;TYPE&nbsp;fkk_crm_ari_attr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_applk&nbsp;&nbsp;TYPE&nbsp;applk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_argrd&nbsp;&nbsp;TYPE&nbsp;argrd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fkkvkp&nbsp;TYPE&nbsp;fkkvkp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkop&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapidfkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkopk&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapidfkkopk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop&nbsp;TYPE&nbsp;bapidfkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk&nbsp;TYPE&nbsp;bapidfkkopk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkko&nbsp;TYPE&nbsp;bapidfkkko,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;documentnumber&nbsp;LIKE&nbsp;&nbsp;bapidfkkko-doc_no,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;LIKE&nbsp;&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;division&nbsp;TYPE&nbsp;spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vtkey&nbsp;TYPE&nbsp;vtkey_kk.<br />
+<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_fkkop&gt;&nbsp;TYPE&nbsp;fkkop.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;et_return.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- read customizing<br />
+************************************************************************<br />
+<br />
+* -- determine APPLK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;gv_applk&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_GET_APPLICATION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_appl_selected&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- check existence of adjustment request reason<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;gv_argrd&nbsp;&lt;&gt;&nbsp;is_ari_attr-argrd&nbsp;OR&nbsp;gv_argrd&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;argrd&nbsp;FROM&nbsp;tfk069<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;gv_argrd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;argrd&nbsp;=&nbsp;is_ari_attr-argrd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;102&nbsp;INTO&nbsp;lv_string&nbsp;WITH&nbsp;is_ari_attr-argrd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- read posting area 1075<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_tfk033d-applk&nbsp;=&nbsp;gv_applk.<br />
+&nbsp;&nbsp;ls_tfk033d-buber&nbsp;=&nbsp;co_buber_1075.<br />
+&nbsp;&nbsp;ls_tfk033d-key01&nbsp;=&nbsp;is_ari_attr-argrd.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ACCOUNT_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_tfk033d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tfk033d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_tfk033d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_tfk033d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_in_input_data&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nothing_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ACCOUNT_DETERMINE_1075'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- determine logical system (CRM)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;get_crmrfcpar&nbsp;CHANGING&nbsp;ls_crmrfcpar.<br />
+&nbsp;&nbsp;IF&nbsp;ls_crmrfcpar&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;025&nbsp;INTO&nbsp;lv_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- determine referenced FI-CA documents<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_document&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_dm_documents,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_documents&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_dm_t_documents,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_documents_2&nbsp;TYPE&nbsp;fkk_dm_t_documents,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_invoice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkdm_s_invid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_invoices&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkdm_t_invid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ci_objects&nbsp;&nbsp;TYPE&nbsp;fkkdm_s_ci_objects,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_ci_objects&nbsp;&nbsp;TYPE&nbsp;fkkdm_t_ci_objects,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_dcobj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fdm_dcobj,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_dispute_case_guid&nbsp;TYPE&nbsp;sysuuid_c.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_reference&gt;&nbsp;TYPE&nbsp;fkk_crm_ari_ref,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_document&gt;&nbsp;&nbsp;TYPE&nbsp;fkk_dm_documents,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_dcobj&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fdm_dcobj.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- a) Adjustment Request Item was created for an FI-CA invoice<br />
+*       or a utilities bill<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;iv_is_dispute&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_documents,&nbsp;lt_invoices,&nbsp;lt_ci_objects.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_reference&nbsp;ASSIGNING&nbsp;&lt;fs_reference&gt;&nbsp;WHERE&nbsp;ari_guid&nbsp;=&nbsp;is_ari_attr-ari_guid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_reference&gt;-bor_type&nbsp;=&nbsp;'CA_DOC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_document-opbel&nbsp;=&nbsp;&lt;fs_reference&gt;-bor_key.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_document&nbsp;TO&nbsp;lt_documents.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;&lt;fs_reference&gt;-bor_type(3)&nbsp;=&nbsp;'CI_'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_ci_objects.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ci_objects-obj_type&nbsp;=&nbsp;&lt;fs_reference&gt;-bor_type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ci_objects-obj_key&nbsp;&nbsp;=&nbsp;&lt;fs_reference&gt;-bor_key.<br />
+   </div>
+   <div class="codeComment">
+*       ls_ci_objects-xinfo  keep initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_ci_objects&nbsp;TO&nbsp;lt_ci_objects.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_invoice-invid&nbsp;=&nbsp;&lt;fs_reference&gt;-bor_key.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_invoice&nbsp;TO&nbsp;lt_invoices.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lt_invoices&nbsp;&nbsp;&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;NOT&nbsp;lt_ci_objects&nbsp;IS&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+* -- determine FI-CA documents from invoices or CI-objects<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DISPUTE_DOC_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_invoices&nbsp;&nbsp;&nbsp;=&nbsp;lt_invoices<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_ci_objects&nbsp;=&nbsp;lt_ci_objects<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_documents&nbsp;&nbsp;=&nbsp;lt_documents_2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LINES&nbsp;OF&nbsp;lt_documents_2&nbsp;TO&nbsp;lt_documents.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+* -- b) adjustment request item was created for a dispute<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+* -- determine dispute case GUID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;case_guid_loc&nbsp;INTO&nbsp;lv_dispute_case_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fdm_dcobj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;logsys&nbsp;=&nbsp;ls_crmrfcpar-rem_logsys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;obj_type&nbsp;=&nbsp;'BUS2000120'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;obj_key&nbsp;=&nbsp;iv_header_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;relation&nbsp;=&nbsp;'F3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+* -- determine all the disputed accounting documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FDM_LOCAL_GET_OBJECTS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_dc_guid_loc&nbsp;&nbsp;=&nbsp;lv_dispute_case_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_relation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'F1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_dcobj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_dcobj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_entry_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_dcobj&nbsp;ASSIGNING&nbsp;&lt;fs_dcobj&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_dcobj&gt;-obj_type&nbsp;=&nbsp;'CA_DOC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_document-opbel&nbsp;=&nbsp;&lt;fs_dcobj&gt;-obj_key.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_document&nbsp;TO&nbsp;lt_documents.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- determine involved contract accounts from FI-CA documents<br />
+* -- (if not unique!)<br />
+************************************************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_msdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_msdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkop.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_op&gt;&nbsp;TYPE&nbsp;fkkop.<br />
+<br />
+&nbsp;&nbsp;ls_ari_attr&nbsp;=&nbsp;is_ari_attr.<br />
+&nbsp;&nbsp;IF&nbsp;is_ari_attr-vkont&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_documents&nbsp;ASSIGNING&nbsp;&lt;fs_document&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_BP_LINE_ITEMS_SEL_BY_OPBEL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_opbel&nbsp;&nbsp;=&nbsp;&lt;fs_document&gt;-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_fkkop&nbsp;=&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_op&nbsp;ASSIGNING&nbsp;&lt;fs_op&gt;.<br />
+   </div>
+   <div class="codeComment">
+* only collect amounts for different VKONT (do not fill other fields from &lt;FS_OP&gt; in ls_msdat!)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-vkont&nbsp;=&nbsp;&lt;fs_op&gt;-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-vtref&nbsp;=&nbsp;&lt;fs_op&gt;-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-subap&nbsp;=&nbsp;&lt;fs_op&gt;-subap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-betrw&nbsp;=&nbsp;abs(&nbsp;&lt;fs_op&gt;-betrw&nbsp;).<br />
+   </div>
+   <div class="codeComment">
+* TODO: convert into same currency? which one - dispute currency if dispute related?<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLLECT&nbsp;ls_msdat&nbsp;INTO&nbsp;lt_msdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* if VKONT is unique within involved FI-CA doc, set it now fix (as if it were sent by CRM)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lines(&nbsp;lt_msdat&nbsp;)&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-vkont&nbsp;=&nbsp;ls_msdat-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-vtref&nbsp;=&nbsp;ls_msdat-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-subap&nbsp;=&nbsp;ls_msdat-subap.<br />
+   </div>
+   <div class="codeComment">
+* ...if not unique, take VKONT with highest amount in items<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_msdat&nbsp;BY&nbsp;betrw&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_msdat&nbsp;INTO&nbsp;ls_msdat&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-vkont&nbsp;=&nbsp;ls_msdat-vkont.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"only&nbsp;here&nbsp;LS_ARI&nbsp;may&nbsp;differ&nbsp;from&nbsp;IS_ARI<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-vtref&nbsp;=&nbsp;ls_msdat-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr-subap&nbsp;=&nbsp;ls_msdat-subap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-vkont&nbsp;=&nbsp;is_ari_attr-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-vtref&nbsp;=&nbsp;is_ari_attr-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msdat-subap&nbsp;=&nbsp;is_ari_attr-subap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_msdat&nbsp;TO&nbsp;lt_msdat.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- create document header (DFKKKO)<br />
+************************************************************************<br />
+<br />
+* -- origin<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;is_ari_attr-bor_type&nbsp;=&nbsp;co_objtyp_credit.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkko-herkf&nbsp;=&nbsp;co_herkf_a1.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;is_ari_attr-bor_type&nbsp;=&nbsp;co_objtyp_debit.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkko-herkf&nbsp;=&nbsp;co_herkf_a2.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_HERKF_A1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_HERKF_A2'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+   </div>
+   <div class="codeComment">
+* -- reference document number<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-xblnr&nbsp;=&nbsp;iv_header_id.<br />
+   </div>
+   <div class="codeComment">
+* -- reference business transaction<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-awtyp&nbsp;=&nbsp;'CRMAR'.<br />
+&nbsp;&nbsp;ls_fkkko-awkey&nbsp;=&nbsp;iv_header_id.<br />
+&nbsp;&nbsp;ls_fkkko-awsys&nbsp;=&nbsp;ls_crmrfcpar-rem_logsys.<br />
+   </div>
+   <div class="codeComment">
+* -- document type<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-blart&nbsp;=&nbsp;ls_tfk033d-fun01.<br />
+   </div>
+   <div class="codeComment">
+* -- posting reason<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-abgrd&nbsp;=&nbsp;ls_tfk033d-key01.<br />
+   </div>
+   <div class="codeComment">
+* -- applk<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-applk&nbsp;=&nbsp;gv_applk.<br />
+   </div>
+   <div class="codeComment">
+* -- currency<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-waers&nbsp;=&nbsp;is_ari_attr-waers.<br />
+   </div>
+   <div class="codeComment">
+* -- document date<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-bldat&nbsp;=&nbsp;sy-datum.<br />
+   </div>
+   <div class="codeComment">
+* -- posting date<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-budat&nbsp;=&nbsp;sy-datum.<br />
+   </div>
+   <div class="codeComment">
+* -- reconciliation key<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_CRM_GENERAL_FIKEY_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_applk&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_herkf&nbsp;=&nbsp;ls_fkkko-herkf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_fikey&nbsp;=&nbsp;ls_fkkko-fikey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0&nbsp;OR&nbsp;ls_fkkko-fikey&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*dbitanga: adding posting reason LS_FKKO-HERKF<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkko-herkf&nbsp;=&nbsp;'A1'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*end of change<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKKO_COMPLETE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- create partner position (DFKKOP)<br />
+************************************************************************<br />
+<br />
+* -- fill duplicate header/position fields with information<br />
+*    contained in header<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_fkkko&nbsp;TO&nbsp;ls_fkkop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- master data - GPART/VKONT/VTREF/SUBAP/WAERS<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;is_ari_attr&nbsp;TO&nbsp;ls_fkkop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* --fix VKONT from involved FI-CA documents?<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;&nbsp;is_ari_attr-vkont&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;AND&nbsp;ls_ari_attr-vkont&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop-vkont&nbsp;=&nbsp;ls_ari_attr-vkont.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- determine tax jurisdiction code<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;&nbsp;gs_fkkvkp-gpart&nbsp;&lt;&gt;&nbsp;ls_fkkop-gpart<br />
+&nbsp;&nbsp;AND&nbsp;gs_fkkvkp-vkont&nbsp;&lt;&gt;&nbsp;ls_fkkop-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;fkkvkp&nbsp;INTO&nbsp;gs_fkkvkp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;gpart&nbsp;=&nbsp;ls_fkkop-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;=&nbsp;ls_fkkop-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txjcd&nbsp;=&nbsp;gs_fkkvkp-txjcd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_txjcd&nbsp;=&nbsp;gs_fkkvkp-txjcd.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ls_fkkop-txjcd&nbsp;=&nbsp;lv_txjcd.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- amount<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkop-betrw&nbsp;=&nbsp;is_ari_attr-amount.<br />
+   </div>
+   <div class="codeComment">
+* -- assumption: always one position (DFKKOP) per document (DFKKKO)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkop-opupk&nbsp;=&nbsp;'0001'.<br />
+   </div>
+   <div class="codeComment">
+* -- company code<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_STDBK_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_stdbk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_stdbk_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+* -- main / sub transaction<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkop-hvorg&nbsp;=&nbsp;ls_tfk033d-fun02.<br />
+&nbsp;&nbsp;ls_fkkop-tvorg&nbsp;=&nbsp;ls_tfk033d-fun03.<br />
+   </div>
+   <div class="codeComment">
+* -- VERKZ<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fkkop-verkz&nbsp;=&nbsp;ls_tfk033d-fun04.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- set due date<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;is_ari_attr-faedn&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop-faedn&nbsp;=&nbsp;is_ari_attr-faedn.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop-faedn&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- event 1102 - OP-substitution<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;event_1102&nbsp;CHANGING&nbsp;ls_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_error.<br />
+&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- event 1101 - HKONT determination<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;event_1101&nbsp;USING&nbsp;ls_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_fkkop-hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_error.<br />
+&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;UNPACK&nbsp;is_ari_attr-vtref&nbsp;TO&nbsp;i_vtkey.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;stdsp&nbsp;FROM&nbsp;dfkk_vt_i&nbsp;INTO&nbsp;division&nbsp;WHERE&nbsp;vtkey&nbsp;=&nbsp;i_vtkey.<br />
+<br />
+&nbsp;&nbsp;ls_fkkop-spart&nbsp;=&nbsp;division.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOP_ADD_DEFAULTS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_xfaedn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_default_segment&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOP_COMPLETE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fkkop&nbsp;TO&nbsp;lt_fkkop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- event 2814<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;lv_rc&nbsp;TYPE&nbsp;sysubrc.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;event_2814&nbsp;TABLES&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_msdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_documents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_ci_objects<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ari_attr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;lv_rc.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lv_rc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- determine tax lines<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_fkktaxexc&nbsp;TYPE&nbsp;fkktaxexc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txdat&nbsp;TYPE&nbsp;txdat_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txexk&nbsp;TYPE&nbsp;txexk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_taxline&nbsp;TYPE&nbsp;fkktaxlin,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_taxlines&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkktaxlin.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- determine tax date<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fkkop&nbsp;INTO&nbsp;ls_fkkop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- MWSKZ in FKKOP is determined via HVORG/TVORG<br />
+*    no MWSKZ determined -&gt; tax lines creation makes no sense<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;NOT&nbsp;ls_fkkop-mwskz&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_fkkop-txdat&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txdat&nbsp;=&nbsp;ls_fkkko-bldat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_txdat&nbsp;=&nbsp;ls_fkkop-txdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- determine tax exemptions<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_fkkop&nbsp;TO&nbsp;ls_fkktaxexc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_TAX_EXEMPT_KEY_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkktaxexc&nbsp;=&nbsp;ls_fkktaxexc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_exc_key&nbsp;&nbsp;&nbsp;=&nbsp;lv_txexk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- create tax lines<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_TAX_LINES_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_waers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko-waers<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_betrw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-betrw<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_mwskz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkop-mwskz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_txjcd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_txjcd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_txdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_txdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_exc_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_txexk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_taxlines&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_taxlines<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_taxlines&nbsp;INTO&nbsp;ls_taxline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_taxline&nbsp;TO&nbsp;ls_fkkopk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkopk-betrw&nbsp;=&nbsp;0&nbsp;-&nbsp;ls_taxline-sbetw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkopk-sbasw&nbsp;=&nbsp;0&nbsp;-&nbsp;ls_taxline-sbasw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkopk-bukrs&nbsp;=&nbsp;ls_fkkop-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkopk-opupk&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fkkopk&nbsp;TO&nbsp;lt_fkkopk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- create G/L-popsition(s) (DFKKOPK)<br />
+************************************************************************<br />
+<br />
+* -- determine ACADM<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lv_acadm&nbsp;=&nbsp;ls_tfk033d-fun05.<br />
+&nbsp;&nbsp;IF&nbsp;lv_acadm&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;(&nbsp;lv_acadm&nbsp;=&nbsp;gc_acadm_02&nbsp;AND&nbsp;lt_documents&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_acadm&nbsp;=&nbsp;gc_acadm_01.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CASE&nbsp;lv_acadm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_acadm_02.<br />
+   </div>
+   <div class="codeComment">
+* -- inheritance of the dominant account assignment<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;det_dominant_op&nbsp;TABLES&nbsp;lt_documents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ls_fkkop_template.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fkkop&nbsp;ASSIGNING&nbsp;&lt;fs_fkkop&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_fkkop&gt;-prctr&nbsp;=&nbsp;ls_fkkop_template-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_fkkop&gt;-gsber&nbsp;=&nbsp;ls_fkkop_template-gsber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_fkkop&gt;-segment&nbsp;=&nbsp;ls_fkkop_template-segment.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOP_COMPLETE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_fkkop&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;event_1100&nbsp;TABLES&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;lv_error.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;"&nbsp;gc_acadm_01<br />
+   </div>
+   <div class="codeComment">
+* -- event 1100<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;event_1100&nbsp;TABLES&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;lv_error.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fkkopk&nbsp;INTO&nbsp;ls_fkkopk.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_fkkopk-sbasw&nbsp;EQ&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+* -- set CO data<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOPK_ADD_CO_DEFAULT_DATA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- set cash forecast level out of GL master data<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_CASH_FORECAST_FOR_FKKOPK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkopk-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_hkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkopk-hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_fdlev&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkopk-fdlev<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOPK_COMPLETE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- balance check<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_BALANCE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- store the relationships in table DFKKOBJRL<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_fkkoprel&nbsp;TYPE&nbsp;fkkoprel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fkkoprel&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkoprel.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- relation: created document &lt;-&gt; CRM adjustment request item<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;ls_fkkoprel-opupk.&nbsp;&nbsp;"&nbsp;relation&nbsp;on&nbsp;document&nbsp;header<br />
+&nbsp;&nbsp;ls_fkkoprel-objrl&nbsp;=&nbsp;'10'.&nbsp;"&nbsp;10&nbsp;=&nbsp;adjustment&nbsp;request&nbsp;item<br />
+&nbsp;&nbsp;ls_fkkoprel-objty&nbsp;=&nbsp;'04'.<br />
+&nbsp;&nbsp;ls_fkkoprel-objky&nbsp;=&nbsp;is_ari_attr-ari_guid.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_fkkoprel&nbsp;TO&nbsp;lt_fkkoprel.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- relation: created document &lt;-&gt; dispute case GUID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;iv_is_dispute&nbsp;=&nbsp;abap_true&nbsp;AND&nbsp;NOT&nbsp;lv_dispute_case_guid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_fkkoprel-opupk.&nbsp;&nbsp;"&nbsp;relation&nbsp;on&nbsp;document&nbsp;header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objrl&nbsp;=&nbsp;'02'.&nbsp;"&nbsp;02&nbsp;=&nbsp;receivables&nbsp;adjustment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objty&nbsp;=&nbsp;'03'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objky&nbsp;=&nbsp;lv_dispute_case_guid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fkkoprel&nbsp;TO&nbsp;lt_fkkoprel.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- relation: created document &lt;-&gt; FI-CA documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_documents&nbsp;INTO&nbsp;ls_document.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_fkkoprel-opupk.&nbsp;&nbsp;"&nbsp;relation&nbsp;on&nbsp;document&nbsp;header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objrl&nbsp;=&nbsp;'02'.&nbsp;"&nbsp;02&nbsp;=&nbsp;receivables&nbsp;adjustment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objty&nbsp;=&nbsp;'01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkoprel-objky&nbsp;=&nbsp;ls_document-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fkkoprel&nbsp;TO&nbsp;lt_fkkoprel.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+* -- create document<br />
+************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_CREATE_DOC'<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_fkkko<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_update_task&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_resob&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;resob&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1004436<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_resky&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;resky&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1004436<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;testrun<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_opbel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ev_opbel<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkopk<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkoprel&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkoprel<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_bapiret_from_sy&nbsp;CHANGING&nbsp;et_return.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_SET_HANDLER_FOR_DEQUEUE'<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fikey&nbsp;=&nbsp;ls_fkkko-fikey.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;SELECT&nbsp;single&nbsp;*&nbsp;FROM&nbsp;ls_fkkop&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_fkkop.<br />
+&nbsp;&nbsp;"&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;ls_fkkopk&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;t_fkkopk.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;kopiranje&nbsp;originalne&nbsp;strukture&nbsp;doc.&nbsp;headera&nbsp;u&nbsp;strukturu&nbsp;za&nbsp;BAPI<br />
+&nbsp;&nbsp;wa_fkkko-doc_no&nbsp;=&nbsp;ls_fkkko-opbel.<br />
+&nbsp;&nbsp;wa_fkkko-fikey&nbsp;=&nbsp;ls_fkkko-fikey.<br />
+&nbsp;&nbsp;wa_fkkko-appl_area&nbsp;=&nbsp;ls_fkkko-applk.<br />
+&nbsp;&nbsp;wa_fkkko-doc_type&nbsp;=&nbsp;ls_fkkko-blart.<br />
+&nbsp;&nbsp;wa_fkkko-doc_source_key&nbsp;=&nbsp;ls_fkkko-herkf.<br />
+&nbsp;&nbsp;wa_fkkko-created_by&nbsp;=&nbsp;ls_fkkko-ernam.<br />
+&nbsp;&nbsp;wa_fkkko-entry_date&nbsp;=&nbsp;ls_fkkko-cpudt.<br />
+&nbsp;&nbsp;wa_fkkko-entry_time&nbsp;=&nbsp;ls_fkkko-cputm.<br />
+&nbsp;&nbsp;wa_fkkko-currency&nbsp;=&nbsp;ls_fkkko-waers.<br />
+&nbsp;&nbsp;wa_fkkko-doc_date&nbsp;=&nbsp;iv_bldat.<br />
+&nbsp;&nbsp;wa_fkkko-post_date&nbsp;=&nbsp;iv_budat.<br />
+&nbsp;&nbsp;wa_fkkko-trans_date&nbsp;=&nbsp;ls_fkkko-wwert.<br />
+&nbsp;&nbsp;wa_fkkko-ref_doc_no&nbsp;=&nbsp;ls_fkkko-xblnr.<br />
+&nbsp;&nbsp;wa_fkkko-return_reason&nbsp;=&nbsp;ls_fkkko-rlgrd.<br />
+&nbsp;&nbsp;wa_fkkko-charge_off_reason&nbsp;=&nbsp;ls_fkkko-abgrd.<br />
+&nbsp;&nbsp;wa_fkkko-single_doc&nbsp;=&nbsp;ls_fkkko-xeibh.<br />
+&nbsp;&nbsp;wa_fkkko-valuation_doc&nbsp;=&nbsp;ls_fkkko-xbwer.<br />
+&nbsp;&nbsp;wa_fkkko-obj_type&nbsp;=&nbsp;ls_fkkko-awtyp.<br />
+&nbsp;&nbsp;wa_fkkko-obj_key&nbsp;=&nbsp;ls_fkkko-awkey.<br />
+&nbsp;&nbsp;wa_fkkko-reversed_doc&nbsp;=&nbsp;ls_fkkko-stbel.<br />
+&nbsp;&nbsp;wa_fkkko-coc_category&nbsp;=&nbsp;ls_fkkko-bltyp.<br />
+&nbsp;&nbsp;wa_fkkko-clear_info&nbsp;=&nbsp;ls_fkkko-aginf.<br />
+&nbsp;&nbsp;wa_fkkko-tax_comp_code&nbsp;=&nbsp;ls_fkkko-stbuk.<br />
+&nbsp;&nbsp;wa_fkkko-sample_doc&nbsp;=&nbsp;ls_fkkko-xmbel.<br />
+&nbsp;&nbsp;wa_fkkko-obj_sys&nbsp;=&nbsp;ls_fkkko-awsys.<br />
+&nbsp;&nbsp;wa_fkkko-cm_message_id&nbsp;=&nbsp;ls_fkkko-prtid.<br />
+<br />
+&nbsp;&nbsp;"&nbsp;kopiranje&nbsp;tablice&nbsp;fkkop&nbsp;u&nbsp;strukturu&nbsp;spremnu&nbsp;za&nbsp;BAPI<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fkkop&nbsp;INTO&nbsp;ws_fkkop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-doc_no&nbsp;=&nbsp;ws_fkkop-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-rep_item&nbsp;=&nbsp;ws_fkkop-opupw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-item&nbsp;=&nbsp;ws_fkkop-opupk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-sub_item&nbsp;=&nbsp;ws_fkkop-opupz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-comp_code&nbsp;=&nbsp;ws_fkkop-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-bus_area&nbsp;=&nbsp;ws_fkkop-gsber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-status&nbsp;=&nbsp;ws_fkkop-augst.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-buspartner&nbsp;=&nbsp;ws_fkkop-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-contract&nbsp;=&nbsp;ws_fkkop-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-contract2&nbsp;=&nbsp;ws_fkkop-vtre2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-cont_acct&nbsp;=&nbsp;ws_fkkop-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-sub_doc&nbsp;=&nbsp;ws_fkkop-abwbl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-doc_cat&nbsp;=&nbsp;ws_fkkop-abwtp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-appl_area&nbsp;=&nbsp;ws_fkkop-applk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-main_trans&nbsp;=&nbsp;ws_fkkop-hvorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-sub_trans&nbsp;=&nbsp;ws_fkkop-tvorg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-actdeterid&nbsp;=&nbsp;ws_fkkop-kofiz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-division&nbsp;=&nbsp;ws_fkkop-spart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-g_l_acct&nbsp;=&nbsp;ws_fkkop-hkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_code&nbsp;=&nbsp;ws_fkkop-mwskz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-down_pmnt&nbsp;=&nbsp;ws_fkkop-xanza.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-stat_key&nbsp;=&nbsp;ws_fkkop-stakz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-doc_date&nbsp;=&nbsp;iv_bldat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-post_date&nbsp;=&nbsp;iv_budat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-text&nbsp;=&nbsp;ws_fkkop-optxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-net_date&nbsp;=&nbsp;ws_fkkop-faedn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-disc_due&nbsp;=&nbsp;ws_fkkop-faeds.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-only_off&nbsp;=&nbsp;ws_fkkop-verkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-deferral&nbsp;=&nbsp;ws_fkkop-studt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-disc_rate&nbsp;=&nbsp;ws_fkkop-sktpz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-no_dunning&nbsp;=&nbsp;ws_fkkop-xmanl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tran_rate&nbsp;=&nbsp;ws_fkkop-kursf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-currency&nbsp;=&nbsp;ws_fkkop-waers.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_loc_curr&nbsp;=&nbsp;ws_fkkop-betrh.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount&nbsp;=&nbsp;ws_fkkop-betrw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_par2_curr&nbsp;=&nbsp;ws_fkkop-betr2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_par3_curr&nbsp;=&nbsp;ws_fkkop-betr3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-discount_base&nbsp;=&nbsp;ws_fkkop-skfbt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount_loc_curr&nbsp;=&nbsp;ws_fkkop-sbeth.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount&nbsp;=&nbsp;ws_fkkop-sbetw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount_par2_curr&nbsp;=&nbsp;ws_fkkop-sbet2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount_par3_curr&nbsp;=&nbsp;ws_fkkop-sbet3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_acct&nbsp;=&nbsp;ws_fkkop-mwsko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-offset_tax&nbsp;=&nbsp;ws_fkkop-mwvko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-pmnt_block&nbsp;=&nbsp;ws_fkkop-spzah.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-pmnt_meth&nbsp;=&nbsp;ws_fkkop-pymet.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-person_no&nbsp;=&nbsp;ws_fkkop-pernr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-grouping&nbsp;=&nbsp;ws_fkkop-grkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-period_key&nbsp;=&nbsp;ws_fkkop-persl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-chg_block&nbsp;=&nbsp;ws_fkkop-xaesp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-cleardate&nbsp;=&nbsp;ws_fkkop-augdt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-cleardocno&nbsp;=&nbsp;ws_fkkop-augbl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-cl_postdte&nbsp;=&nbsp;ws_fkkop-augbd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-clear_reas&nbsp;=&nbsp;ws_fkkop-augrd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-clrg_curr&nbsp;=&nbsp;ws_fkkop-augwa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_clear&nbsp;=&nbsp;ws_fkkop-augbt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount_clear&nbsp;=&nbsp;ws_fkkop-augbs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-val_date&nbsp;=&nbsp;ws_fkkop-augvd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-canceled&nbsp;=&nbsp;ws_fkkop-augob.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-no_reps&nbsp;=&nbsp;ws_fkkop-whang.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-repet_grp&nbsp;=&nbsp;ws_fkkop-whgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-line_item&nbsp;=&nbsp;ws_fkkop-xeiph.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-dunn_proc&nbsp;=&nbsp;ws_fkkop-mahnv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-dunn_block&nbsp;=&nbsp;ws_fkkop-mansp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-check_clng&nbsp;=&nbsp;ws_fkkop-xaugp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-calc_perlo&nbsp;=&nbsp;ws_fkkop-abrzu.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-calc_perhi&nbsp;=&nbsp;ws_fkkop-abrzo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-plan_grp&nbsp;=&nbsp;ws_fkkop-fdgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-plan_level&nbsp;=&nbsp;ws_fkkop-fdlev.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-cm_ex_days&nbsp;=&nbsp;ws_fkkop-fdztg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_planned&nbsp;=&nbsp;ws_fkkop-fdwbt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-part_clrg&nbsp;=&nbsp;ws_fkkop-xtaus.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-restrict&nbsp;=&nbsp;ws_fkkop-augrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-paymnt_grp&nbsp;=&nbsp;ws_fkkop-pygrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-int_block&nbsp;=&nbsp;ws_fkkop-sperz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-int_info&nbsp;=&nbsp;ws_fkkop-infoz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-taxjurcode&nbsp;=&nbsp;ws_fkkop-txjcd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_date&nbsp;=&nbsp;ws_fkkop-txdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-trade_id&nbsp;=&nbsp;ws_fkkop-vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-acctasscat&nbsp;=&nbsp;ws_fkkop-kontt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-acct_assgt&nbsp;=&nbsp;ws_fkkop-kontl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-dun_indic&nbsp;=&nbsp;ws_fkkop-opsta.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-doc_type&nbsp;=&nbsp;ws_fkkop-blart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-partner&nbsp;=&nbsp;ws_fkkop-emgpa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-bk_details&nbsp;=&nbsp;ws_fkkop-embvt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-addr_no&nbsp;=&nbsp;ws_fkkop-emadr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-int_key&nbsp;=&nbsp;ws_fkkop-ikey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-euro_stat&nbsp;=&nbsp;ws_fkkop-eurou.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-reverseclg&nbsp;=&nbsp;ws_fkkop-xragl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-xrepetpos&nbsp;=&nbsp;ws_fkkop-xwhpo.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-stat_key_src&nbsp;=&nbsp;ws_fkkop-astkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-ref_doc_no&nbsp;=&nbsp;ws_fkkop-asblg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-collection_pos&nbsp;=&nbsp;ws_fkkop-inkps.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-reference_item&nbsp;=&nbsp;ws_fkkop-xblnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-other_tax_code&nbsp;=&nbsp;ws_fkkop-strkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_category&nbsp;=&nbsp;ws_fkkop-fitpr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-w_tax_code&nbsp;=&nbsp;ws_fkkop-qsskz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-w_tax_suppl&nbsp;=&nbsp;ws_fkkop-qssew.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-w_tax_licat&nbsp;=&nbsp;ws_fkkop-qsptp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-w_tax_base&nbsp;=&nbsp;ws_fkkop-qsshb.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-w_tax_amount&nbsp;=&nbsp;ws_fkkop-qbshb.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-exempt_no&nbsp;=&nbsp;ws_fkkop-qsznr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-sub_application&nbsp;=&nbsp;ws_fkkop-subap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-amount_gl&nbsp;=&nbsp;ws_fkkop-pswbt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-tax_amount_gl&nbsp;=&nbsp;ws_fkkop-pswtx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-currency_gl&nbsp;=&nbsp;ws_fkkop-pswsl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-segment&nbsp;=&nbsp;ws_fkkop-segment.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-stat_tax_amount&nbsp;=&nbsp;ws_fkkop-sttax.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-portion_tax_amount_loc&nbsp;=&nbsp;ws_fkkop-sctax.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-profit_ctr&nbsp;=&nbsp;ws_fkkop-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkop-contract_pos&nbsp;=&nbsp;ws_fkkop-vtpos.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_fkkop&nbsp;TO&nbsp;t_fkkop.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fkkopk&nbsp;INTO&nbsp;ws_fkkopk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-doc_no&nbsp;=&nbsp;ws_fkkopk-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-item&nbsp;=&nbsp;ws_fkkopk-opupk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-comp_code&nbsp;=&nbsp;ws_fkkopk-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-g_l_acct&nbsp;=&nbsp;ws_fkkopk-hkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-bus_area&nbsp;=&nbsp;ws_fkkopk-gsber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-profit_ctr&nbsp;=&nbsp;ws_fkkopk-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-costcenter&nbsp;=&nbsp;ws_fkkopk-kostl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-sales_ord&nbsp;=&nbsp;ws_fkkopk-kdauf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-s_ord_item&nbsp;=&nbsp;ws_fkkopk-kdpos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-sched_line&nbsp;=&nbsp;ws_fkkopk-kdein.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-wbs_elem&nbsp;=&nbsp;ws_fkkopk-ps_psp_pnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-profit_segm_no&nbsp;=&nbsp;ws_fkkopk-paobjnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-profit_segment_hist&nbsp;=&nbsp;ws_fkkopk-pasubnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-plan_level&nbsp;=&nbsp;ws_fkkopk-fdlev.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-value_date&nbsp;=&nbsp;ws_fkkopk-valut.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tran_rate&nbsp;=&nbsp;ws_fkkopk-kursf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-amount_loc_curr&nbsp;=&nbsp;ws_fkkopk-betrh.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-amount&nbsp;=&nbsp;ws_fkkopk-betrw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-amount_par2_curr&nbsp;=&nbsp;ws_fkkopk-betr2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-amount_par3_curr&nbsp;=&nbsp;ws_fkkopk-betr3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-repet_grp&nbsp;=&nbsp;ws_fkkopk-whgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-other_tax_code&nbsp;=&nbsp;ws_fkkopk-strkz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_code&nbsp;=&nbsp;ws_fkkopk-mwskz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-taxjurcode&nbsp;=&nbsp;ws_fkkopk-txjcd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-taxjurcode_orig&nbsp;=&nbsp;ws_fkkopk-txjco.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_level&nbsp;=&nbsp;ws_fkkopk-txcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_date&nbsp;=&nbsp;ws_fkkopk-txdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_exception&nbsp;=&nbsp;ws_fkkopk-txexk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_base_loc_curr&nbsp;=&nbsp;ws_fkkopk-sbash.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_base&nbsp;=&nbsp;ws_fkkopk-sbasw.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_transact_key&nbsp;=&nbsp;ws_fkkopk-ktosl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-tax_percent_rate&nbsp;=&nbsp;ws_fkkopk-stprz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-cond_type&nbsp;=&nbsp;ws_fkkopk-kschl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-orderid&nbsp;=&nbsp;ws_fkkopk-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-line_item&nbsp;=&nbsp;ws_fkkopk-xeiph.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-acctasscat&nbsp;=&nbsp;ws_fkkopk-kontt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-acct_assgt&nbsp;=&nbsp;ws_fkkopk-kontl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-item_generated&nbsp;=&nbsp;ws_fkkopk-xintb.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-euro_stat&nbsp;=&nbsp;ws_fkkopk-eurou.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-fikey&nbsp;=&nbsp;ws_fkkopk-fikey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-copa_updated&nbsp;=&nbsp;ws_fkkopk-xcopa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-quantity&nbsp;=&nbsp;ws_fkkopk-menge.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-base_uom&nbsp;=&nbsp;ws_fkkopk-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-county_cde&nbsp;=&nbsp;ws_fkkopk-counc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-act_code_inc_tax&nbsp;=&nbsp;ws_fkkopk-gricd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-distr_type_emp_tax&nbsp;=&nbsp;ws_fkkopk-gityp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-w_tax_suppl&nbsp;=&nbsp;ws_fkkopk-qssew.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-segment&nbsp;=&nbsp;ws_fkkopk-segment.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkopk-portion_tax_amount_loc&nbsp;=&nbsp;ws_fkkopk-sctax.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_fkkopk&nbsp;TO&nbsp;t_fkkopk.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_CTRACDOCUMENT_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testrun&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;documentheader&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;documentnumber&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ev_opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partnerpositions&nbsp;&nbsp;&nbsp;=&nbsp;t_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;genledgerpositions&nbsp;=&nbsp;t_fkkopk.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;=&nbsp;return.<br />
+<br />
+<br />
+ENDFUNCTION.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  FILL_BAPIRET_FROM_SY<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fill_bapiret_from_sy CHANGING ct_return TYPE bapiret2_tab.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_bapi_ret&nbsp;TYPE&nbsp;bapiret2.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BALW_BAPIRETURN_GET2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;=&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;par1&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;par2&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;par3&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;par4&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;=&nbsp;ls_bapi_ret.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_bapi_ret&nbsp;TO&nbsp;ct_return.<br />
+<br />
+ENDFORM.                    " FILL_BAPIRET_FROM_SY<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  GET_CRMRFCPAR<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_crmrfcpar CHANGING cs_crmrfcpar TYPE crmrfcpar.<br />
+<br />
+&nbsp;&nbsp;CONSTANTS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_bus_proces_snd&nbsp;&nbsp;TYPE&nbsp;bapicrmobj-objclass&nbsp;VALUE&nbsp;'BUSPROCESSND',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_response&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapicrmobj-obj_name&nbsp;VALUE&nbsp;'RESPONSE_ARIDOC',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_response_struc&nbsp;&nbsp;TYPE&nbsp;tabname30&nbsp;VALUE&nbsp;'FKK_CRM_ARIDOC_RESPONSE',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out_change_from_r3&nbsp;TYPE&nbsp;char2&nbsp;VALUE&nbsp;'09',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_herkf_a1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;herkf_kk&nbsp;VALUE&nbsp;'A1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_herkf_a2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;herkf_kk&nbsp;VALUE&nbsp;'A2',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_buber_1075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tfk033f-buber&nbsp;VALUE&nbsp;'1075',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_objtyp_credit&nbsp;&nbsp;&nbsp;TYPE&nbsp;swo_objtyp&nbsp;VALUE&nbsp;'BUS2000162',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_objtyp_debit&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;swo_objtyp&nbsp;VALUE&nbsp;'BUS2000167',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_consumer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;consumer&nbsp;VALUE&nbsp;'CRM',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_acadm_01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;acadm_kk&nbsp;VALUE&nbsp;'01',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_acadm_02&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;acadm_kk&nbsp;VALUE&nbsp;'02'.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_crmrfcpar&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;crmrfcpar,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_crmrfcpar&nbsp;TYPE&nbsp;crmrfcpar.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CRM0_READ_RFC_DEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_consumer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_consumer<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_download_type&nbsp;=&nbsp;'*'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_objname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_response<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_crmrfcpar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_crmrfcpar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_entry_found&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;lt_crmrfcpar&nbsp;LINES&nbsp;sy-tfill.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;sy-tfill&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;&nbsp;&nbsp;&nbsp;lt_crmrfcpar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cs_crmrfcpar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;consumer&nbsp;=&nbsp;gc_consumer.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;sy-subrc&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;cs_crmrfcpar.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " GET_CRMRFCPAR<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  EVENT_1102<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM event_1102 CHANGING cs_fkkop TYPE fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;TYPE&nbsp;boole_d.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fbstab&nbsp;LIKE&nbsp;tfkfbc&nbsp;OCCURS&nbsp;1&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_applk&nbsp;&nbsp;TYPE&nbsp;applk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_argrd&nbsp;&nbsp;TYPE&nbsp;argrd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fkkvkp&nbsp;TYPE&nbsp;fkkvkp.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FUNC_MODULE_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fbeve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1102'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fbstab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fbstab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fbstab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;lt_fbstab-funcc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cs_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cs_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_SAMPLE_1102'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+<br />
+ENDFORM.                    " EVENT_1102<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  EVENT_1101<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM event_1101 USING is_fkkop TYPE fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;cv_hkont&nbsp;TYPE&nbsp;hkont_kk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;TYPE&nbsp;boole_d.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fbstab&nbsp;LIKE&nbsp;tfkfbc&nbsp;OCCURS&nbsp;1&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_applk&nbsp;&nbsp;TYPE&nbsp;applk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_argrd&nbsp;&nbsp;TYPE&nbsp;argrd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fkkvkp&nbsp;TYPE&nbsp;fkkvkp.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FUNC_MODULE_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fbeve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1101'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fbstab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fbstab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fbstab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;lt_fbstab-funcc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_hkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cv_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_in_input_data&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_SAMPLE_1101'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+<br />
+ENDFORM.                    " EVENT_1101<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  EVENT_1100<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM event_1100 TABLES it_fkkop STRUCTURE fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fkkopk&nbsp;STRUCTURE&nbsp;fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ev_error&nbsp;TYPE&nbsp;boole_d.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fbstab&nbsp;LIKE&nbsp;tfkfbc&nbsp;OCCURS&nbsp;1&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_applk&nbsp;&nbsp;TYPE&nbsp;applk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_argrd&nbsp;&nbsp;TYPE&nbsp;argrd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fkkvkp&nbsp;TYPE&nbsp;fkkvkp.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FUNC_MODULE_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fbeve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1100'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fbstab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fbstab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fbstab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;lt_fbstab-funcc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fkkopk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ct_fkkopk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_error&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_SAMPLE_1100'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+<br />
+ENDFORM.                    " EVENT_1100<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  DET_DOMINANT_OP<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM det_dominant_op TABLES it_documents STRUCTURE fkk_dm_documents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;es_fkkop&nbsp;TYPE&nbsp;fkkop.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fkkop&nbsp;TYPE&nbsp;fkkop_t,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;range_opbel&nbsp;TYPE&nbsp;fkkr_opbel&nbsp;OCCURS&nbsp;0&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+&nbsp;&nbsp;range_opbel-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;range_opbel-option&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_documents.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;range_opbel-low&nbsp;=&nbsp;it_documents-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;range_opbel.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_BP_LINE_ITEMS_SEL_LOGICAL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_logfkkop&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp_opbel_range&nbsp;=&nbsp;range_opbel.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_fkkop&nbsp;BY&nbsp;betrw&nbsp;DESCENDING&nbsp;opupk&nbsp;ASCENDING.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_fkkop&nbsp;INTO&nbsp;es_fkkop&nbsp;INDEX&nbsp;1.<br />
+<br />
+ENDFORM.                    " DET_DOMINANT_OP<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  GET_HEADER_GUID<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_header_guid USING iv_awref TYPE awref<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_rfc_dest&nbsp;TYPE&nbsp;rfcdest<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ev_guid&nbsp;TYPE&nbsp;guid_32.<br />
+<br />
+&nbsp;&nbsp;TYPES&nbsp;BEGIN&nbsp;OF&nbsp;guid_struc.<br />
+&nbsp;&nbsp;TYPES&nbsp;guid&nbsp;TYPE&nbsp;char32.<br />
+&nbsp;&nbsp;TYPES&nbsp;object_type&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;TYPES&nbsp;END&nbsp;OF&nbsp;guid_struc.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_guid&nbsp;TYPE&nbsp;guid_struc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_guid&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;guid_struc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_id_range&nbsp;TYPE&nbsp;RANGE&nbsp;OF&nbsp;crmt_object_id_db&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- fill ID range<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lt_id_range-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;lt_id_range-option&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;lt_id_range-low&nbsp;=&nbsp;iv_awref.<br />
+&nbsp;&nbsp;APPEND&nbsp;lt_id_range.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- determine GUID<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BUSPROCESSND_GETLIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DESTINATION&nbsp;iv_rfc_dest<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object_id_sel&nbsp;=&nbsp;lt_id_range.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_guid&nbsp;INTO&nbsp;ls_guid&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_guid&nbsp;=&nbsp;ls_guid-guid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " GET_HEADER_GUID<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&      Form  EVENT_2814<br />
+*&---------------------------------------------------------------------*<br />
+*       text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM event_2814 TABLES ct_fkkop STRUCTURE fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_msdat&nbsp;STRUCTURE&nbsp;fkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;is_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_documents&nbsp;&nbsp;TYPE&nbsp;fkk_dm_t_documents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_ci_objects&nbsp;TYPE&nbsp;fkkdm_t_ci_objects<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_ari_attr&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_crm_ari_attr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ev_rc&nbsp;TYPE&nbsp;sysubrc.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_fbstab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tfkfbc&nbsp;OCCURS&nbsp;1&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fkkop_old&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_no_change_old&nbsp;TYPE&nbsp;fkk_no_change_2814,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_no_change_new&nbsp;TYPE&nbsp;fkk_no_change_2814,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betrw_new&nbsp;TYPE&nbsp;betrw_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betrh_new&nbsp;TYPE&nbsp;betrh_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betr2_new&nbsp;TYPE&nbsp;betr2_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betr3_new&nbsp;TYPE&nbsp;betr3_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_applk&nbsp;&nbsp;TYPE&nbsp;applk_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_argrd&nbsp;&nbsp;TYPE&nbsp;argrd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fkkvkp&nbsp;TYPE&nbsp;fkkvkp..<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;fs_fkkop&gt;&nbsp;TYPE&nbsp;fkkop.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;ct_fkkop&nbsp;INTO&nbsp;ls_fkkop_old&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_fkkop_old&nbsp;TO&nbsp;ls_no_change_old.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FUNC_MODULE_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fbeve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'2814'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fbstab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_fbstab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fbstab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;lt_fbstab-funcc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_documents&nbsp;&nbsp;=&nbsp;it_documents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_ci_objects&nbsp;=&nbsp;it_ci_objects<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_ari_attr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_ari_attr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ct_fkkop[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- where used list<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;OFF.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_SAMPLE_2814'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SET&nbsp;EXTENDED&nbsp;CHECK&nbsp;ON.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_fkkop&nbsp;ASSIGNING&nbsp;&lt;fs_fkkop&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;&lt;fs_fkkop&gt;&nbsp;TO&nbsp;ls_no_change_new.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- new VKONT does not appear in any item? unallowed change in 2814<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_msdat&nbsp;WITH&nbsp;KEY&nbsp;vkont&nbsp;=&nbsp;&lt;fs_fkkop&gt;-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;103&nbsp;INTO&nbsp;lv_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- new VTREF does not appear in any item? unallowed change in 2814<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;fs_fkkop&gt;-vtref&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_msdat&nbsp;WITH&nbsp;KEY&nbsp;vtref&nbsp;=&nbsp;&lt;fs_fkkop&gt;-vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;103&nbsp;INTO&nbsp;lv_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* -- unallowed changes (GPART ...)?<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_no_change_old&nbsp;&lt;&gt;&nbsp;ls_no_change_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;103&nbsp;INTO&nbsp;lv_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;&lt;fs_fkkop&gt;-betrw&nbsp;TO&nbsp;lv_sum_betrw_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;&lt;fs_fkkop&gt;-betrh&nbsp;TO&nbsp;lv_sum_betrh_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;&lt;fs_fkkop&gt;-betr2&nbsp;TO&nbsp;lv_sum_betr2_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;&lt;fs_fkkop&gt;-betr3&nbsp;TO&nbsp;lv_sum_betr3_new.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOP_ADD_DEFAULTS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_xfaedn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_default_segment&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_fkkop&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FKKOP_COMPLETE_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkko&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_fkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fkkop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_fkkop&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_sum_betrw_new&nbsp;&lt;&gt;&nbsp;ls_fkkop_old-betrw&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betrh_new&nbsp;&lt;&gt;&nbsp;ls_fkkop_old-betrh&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betr2_new&nbsp;&lt;&gt;&nbsp;ls_fkkop_old-betr2&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sum_betr3_new&nbsp;&lt;&gt;&nbsp;ls_fkkop_old-betr3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;'FKK_CRM'&nbsp;TYPE&nbsp;'E'&nbsp;NUMBER&nbsp;103&nbsp;INTO&nbsp;lv_string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ev_rc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " EVENT_2814<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+* Message class: FKK_CRM<br />
+*025   The system was unable to determine any RFC destination for the CRM System<br />
+*102   Adjustment request reason &1 is not defined<br />
+*103   Unallowed change in event 2814<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

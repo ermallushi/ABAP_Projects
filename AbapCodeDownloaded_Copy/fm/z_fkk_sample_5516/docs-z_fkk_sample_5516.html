@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_5516</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_5516</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Beispiel&nbsp;5516:&nbsp;Prüfen,&nbsp;ob&nbsp;Zahlungsversprechen&nbsp;bestätigt&nbsp;werden&nbsp;muss<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;processed&nbsp;in&nbsp;event&nbsp;5516&nbsp;decides&nbsp;whether&nbsp;a&nbsp;promise&nbsp;to<br />
+&nbsp;pay&nbsp;has&nbsp;to&nbsp;be&nbsp;confirmed.<br />
+&nbsp;The&nbsp;following&nbsp;data&nbsp;is&nbsp;available:<br />
+&nbsp;<br />
+&nbsp;&lt;LS&gt;I_DFKKPP&lt;/&gt;,,Header&nbsp;of&nbsp;the&nbsp;promise&nbsp;to&nbsp;pay.<br />
+&nbsp;&lt;LS&gt;I_DFKKPPD_TAB&lt;/&gt;,,Dates&nbsp;and&nbsp;amounts<br />
+&nbsp;&lt;LS&gt;I_DFKKPPD_PAY_TAB&lt;/&gt;,,Details&nbsp;for&nbsp;debit&nbsp;memos<br />
+&nbsp;&lt;LS&gt;I_FKKCL_TAB&lt;/&gt;,,Related&nbsp;open&nbsp;items<br />
+&nbsp;If&nbsp;the&nbsp;promise&nbsp;to&nbsp;pay&nbsp;is&nbsp;created&nbsp;to&nbsp;replace&nbsp;another&nbsp;promise,&nbsp;in<br />
+&nbsp;parameter&nbsp;&lt;LS&gt;I_REP_KEY&lt;/&gt;,&nbsp;specify&nbsp;the&nbsp;key&nbsp;of&nbsp;the&nbsp;promise&nbsp;to&nbsp;pay&nbsp;to&nbsp;be<br />
+&nbsp;replaced.<br />
+&nbsp;If&nbsp;a&nbsp;workflow&nbsp;is&nbsp;to&nbsp;be&nbsp;started&nbsp;for&nbsp;confirmation,&nbsp;you&nbsp;have&nbsp;to&nbsp;return&nbsp;the<br />
+&nbsp;reason&nbsp;for&nbsp;the&nbsp;confirmation&nbsp;required&nbsp;in&nbsp;the&nbsp;parameter&nbsp;&lt;LS&gt;E_C4EYE&lt;/&gt;.<br />
+&nbsp;In&nbsp;parameter&nbsp;&lt;LS&gt;E_C4LEV&lt;/&gt;,&nbsp;you&nbsp;can&nbsp;specify&nbsp;the&nbsp;number&nbsp;of&nbsp;parallel<br />
+&nbsp;checks&nbsp;to&nbsp;be&nbsp;processed.<br />
+&nbsp;In&nbsp;the&nbsp;dual&nbsp;control&nbsp;principle,&nbsp;&lt;LS&gt;E_C4LEV&lt;/&gt;&nbsp;has&nbsp;the&nbsp;value&nbsp;one,&nbsp;meaning<br />
+&nbsp;that&nbsp;one&nbsp;additional&nbsp;person&nbsp;must&nbsp;confirm&nbsp;the&nbsp;posting.&nbsp;In&nbsp;the&nbsp;triple<br />
+&nbsp;control&nbsp;principle,&nbsp;&lt;LS&gt;E_C4LEV&lt;/&gt;&nbsp;must&nbsp;have&nbsp;the&nbsp;value&nbsp;2.&nbsp;The&nbsp;maximum<br />
+&nbsp;possible&nbsp;value&nbsp;is&nbsp;9.&nbsp;If&nbsp;no&nbsp;value&nbsp;is&nbsp;returned,&nbsp;1&nbsp;is&nbsp;set&nbsp;as&nbsp;the&nbsp;default<br />
+&nbsp;value.<br />
+&nbsp;You&nbsp;can&nbsp;also&nbsp;return&nbsp;further&nbsp;data&nbsp;in&nbsp;&lt;LS&gt;E_C4EYE_PAR&lt;/&gt;&nbsp;(optional);&nbsp;you<br />
+&nbsp;can&nbsp;use&nbsp;this&nbsp;data&nbsp;for&nbsp;role&nbsp;resolution&nbsp;(determination&nbsp;of&nbsp;workflow<br />
+&nbsp;addressees).&nbsp;There&nbsp;are&nbsp;three&nbsp;fields&nbsp;of&nbsp;length&nbsp;20&nbsp;available.&nbsp;You&nbsp;define<br />
+&nbsp;the&nbsp;meaning&nbsp;of&nbsp;these&nbsp;fields&nbsp;specific&nbsp;to&nbsp;the&nbsp;installation.<br />
+EXAMPLE <br />
+&nbsp;If&nbsp;the&nbsp;recipient&nbsp;of&nbsp;the&nbsp;workflow&nbsp;is&nbsp;to&nbsp;be&nbsp;determined&nbsp;dependent&nbsp;on&nbsp;the<br />
+&nbsp;paying&nbsp;company&nbsp;code&nbsp;and&nbsp;an&nbsp;amount&nbsp;category,&nbsp;you&nbsp;can&nbsp;return&nbsp;the&nbsp;company<br />
+&nbsp;code&nbsp;in&nbsp;the&nbsp;field&nbsp;&lt;LS&gt;E_C4EYE_PAR-WFP01&lt;/&gt;&nbsp;and&nbsp;the&nbsp;amount&nbsp;category&nbsp;in<br />
+&nbsp;the&nbsp;parameter&nbsp;&lt;LS&gt;E_C4EYE_PAR-WFP02&lt;/&gt;,&nbsp;for&nbsp;example:<br />
+&nbsp;<br />
+&nbsp;1,,Amounts&nbsp;up&nbsp;to:,,EUR&nbsp;1000.00<br />
+&nbsp;2,,Amounts&nbsp;up&nbsp;to:,,EUR&nbsp;5000.00<br />
+&nbsp;3,,Amounts&nbsp;over:,,EUR&nbsp;5000.00<br />
+&nbsp;<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+E_C4EYE                          Reason for Required Confirmation<br />
+E_C4EYE_PAR                      Additional Parameters for Role Determination<br />
+E_C4LEV                          Number of Parallel Checks<br />
+I_DFKKPP                         Header of Promise to Pay<br />
+I_DFKKPPD_PAY_TAB                Data for Debit Memo<br />
+I_DFKKPPD_TAB                    Installments<br />
+I_FKKCL_TAB                      Related Original Items<br />
+I_REP_KEY                        Promise to Pay Being Replaced<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

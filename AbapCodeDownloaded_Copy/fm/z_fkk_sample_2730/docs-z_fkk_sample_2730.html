@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_2730</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_2730</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;INV:&nbsp;Ratenplan&nbsp;fällig&nbsp;stellen&nbsp;(&nbsp;'Auflösen&nbsp;in&nbsp;der&nbsp;Fakturierung')<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;Event&nbsp;2730&nbsp;is&nbsp;processed&nbsp;in&nbsp;invoicing&nbsp;when&nbsp;you&nbsp;execute&nbsp;the&nbsp;invoicing<br />
+&nbsp;function&nbsp;&lt;DS:DE.INVFUNC_INSTPLAN_DUE_KK&gt;Set&nbsp;Installment&nbsp;Plan&nbsp;to&nbsp;Due&lt;/&gt;.<br />
+&nbsp;In&nbsp;this&nbsp;event,&nbsp;you&nbsp;can&nbsp;decide&nbsp;if&nbsp;an&nbsp;installment&nbsp;plan&nbsp;should&nbsp;be&nbsp;set&nbsp;to<br />
+&nbsp;due&nbsp;within&nbsp;invoicing;&nbsp;in&nbsp;other&nbsp;words,&nbsp;you&nbsp;decide&nbsp;whether&nbsp;all&nbsp;of&nbsp;the<br />
+&nbsp;installments&nbsp;of&nbsp;the&nbsp;installment&nbsp;plan&nbsp;that&nbsp;are&nbsp;not&nbsp;yet&nbsp;due&nbsp;at&nbsp;the&nbsp;time&nbsp;of<br />
+&nbsp;invoicing&nbsp;should&nbsp;be&nbsp;due&nbsp;with&nbsp;the&nbsp;invoice.<br />
+&nbsp;At&nbsp;the&nbsp;interface,&nbsp;the&nbsp;number&nbsp;of&nbsp;the&nbsp;installment&nbsp;plan&nbsp;is&nbsp;transferred&nbsp;in<br />
+&nbsp;the&nbsp;parameter&nbsp;I_INSTPLAN_OPBEL.&nbsp;The&nbsp;not&nbsp;yet&nbsp;paid&nbsp;installments&nbsp;of&nbsp;this<br />
+&nbsp;installment&nbsp;plan&nbsp;are&nbsp;transferred&nbsp;in&nbsp;C_INSTPLAN_FKKCL_TAB.<br />
+&nbsp;The&nbsp;parameter&nbsp;C_SET_INSTPLAN_TO_DUE&nbsp;=&nbsp;'X'&nbsp;specifies&nbsp;that&nbsp;the&nbsp;due&nbsp;dates<br />
+&nbsp;of&nbsp;these&nbsp;installments&nbsp;are&nbsp;moved&nbsp;to&nbsp;the&nbsp;due&nbsp;date&nbsp;of&nbsp;the&nbsp;invoice.&nbsp;Set&nbsp;this<br />
+&nbsp;parameter&nbsp;to&nbsp;C_SET_INSTPLAN_TO_DUE&nbsp;=&nbsp;'&nbsp;',&nbsp;if&nbsp;the&nbsp;installment&nbsp;plan&nbsp;is&nbsp;to<br />
+&nbsp;be&nbsp;excluded&nbsp;from&nbsp;processing,&nbsp;that&nbsp;is,&nbsp;if&nbsp;it&nbsp;should&nbsp;keep&nbsp;its&nbsp;due&nbsp;dates.<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;<br />
+FURTHER_SOURCES_OF_INF <br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_INSTPLAN_FKKCL_TAB             Event 2730: Set Installment Plan to Due<br />
+I_INSTPLAN_OPBEL                 Installment Plan Number in Contract Accounts Receivable and Payable<br />
+I_INV_UNIT_PUBLIC                Invoicing Unit (Public Data)<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

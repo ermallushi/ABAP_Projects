@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_FPCOPARA</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_FPCOPARA</h2>
+<h3> Description: PFCOPARA - Automation of Invoice Process</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZRMCA_FPCOPARA<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Eyup&nbsp;Ozdener<br />
+*&&nbsp;Creation&nbsp;date&nbsp;:&nbsp;05.03.2014<br />
+*&&nbsp;Project&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;PFCOPARA&nbsp;-&nbsp;Automation&nbsp;of&nbsp;Invoice&nbsp;Process<br />
+*&&nbsp;Definition&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Automation&nbsp;of&nbsp;invoice&nbsp;process&nbsp;regarding&nbsp;creation&nbsp;and<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loading&nbsp;of&nbsp;invoice&nbsp;text&nbsp;files&nbsp;into&nbsp;the&nbsp;system<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zrmca_fpcopara.<br />
+<br />
+include <a href ="zrmca_fpcopara_top.html">zrmca_fpcopara_top</a>. " GlobalData / Selection Screen<br />
+include <a href ="zrmca_fpcopara_f01.html">zrmca_fpcopara_f01</a>. " Form-Routines<br />
+include <a href ="zrmca_fpcopara_i01.html">zrmca_fpcopara_i01</a>. " Input Modules<br />
+include <a href ="zrmca_fpcopara_cls.html">zrmca_fpcopara_cls</a>. " Class<br />
+include <a href ="zrmca_fpcopara_o01.html">zrmca_fpcopara_o01</a>. " Output Modules<br />
+<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_init_value.<br />
+<br />
+AT SELECTION-SCREEN OUTPUT.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_screen.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;PERFORM&nbsp;maintain_table.<br />
+<br />
+AT SELECTION-SCREEN ON BLOCK win3.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_laufi.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;check_authority.<br />
+&nbsp;&nbsp;PERFORM&nbsp;program_lock.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_inv_doc_num.<br />
+&nbsp;&nbsp;PERFORM&nbsp;check_db.<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_customizing_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_contract_accs.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_group_id.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fill_header_and_item.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_group[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-016&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;T0100&nbsp;--&gt;&nbsp;FPCOPARA&nbsp;-&nbsp;Correspondence&nbsp;Printing<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;Date&nbsp;:<br />
+*&nbsp;002&nbsp;records<br />
+*&nbsp;003&nbsp;Internal&nbsp;error!...<br />
+*&nbsp;004&nbsp;...<br />
+*&nbsp;005&nbsp;Save&nbsp;to&nbsp;DB<br />
+*&nbsp;006&nbsp;All&nbsp;records&nbsp;will&nbsp;be&nbsp;saved&nbsp;to&nbsp;database...<br />
+*&nbsp;007&nbsp;All&nbsp;records&nbsp;saved&nbsp;to&nbsp;database...<br />
+*&nbsp;008&nbsp;Schedule&nbsp;/&nbsp;Download<br />
+*&nbsp;009&nbsp;Correspondence&nbsp;printing&nbsp;will&nbsp;be&nbsp;scheduled...<br />
+*&nbsp;010&nbsp;Error!...Please&nbsp;try&nbsp;it&nbsp;again...<br />
+*&nbsp;011&nbsp;Do&nbsp;you&nbsp;want&nbsp;to&nbsp;continue?<br />
+*&nbsp;012&nbsp;Yes<br />
+*&nbsp;013&nbsp;No<br />
+*&nbsp;014&nbsp;Process&nbsp;cancelled&nbsp;by&nbsp;the&nbsp;user...<br />
+*&nbsp;015&nbsp;Download&nbsp;as&nbsp;PDF<br />
+*&nbsp;016&nbsp;No&nbsp;record&nbsp;found&nbsp;for&nbsp;selected&nbsp;criteria!...<br />
+*&nbsp;017&nbsp;All&nbsp;spool&nbsp;list&nbsp;will&nbsp;be&nbsp;saved&nbsp;as&nbsp;PDF...<br />
+*&nbsp;018&nbsp;Job&nbsp;select&nbsp;error!...<br />
+*&nbsp;019&nbsp;Spool&nbsp;error!...<br />
+*&nbsp;020&nbsp;PDF&nbsp;convertion&nbsp;error!...<br />
+*&nbsp;021&nbsp;Download&nbsp;error!...<br />
+*&nbsp;022&nbsp;Run&nbsp;ID<br />
+*&nbsp;023&nbsp;Invoice&nbsp;Selection&nbsp;Criteria<br />
+*&nbsp;024&nbsp;Delete&nbsp;from&nbsp;DB<br />
+*&nbsp;025&nbsp;All&nbsp;the&nbsp;related&nbsp;date&nbsp;will&nbsp;be&nbsp;deleted...<br />
+*&nbsp;026&nbsp;All&nbsp;related&nbsp;records&nbsp;deleted&nbsp;from&nbsp;database...<br />
+*&nbsp;027&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;scheduled...<br />
+*&nbsp;028&nbsp;Please&nbsp;select&nbsp;row(s)&nbsp;to&nbsp;download&nbsp;PDF(s)!...<br />
+*&nbsp;029&nbsp;The&nbsp;spool&nbsp;split&nbsp;up&nbsp;more&nbsp;than&nbsp;one&nbsp;ID!...<br />
+*&nbsp;030&nbsp;Customizing<br />
+*&nbsp;031&nbsp;Fill&nbsp;in&nbsp;all&nbsp;required&nbsp;entry&nbsp;fields...<br />
+*&nbsp;032&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;released...<br />
+*&nbsp;033&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;still&nbsp;active...<br />
+*&nbsp;034&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;finished...<br />
+*&nbsp;035&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;canceled...<br />
+*&nbsp;036&nbsp;Do&nbsp;you&nbsp;want&nbsp;to&nbsp;reset&nbsp;the&nbsp;job?<br />
+*&nbsp;037&nbsp;Maintain&nbsp;Table<br />
+*&nbsp;038&nbsp;Mass&nbsp;Change<br />
+*&nbsp;039&nbsp;Invoice&nbsp;Splitting&nbsp;Criteria<br />
+*&nbsp;040&nbsp;Print&nbsp;Lock<br />
+*&nbsp;041&nbsp;Special&nbsp;Group<br />
+*&nbsp;042&nbsp;Parallel&nbsp;Processing<br />
+*&nbsp;043&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;scheduled&nbsp;not&nbsp;found!...<br />
+*&nbsp;044&nbsp;The&nbsp;directory&nbsp;which&nbsp;invoices&nbsp;would&nbsp;be&nbsp;downloaded&nbsp;not&nbsp;found!...<br />
+*&nbsp;045&nbsp;Parameter&nbsp;error.&nbsp;Identifier&nbsp;not&nbsp;found&nbsp;in&nbsp;table&nbsp;ZRMCA_AIP_DIR!...<br />
+*&nbsp;046&nbsp;There&nbsp;is&nbsp;not&nbsp;enough&nbsp;space&nbsp;in&nbsp;shared&nbsp;folder!...<br />
+*&nbsp;047&nbsp;Check&nbsp;available&nbsp;space&nbsp;-&nbsp;Format&nbsp;error!...<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_DATUM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invoice&nbsp;Create&nbsp;Date...From<br />
+*&nbsp;P_FOLDER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Folder&nbsp;Name<br />
+*&nbsp;P_LAUFD&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LAUFI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial&nbsp;of&nbsp;Identification<br />
+*&nbsp;P_NOFS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number&nbsp;of&nbsp;Process<br />
+*&nbsp;P_TDDEST&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_VKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;6<br />
+*176&nbsp;&nbsp;&nbsp;&1&nbsp;jobs&nbsp;is&nbsp;too&nbsp;many;&nbsp;maximum&nbsp;number&nbsp;is&nbsp;&2<br />
+*181&nbsp;&nbsp;&nbsp;Minimum&nbsp;number&nbsp;of&nbsp;jobs&nbsp;is&nbsp;1<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;U<br />
+*047&nbsp;&nbsp;&nbsp;Job&nbsp;cannot&nbsp;be&nbsp;created<br />
+*050&nbsp;&nbsp;&nbsp;Error&nbsp;in&nbsp;job&nbsp;step<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;EU<br />
+*059&nbsp;&nbsp;&nbsp;You&nbsp;do&nbsp;not&nbsp;have&nbsp;authorization&nbsp;for&nbsp;transaction&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

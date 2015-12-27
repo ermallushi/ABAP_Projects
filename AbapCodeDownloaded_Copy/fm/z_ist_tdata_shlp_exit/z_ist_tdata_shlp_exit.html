@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_IST_TDATA_SHLP_EXIT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_IST_TDATA_SHLP_EXIT</h2>
+<h3> Description: Telephone Numbers Search Help Exit</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_ist_tdata_shlp_exit.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  TABLES<br />
+*"      SHLP_TAB TYPE  SHLP_DESCR_TAB_T<br />
+*"      RECORD_TAB STRUCTURE  SEAHLPRES<br />
+*"  CHANGING<br />
+*"     VALUE(SHLP) TYPE  SHLP_DESCR_T<br />
+*"     VALUE(CALLCONTROL) LIKE  DDSHF4CTRL STRUCTURE  DDSHF4CTRL<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_ist_tdata_shlp_exit.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;TYPES:&nbsp;BEGIN&nbsp;OF&nbsp;ty_but000,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bu_type,&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Partner&nbsp;category<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_org1&nbsp;&nbsp;TYPE&nbsp;bu_nameor1,&nbsp;"&nbsp;Organization&nbsp;name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_last&nbsp;&nbsp;TYPE&nbsp;bu_namep_l,&nbsp;"&nbsp;Last&nbsp;name&nbsp;of&nbsp;business&nbsp;partner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_first&nbsp;TYPE&nbsp;bu_namep_f,&nbsp;"&nbsp;First&nbsp;name&nbsp;of&nbsp;business&nbsp;partner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_but000.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_fielddescr&nbsp;TYPE&nbsp;dfies,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Help&nbsp;table&nbsp;fields<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fieldprop&nbsp;&nbsp;TYPE&nbsp;ddshfprop,&nbsp;"&nbsp;Characteristics&nbsp;of&nbsp;search&nbsp;help&nbsp;parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_but000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_but000,&nbsp;"&nbsp;Partner&nbsp;general&nbsp;data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_record_str&nbsp;TYPE&nbsp;seahlpres,&nbsp;"&nbsp;Search&nbsp;help&nbsp;result&nbsp;string<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_position&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabfdpos,&nbsp;"&nbsp;Field&nbsp;position<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_offset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;doffset,&nbsp;&nbsp;"&nbsp;Position&nbsp;of&nbsp;the&nbsp;name/surname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_pos&nbsp;TYPE&nbsp;doffset,&nbsp;&nbsp;&nbsp;"&nbsp;Position&nbsp;of&nbsp;the&nbsp;cont.&nbsp;account<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vkont_kk,&nbsp;&nbsp;"&nbsp;Contract&nbsp;Account<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;gpart_kk.&nbsp;&nbsp;"&nbsp;Business&nbsp;partner<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_datetxt&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sydatum&nbsp;TYPE&nbsp;timestamp,&nbsp;&nbsp;&nbsp;"&nbsp;sy-datum/sy-uzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt&nbsp;&nbsp;TYPE&nbsp;ddshselopt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* EXIT immediately, if you do not want to handle this step<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'SELONE'.<br />
+   </div>
+   <div class="codeComment">
+*    and callcontrol-step &lt;&gt; 'SELECT' AND<br />
+*                                       " AND SO ON<br />
+*        callcontrol-step &lt;&gt; 'DISP'.<br />
+*    EXIT.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+* STEP SELONE  (Select one of the elementary searchhelps)<br />
+*"----------------------------------------------------------------------<br />
+* This step is only called for collective searchhelps. It may be used<br />
+* to reduce the amount of elementary searchhelps given in SHLP_TAB.<br />
+* The compound searchhelp is given in SHLP.<br />
+* If you do not change CALLCONTROL-STEP, the next step is the<br />
+* dialog, to select one of the elementary searchhelps.<br />
+* If you want to skip this dialog, you have to return the selected<br />
+* elementary searchhelp in SHLP and to change CALLCONTROL-STEP to<br />
+* either to 'PRESEL' or to 'SELECT'.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'SELONE'.<br />
+   </div>
+   <div class="codeComment">
+**    PERFORM step_selone TABLES    shlp_tab<br />
+**                        CHANGING  shlp<br />
+**                                  callcontrol.<br />
+*    EXIT.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+* STEP PRESEL  (Enter selection conditions)<br />
+*"----------------------------------------------------------------------<br />
+* This step allows you, to influence the selection conditions either<br />
+* before they are displayed or in order to skip the dialog completely.<br />
+* If you want to skip the dialog, you should change CALLCONTROL-STEP<br />
+* to 'SELECT'.<br />
+* Normaly only SHLP-SELOPT should be changed in this step.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'PRESEL'.<br />
+   </div>
+   <div class="codeComment">
+*   PERFORM PRESEL ..........<br />
+*    EXIT.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+* STEP SELECT    (Select values)<br />
+*"----------------------------------------------------------------------<br />
+* This step may be used to overtake the data selection completely.<br />
+* To skip the standard seletion, you should return 'DISP' as following<br />
+* step in CALLCONTROL-STEP.<br />
+* Normally RECORD_TAB should be filled after this step.<br />
+* Standard function module F4UT_RESULTS_MAP may be very helpfull in this<br />
+* step.<br />
+<br />
+* For creation of security deposit, get the valid telephone numbers...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'SELECT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tcode&nbsp;EQ&nbsp;'FPSEC1'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Set valid from and valid to fields for table IST_TDATA...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;sy-datum&nbsp;sy-uzeit&nbsp;INTO&nbsp;lv_datetxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sydatum&nbsp;=&nbsp;lv_datetxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-shlpname&nbsp;&nbsp;=&nbsp;'IST_TDATA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-shlpfield&nbsp;=&nbsp;'VALID_FROM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-option&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'LE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_sydatum.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_selopt&nbsp;TO&nbsp;shlp-selopt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-shlpfield&nbsp;=&nbsp;'VALID_TO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_selopt-option&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'GE'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_selopt&nbsp;TO&nbsp;shlp-selopt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.&nbsp;"Don't&nbsp;process&nbsp;STEP&nbsp;DISP&nbsp;additionally&nbsp;in&nbsp;this&nbsp;call.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+* STEP DISP     (Display values)<br />
+*"----------------------------------------------------------------------<br />
+* This step is called, before the selected data is displayed.<br />
+* You can e.g. modify or reduce the data in RECORD_TAB<br />
+* according to the users authority.<br />
+* If you want to get the standard display dialog afterwards, you<br />
+* should not change CALLCONTROL-STEP.<br />
+* If you want to overtake the dialog on you own, you must return<br />
+* the following values in CALLCONTROL-STEP:<br />
+* - "RETURN" if one line was selected. The selected line must be<br />
+*   the only record left in RECORD_TAB. The corresponding fields of<br />
+*   this line are entered into the screen.<br />
+* - "EXIT" if the values request should be aborted<br />
+* - "PRESEL" if you want to return to the selection dialog<br />
+* Standard function modules F4UT_PARAMETER_VALUE_GET and<br />
+* F4UT_PARAMETER_RESULTS_PUT may be very helpfull in this step.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'DISP'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Check wheather NAME field in the search help already exists...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;shlp-fieldprop&nbsp;INTO&nbsp;ls_fieldprop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;'NAME'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Set NAME field as last field of the search help IST_TDATA...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;shlp-fielddescr&nbsp;BY&nbsp;offset&nbsp;DESCENDING.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;shlp-fielddescr&nbsp;INTO&nbsp;ls_fielddescr&nbsp;INDEX&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_position&nbsp;=&nbsp;ls_fielddescr-position&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_offset&nbsp;&nbsp;&nbsp;=&nbsp;ls_fielddescr-offset&nbsp;+&nbsp;100.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_fielddescr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-fieldname&nbsp;=&nbsp;'NAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-position&nbsp;=&nbsp;lv_position.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-offset&nbsp;=&nbsp;lv_offset.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-domname&nbsp;=&nbsp;'CHAR_50'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-leng&nbsp;=&nbsp;ls_fielddescr-outputlen&nbsp;=&nbsp;ls_fielddescr-headlen&nbsp;=&nbsp;50.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-intlen&nbsp;=&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-datatype&nbsp;=&nbsp;'CHAR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-inttype&nbsp;=&nbsp;'C'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fielddescr-fieldtext&nbsp;=&nbsp;ls_fielddescr-reptext&nbsp;=&nbsp;'Name&nbsp;Surname'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fielddescr&nbsp;TO&nbsp;shlp-fielddescr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fieldprop-fieldname&nbsp;=&nbsp;'NAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fieldprop-shlpselpos&nbsp;=&nbsp;ls_fieldprop-shlplispos&nbsp;=&nbsp;lv_position.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fieldprop&nbsp;TO&nbsp;shlp-fieldprop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_fielddescr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_offset&nbsp;=&nbsp;lv_offset&nbsp;/&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;shlp-fielddescr&nbsp;INTO&nbsp;ls_fielddescr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;fieldname&nbsp;=&nbsp;'NAME'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_offset&nbsp;=&nbsp;ls_fielddescr-offset&nbsp;/&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;shlp-fielddescr&nbsp;INTO&nbsp;ls_fielddescr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;tabname&nbsp;=&nbsp;'IST_TDATA'&nbsp;fieldname&nbsp;=&nbsp;'VKONT'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_pos&nbsp;=&nbsp;ls_fielddescr-offset&nbsp;/&nbsp;2.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Get the name from table BUT000 and set it into the<br />
+* result internal table RECORD_TAB...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;record_tab&nbsp;INTO&nbsp;ls_record_str.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont&nbsp;=&nbsp;ls_record_str-string+lv_vkont_pos(12).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;gpart&nbsp;INTO&nbsp;lv_gpart&nbsp;FROM&nbsp;fkkvkp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;EQ&nbsp;lv_vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;type&nbsp;name_org1&nbsp;name_last&nbsp;name_first<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;partner&nbsp;EQ&nbsp;lv_gpart.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_but000-type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'1'.&nbsp;"&nbsp;Person<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ls_but000-name_first&nbsp;ls_but000-name_last<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_record_str+lv_offset(50)&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;"&nbsp;Organizasion<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_record_str+lv_offset(50)&nbsp;=&nbsp;ls_but000-name_org1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;record_tab&nbsp;FROM&nbsp;ls_record_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

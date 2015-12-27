@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTEST</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTEST</h2>
+<h3> Description: test</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZTEST<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT ZTEST.<br />
+<br />
+type-pools: slis.<br />
+tables: bkpf.<br />
+<br />
+DATA: begin of it_test occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;like&nbsp;bkpf-belnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;like&nbsp;bkpf-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;it_test.<br />
+<br />
+<br />
+DATA: it_fieldcat  TYPE slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_layout&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fieldcat&nbsp;&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.<br />
+SELECT-OPTIONS tbelnr FOR bkpf-belnr.<br />
+SELECT-OPTIONS tgjahr FOR bkpf-gjahr.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+perform build_fieldcatalog.<br />
+perform build_layout.<br />
+perform display_alv_report.<br />
+<br />
+<br />
+select * from bkpf<br />
+&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;it_test<br />
+&nbsp;&nbsp;where&nbsp;belnr&nbsp;in&nbsp;tbelnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;in&nbsp;tgjahr.<br />
+&nbsp;&nbsp;endselect.<br />
+<br />
+&nbsp;end-of-selection.<br />
+<br />
+form build_fieldcatalog.<br />
+wa_fieldcat-fieldname   = 'belnr'.<br />
+wa_fieldcat-seltext_m   = 'Document Number'.<br />
+wa_fieldcat-col_pos     = 0.<br />
+wa_fieldcat-outputlen   = 10.<br />
+&nbsp;append&nbsp;wa_fieldcat&nbsp;to&nbsp;it_fieldcat.<br />
+&nbsp;clear&nbsp;&nbsp;wa_fieldcat.<br />
+<br />
+wa_fieldcat-fieldname   = 'gjahr'.<br />
+wa_fieldcat-seltext_m   = 'Fiscal Year'.<br />
+wa_fieldcat-col_pos     = 1.<br />
+wa_fieldcat-outputlen   = 4.<br />
+&nbsp;append&nbsp;wa_fieldcat&nbsp;to&nbsp;it_fieldcat.<br />
+&nbsp;clear&nbsp;&nbsp;wa_fieldcat.<br />
+&nbsp;endform.<br />
+<br />
+&nbsp;FORM&nbsp;build_layout&nbsp;.<br />
+gd_layout-no_input          = 'X'.<br />
+gd_layout-colwidth_optimize = 'X'.<br />
+ENDFORM.                    " build_layout<br />
+<br />
+form display_alv_report.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;=&nbsp;it_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_test<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;endform.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*form&nbsp;data_retrieval.<br />
+*select&nbsp;belnr&nbsp;gjahr<br />
+*from&nbsp;bkpf<br />
+*into&nbsp;table&nbsp;it_test.<br />
+*endform.<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;BELNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Document&nbsp;Number<br />
+*&nbsp;GJAHR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fiscal&nbsp;Year<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

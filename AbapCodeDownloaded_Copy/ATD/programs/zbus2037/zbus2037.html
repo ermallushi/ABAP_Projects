@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZBUS2037</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZBUS2037</h2>
+<h3> Description: Programm for oject type BUS2037 : Customer billing document</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+INCLUDE &lt;OBJECT&gt;.<br />
+BEGIN_DATA OBJECT. " Do not change.. DATA is generated<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;only&nbsp;private&nbsp;members&nbsp;may&nbsp;be&nbsp;inserted&nbsp;into&nbsp;structure&nbsp;private<br />
+   </div>
+   <div class="code">
+DATA:<br />
+" begin of private,<br />
+"   to declare private attributes remove comments and<br />
+"   insert private attributes here ...<br />
+" end of private,<br />
+&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;KEY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;LIKE&nbsp;VBRK-VBELN,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;KEY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_VBRK&nbsp;LIKE&nbsp;VBRK.<br />
+END_DATA OBJECT. " Do not change.. DATA is generated<br />
+<br />
+TABLES VBRK.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+GET_TABLE_PROPERTY VBRK.<br />
+DATA SUBRC LIKE SY-SUBRC.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;TABLES&nbsp;VBRK&nbsp;to&nbsp;enable&nbsp;Object&nbsp;Manager&nbsp;Access&nbsp;to&nbsp;Table&nbsp;Properties<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;SELECT_TABLE_VBRK&nbsp;USING&nbsp;SUBRC.<br />
+&nbsp;&nbsp;IF&nbsp;SUBRC&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT_OBJECT_NOT_FOUND.<br />
+&nbsp;&nbsp;ENDIF.<br />
+END_PROPERTY.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;Use&nbsp;Form&nbsp;also&nbsp;for&nbsp;other(virtual)&nbsp;Properties&nbsp;to&nbsp;fill&nbsp;TABLES&nbsp;VBRK<br />
+   </div>
+   <div class="code">
+FORM SELECT_TABLE_VBRK USING SUBRC LIKE SY-SUBRC.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;single&nbsp;*&nbsp;from&nbsp;VBRK,&nbsp;if&nbsp;OBJECT-_VBRK&nbsp;is&nbsp;initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;OBJECT-_VBRK-MANDT&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;AND&nbsp;OBJECT-_VBRK-VBELN&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;VBRK&nbsp;CLIENT&nbsp;SPECIFIED<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;MANDT&nbsp;=&nbsp;SY-MANDT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;VBELN&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBRC&nbsp;=&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SUBRC&nbsp;NE&nbsp;0.&nbsp;EXIT.&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OBJECT-_VBRK&nbsp;=&nbsp;VBRK.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBRC&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;VBRK&nbsp;=&nbsp;OBJECT-_VBRK.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

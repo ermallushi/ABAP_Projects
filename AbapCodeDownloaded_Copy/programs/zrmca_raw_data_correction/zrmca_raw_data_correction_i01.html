@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_RAW_DATA_CORRECTION_I01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_RAW_DATA_CORRECTION_I01</h2>
+<h3> Description: Include ZRMCA_RAW_DATA_CORRECTION_I01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_RAW_DATA_CORRECTION_I01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;PAI_100&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE pai_100 INPUT.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Process&nbsp;after&nbsp;input<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;gv_ok_code.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CANC'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exit&nbsp;from&nbsp;program...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;exit_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CHANGE'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Change&nbsp;selected&nbsp;Cont.&nbsp;acc&nbsp;/&nbsp;BP&nbsp;...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;change_data_found.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SUBPR'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Change&nbsp;selected&nbsp;subprocess...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;change_manuel&nbsp;USING&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'VKONT'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Change&nbsp;selected&nbsp;contract&nbsp;account...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;change_manuel&nbsp;USING&nbsp;'V'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'GPART'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Change&nbsp;selected&nbsp;business&nbsp;partner...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;change_manuel&nbsp;USING&nbsp;'G'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CDATE'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Change&nbsp;selected&nbsp;consumption&nbsp;date...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;change_manuel&nbsp;USING&nbsp;'D'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;gv_ok_code.<br />
+ENDMODULE.                 " PAI_100  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;CHECK_SUBPROCESS&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE check_subprocess INPUT.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;gv_subpr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;subprocess&nbsp;INTO&nbsp;gv_subpr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tfk8104<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;subprocess&nbsp;EQ&nbsp;gv_subpr.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gv_ok_code.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000(zrmcaj_if)&nbsp;WITH&nbsp;text-037&nbsp;gv_subpr&nbsp;text-038.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                 " CHECK_SUBPROCESS  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;CHECK_CONT_ACC&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE check_cont_acc INPUT.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;gv_vkont&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vkont&nbsp;INTO&nbsp;gv_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;EQ&nbsp;gv_vkont.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gv_ok_code.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000(zrmcaj_if)&nbsp;WITH&nbsp;text-037&nbsp;gv_vkont&nbsp;text-038.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                 " CHECK_CONT_ACC  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;CHECK_BUS_PARTNER&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE check_bus_partner INPUT.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;gv_gpart&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;gpart&nbsp;INTO&nbsp;gv_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;gpart&nbsp;EQ&nbsp;gv_gpart.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gv_ok_code.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000(zrmcaj_if)&nbsp;WITH&nbsp;text-037&nbsp;gv_gpart&nbsp;text-038.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                 " CHECK_BUS_PARTNER  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;EXIT&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE exit INPUT.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Leave&nbsp;the&nbsp;screen...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+ENDMODULE.                 " EXIT  INPUT<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

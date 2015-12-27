@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_BAD_DEBTS_BGD_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_BAD_DEBTS_BGD_TOP</h2>
+<h3> Description: zrmca_bad_debts_download_bgd_top</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_BAD_DEBTS_BGD_TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TABLES zrmca_aip_head.<br />
+<br />
+<br />
+<br />
+CONSTANTS: gc_ident      TYPE zrmca_ident  VALUE 'BADDEPT',<br />
+   </div>
+   <div class="codeComment">
+*VALUE&nbsp;'/usr/sap/RMD/SYS/src',&nbsp;"&nbsp;Identifier<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_saved&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_pstatu&nbsp;&nbsp;VALUE&nbsp;'1',&nbsp;&nbsp;&nbsp;"&nbsp;Saved<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_downloaded&nbsp;TYPE&nbsp;zrmca_pstatu&nbsp;&nbsp;VALUE&nbsp;'3',&nbsp;&nbsp;&nbsp;"&nbsp;Downloaded<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_ast&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'*',&nbsp;&nbsp;&nbsp;"&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_soli&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'/',&nbsp;&nbsp;&nbsp;"&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_jobdata&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcint4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;36,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter1form&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcst_pdf-formname&nbsp;VALUE&nbsp;'ZRMCA_BADDEPT_LETTER1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter2form&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcst_pdf-formname&nbsp;VALUE&nbsp;'ZRMCA_BADDEPT_LETTER2',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first_letter_sent&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'FIRST_LETTER_SENT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second_letter_sent&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'SECOND_LETTER_SENT'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Variable&nbsp;declarations<br />
+   </div>
+   <div class="code">
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_fmodule&nbsp;TYPE&nbsp;rs38l_fnam,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_cparam&nbsp;TYPE&nbsp;ssfctrlop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_outoptions&nbsp;TYPE&nbsp;ssfcompop,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_bin_filesize&nbsp;TYPE&nbsp;i,&nbsp;"&nbsp;Binary&nbsp;File&nbsp;Size<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_file_name&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_file_path&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_full_path&nbsp;TYPE&nbsp;string.<br />
+<br />
+DATA : BEGIN OF t_errorlog OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spool&nbsp;LIKE&nbsp;tsp01-rqident,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;desc(100)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;t_errorlog.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;to&nbsp;hold&nbsp;the&nbsp;OTF&nbsp;data<br />
+   </div>
+   <div class="code">
+DATA:<br />
+t_otf TYPE itcoo OCCURS 0 WITH HEADER LINE,<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;to&nbsp;hold&nbsp;OTF&nbsp;data&nbsp;recd&nbsp;from&nbsp;the&nbsp;SMARTFORM<br />
+   </div>
+   <div class="code">
+t_otf_from_fm TYPE ssfcrescl,<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;to&nbsp;hold&nbsp;the&nbsp;data&nbsp;from&nbsp;the&nbsp;FM&nbsp;CONVERT_OTF<br />
+   </div>
+   <div class="code">
+t_pdf_tab LIKE tline OCCURS 0 WITH HEADER LINE.<br />
+<br />
+<br />
+DATA: lv_command TYPE rlgrap-filename.<br />
+DATA: gv_period    TYPE char6,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_directory&nbsp;TYPE&nbsp;btctext80.<br />
+<br />
+DATA: gt_debts TYPE STANDARD TABLE OF zrmca_baddept, "Header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_debts_temp&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_baddept,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_debts&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_baddept,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_debts&nbsp;TYPE&nbsp;zrmca_baddept.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Log&nbsp;user&nbsp;activities&nbsp;definitions<br />
+   </div>
+   <div class="code">
+DATA: lgmessage TYPE bics_prov_message_text,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;TYPE&nbsp;dduser,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createdate&nbsp;TYPE&nbsp;timestamp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createtime&nbsp;TYPE&nbsp;timestamp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_zrmca_bduseract&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_bduseract,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_zrmca_bduseract&nbsp;TYPE&nbsp;zrmca_bduseract,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgty&nbsp;TYPE&nbsp;msgty&nbsp;VALUE&nbsp;'I',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_ref&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_root.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME.<br />
+PARAMETERS : p_sfrmnm LIKE bcst_pdf-formname.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win6 WITH FRAME.<br />
+PARAMETERS : p_gpart TYPE bu_partner.<br />
+SELECTION-SCREEN END OF BLOCK win6.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME.<br />
+PARAMETERS : p_vkont TYPE vkont_kk.<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win3 WITH FRAME.<br />
+PARAMETERS : p_phnnr TYPE ap_phone_number.<br />
+SELECTION-SCREEN END OF BLOCK win3.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win4 WITH FRAME.<br />
+PARAMETERS : p_first LIKE sy-datum.<br />
+SELECTION-SCREEN END OF BLOCK win4.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win5 WITH FRAME.<br />
+PARAMETERS : p_last LIKE sy-datum.<br />
+SELECTION-SCREEN END OF BLOCK win5.<br />
+<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win7 WITH FRAME.<br />
+PARAMETERS : p_udate LIKE sy-datum.<br />
+PARAMETERS: p_prot TYPE i.<br />
+SELECTION-SCREEN END OF BLOCK win7.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

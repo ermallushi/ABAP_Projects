@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>LZLOG_GRPF01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: LZLOG_GRPF01</h2>
+<h3> Description: Include LZLOG_GRPF01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+Data lv_bal_log_handle TYPE balloghndl.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+***INCLUDE&nbsp;LZLOG_GRPF01.<br />
+*----------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MSG_ADD<br />
+   </div>
+   <div class="code">
+FORM msg_add USING ps_return    TYPE bapiret2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_bal_log_handle&nbsp;TYPE&nbsp;balloghndl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_probclass&nbsp;TYPE&nbsp;balprobcl.<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------------<br />
+*&nbsp;FORM&nbsp;MSG_ADD<br />
+*--------------------------------------------------------------------<br />
+*&nbsp;Add&nbsp;the&nbsp;message&nbsp;to&nbsp;the&nbsp;log<br />
+*-------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bal_s_msg.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Define&nbsp;data&nbsp;of&nbsp;message&nbsp;for&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ps_return&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgty.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-probclass&nbsp;=&nbsp;pv_probclass.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-number.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-probclass&nbsp;=&nbsp;pv_probclass.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Append&nbsp;Message&nbsp;to&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lv_bal_log_handle&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Add&nbsp;this&nbsp;message&nbsp;to&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_MSG_ADD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_log_handle&nbsp;&nbsp;=&nbsp;lv_bal_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;&nbsp;&nbsp;Save&nbsp;Message<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bal_log_save&nbsp;USING&nbsp;lv_bal_log_handle.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;Raise&nbsp;Message&nbsp;for&nbsp;Displaying<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-msgty&nbsp;CA&nbsp;'EAX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;ls_msg-msgid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ls_msg-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;ls_msg-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;ls_msg-msgv1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;DATA:<br />
+**&nbsp;&nbsp;l_s_msg&nbsp;TYPE&nbsp;bal_s_msg.<br />
+**<br />
+***&nbsp;define&nbsp;data&nbsp;of&nbsp;message&nbsp;for&nbsp;Application&nbsp;Log<br />
+**&nbsp;&nbsp;l_s_msg-msgty&nbsp;=&nbsp;sy-msgty.<br />
+**&nbsp;&nbsp;l_s_msg-msgid&nbsp;=&nbsp;sy-msgid.<br />
+**&nbsp;&nbsp;l_s_msg-msgno&nbsp;=&nbsp;sy-msgno.<br />
+**&nbsp;&nbsp;l_s_msg-msgv1&nbsp;=&nbsp;sy-msgv1.<br />
+**&nbsp;&nbsp;l_s_msg-msgv2&nbsp;=&nbsp;sy-msgv2.<br />
+**&nbsp;&nbsp;l_s_msg-msgv3&nbsp;=&nbsp;sy-msgv3.<br />
+**&nbsp;&nbsp;l_s_msg-msgv4&nbsp;=&nbsp;sy-msgv4.<br />
+**<br />
+**&nbsp;&nbsp;l_s_msg-msgty&nbsp;=&nbsp;'E'.&nbsp;"&nbsp;Can&nbsp;use&nbsp;W&nbsp;or&nbsp;S<br />
+**&nbsp;&nbsp;l_s_msg-msgv1&nbsp;=&nbsp;'test1'."&lt;&nbsp;Message&nbsp;text&nbsp;1&gt;'.<br />
+**&nbsp;&nbsp;l_s_msg-msgv2&nbsp;=&nbsp;'test2'."&lt;&nbsp;Message&nbsp;text&nbsp;2&gt;<br />
+**&nbsp;&nbsp;l_s_msg-msgv3&nbsp;=&nbsp;'test3'."&lt;&nbsp;Message&nbsp;text&nbsp;3&gt;<br />
+**&nbsp;&nbsp;l_s_msg-msgv4&nbsp;=&nbsp;'test4'."&lt;&nbsp;Message&nbsp;text&nbsp;4&gt;<br />
+**<br />
+**&nbsp;&nbsp;l_s_msg-context&nbsp;=&nbsp;l_s_log-context.<br />
+***&nbsp;add&nbsp;this&nbsp;message&nbsp;to&nbsp;log&nbsp;file<br />
+***&nbsp;(I_LOG_HANDLE&nbsp;is&nbsp;not&nbsp;specified,&nbsp;we&nbsp;want&nbsp;to&nbsp;add&nbsp;to&nbsp;the&nbsp;default&nbsp;log.<br />
+***&nbsp;If&nbsp;it&nbsp;does&nbsp;not&nbsp;exist&nbsp;we&nbsp;do&nbsp;not&nbsp;care&nbsp;=&gt;EXCEPTIONS&nbsp;log_not_found&nbsp;=&nbsp;0)<br />
+**&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_MSG_ADD'<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_LOG_HANDLE&nbsp;&nbsp;=<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_s_msg<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;=&nbsp;0<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+**&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+**&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " MSG_ADD<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BAL_LOG_SAVE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_LV_BAL_LOG_HANDLE&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bal_log_save  USING pv_loghandle TYPE balloghndl.<br />
+BREAK elushi.<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_log_handle&nbsp;TYPE&nbsp;bal_t_logh.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;&nbsp;pv_loghandle&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;APPEND&nbsp;pv_loghandle&nbsp;TO&nbsp;lt_log_handle.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Application&nbsp;Log:&nbsp;Database:&nbsp;Save&nbsp;logs<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_DB_SAVE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_t_log_handle&nbsp;=&nbsp;lt_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISING&nbsp;failed.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " BAL_LOG_SAVE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BAL_LOG_CREATE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_LV_BAL_LOG_HANDLE&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bal_log_create using co_bal_object co_bal_subboj gs_return CHANGING pv_bal_log_handle.<br />
+BREAK elushi.<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_log&nbsp;TYPE&nbsp;bal_s_log.<br />
+<br />
+<br />
+&nbsp;&nbsp;MOVE&nbsp;co_bal_object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-object.<br />
+&nbsp;&nbsp;MOVE&nbsp;co_bal_subboj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-subobject.<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-datum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-aldate.<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-uzeit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-altime.<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-uname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-aluser.<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-altcode.<br />
+&nbsp;&nbsp;MOVE&nbsp;sy-repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;ls_log-alprog.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Unique&nbsp;identifier&nbsp;for&nbsp;application&nbsp;log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_log_handle&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_bal_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_header_inconsistent&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bal_log_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'4'.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.                    " BAL_LOG_CREATE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BAL_LOG_MESSAGE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GS_RETURN&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_0569&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM bal_log_message    USING ps_return    TYPE bapiret2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_probclass&nbsp;TYPE&nbsp;balprobcl.<br />
+<br />
+BREAK elushi.<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bal_s_msg.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Define&nbsp;data&nbsp;of&nbsp;message&nbsp;for&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ps_return&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgty.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-probclass&nbsp;=&nbsp;pv_probclass.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-number.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ps_return-message_v4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-probclass&nbsp;=&nbsp;pv_probclass.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Append&nbsp;Message&nbsp;to&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lv_bal_log_handle&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Add&nbsp;this&nbsp;message&nbsp;to&nbsp;Application&nbsp;Log<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_MSG_ADD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_msg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_log_handle&nbsp;&nbsp;=&nbsp;lv_bal_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;&nbsp;&nbsp;Save&nbsp;Message<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;bal_log_save&nbsp;USING&nbsp;lv_bal_log_handle.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;Raise&nbsp;Message&nbsp;for&nbsp;Displaying<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-msgty&nbsp;CA&nbsp;'EAX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;ls_msg-msgid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ls_msg-msgty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;ls_msg-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;ls_msg-msgv1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " BAL_LOG_MESSAGE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZIS_CONT_ACTIVE_IN_MONTH</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZIS_CONT_ACTIVE_IN_MONTH</h2>
+<h3> Description: is conract account active on one month</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION zis_cont_active_in_month.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(MONTH) TYPE  MONAT<br />
+*"     REFERENCE(YEAR) TYPE  MJAHR<br />
+*"     REFERENCE(IV_PRVC_GUID) TYPE  CRMT_OBJECT_GUID<br />
+*"  EXPORTING<br />
+*"     REFERENCE(RV_RESULT) TYPE  C<br />
+*"----------------------------------------------------------------------<br />
+<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-zis_cont_active_in_month.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;INCLUDE&nbsp;crm_object_kinds_con.<br />
+&nbsp;&nbsp;INCLUDE&nbsp;crm_log_states_con.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_admini&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;crmd_orderadm_i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_admini&nbsp;TYPE&nbsp;crmd_orderadm_i.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;lt_admini<br />
+&nbsp;&nbsp;&nbsp;FROM&nbsp;crmd_orderadm_i<br />
+&nbsp;&nbsp;WHERE&nbsp;header&nbsp;EQ&nbsp;iv_prvc_guid.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_admini&nbsp;BY&nbsp;order_date&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_admini&nbsp;INTO&nbsp;ls_admini&nbsp;INDEX&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_begin_tstamp&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_date_timestamp_from,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_end_tstamp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_date_timestamp_from,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_item_guids&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_object_guid_tab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&gt;&gt;&gt; read contract start & end<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_appointment&nbsp;TYPE&nbsp;crmt_appointment_wrkt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_appt_begin&nbsp;&nbsp;TYPE&nbsp;crmt_appointment_wrk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_appt_end&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_appointment_wrk.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_admini-guid&nbsp;TO&nbsp;lt_item_guids.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CRM_ORDER_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_item_guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_item_guids<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_appointment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_appointment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_not_found&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_occurred&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_locked&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_change_authority&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_display_authority&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_change_allowed&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_appointment&nbsp;INTO&nbsp;ls_appt_begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;appt_type&nbsp;=&nbsp;'CONTSTART'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ref_guid&nbsp;&nbsp;=&nbsp;ls_admini-guid.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_appointment&nbsp;INTO&nbsp;ls_appt_end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;appt_type&nbsp;=&nbsp;'CONTEND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ref_guid&nbsp;&nbsp;=&nbsp;ls_admini-guid.<br />
+<br />
+&nbsp;&nbsp;lv_begin_tstamp&nbsp;=&nbsp;ls_appt_begin-timestamp_from.<br />
+&nbsp;&nbsp;lv_end_tstamp&nbsp;&nbsp;&nbsp;=&nbsp;ls_appt_end-timestamp_from.<br />
+   </div>
+   <div class="codeComment">
+***&lt;&lt;&lt; read contract start & end<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lv_end_tstamp&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rv_result&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+* get current time stamp and convert in "user perspective" (index returns valid_from and to also converted to sy-zonlo!!<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fdm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_fdnm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ts_from&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_date_timestamp_from,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ts_to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_date_timestamp_from,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tstamp_c1&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tstamp_c2&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;year&nbsp;month&nbsp;'01'&nbsp;INTO&nbsp;lv_fdm.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CRM_GC_ADD_MONTH_TO_DATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;months&nbsp;&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;olddate&nbsp;=&nbsp;lv_fdm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newdate&nbsp;=&nbsp;lv_fdnm.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_fdm&nbsp;'000000'&nbsp;&nbsp;INTO&nbsp;lv_tstamp_c1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_fdnm&nbsp;'000000'&nbsp;INTO&nbsp;lv_tstamp_c2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;lv_tstamp_c1&nbsp;TO&nbsp;lv_ts_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;lv_tstamp_c2&nbsp;TO&nbsp;lv_ts_to.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_end_tstamp&nbsp;GE&nbsp;lv_tstamp_c1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_result&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_result&nbsp;=&nbsp;abap_false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

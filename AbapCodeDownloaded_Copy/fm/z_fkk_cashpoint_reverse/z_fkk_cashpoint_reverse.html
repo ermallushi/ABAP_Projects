@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_FKK_CASHPOINT_REVERSE</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_FKK_CASHPOINT_REVERSE</h2>
+<h3> Description: Online payment reverse</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_fkk_cashpoint_reverse.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     VALUE(HEADER_ID) TYPE  FKK_XI_MESSAGE_HEADER_VALUE<br />
+*"     VALUE(CREATE_DATE) TYPE  FKK_XI_DATE_TIME<br />
+*"     VALUE(REF_ID) TYPE  FKK_BUSINESS_TRANSACTION_DOCUM<br />
+*"     VALUE(OFFICE_ID) TYPE  FKK_BUSINESS_TRANSACTION_DOCUM<br />
+*"     VALUE(TRANS_ID) TYPE  FKK_BUSINESS_TRANSACTION_DOCUM<br />
+*"     VALUE(REV_DATE) TYPE  FKK_XI_DATE<br />
+*"  EXPORTING<br />
+*"     VALUE(RET) TYPE  CHAR1<br />
+*"  CHANGING<br />
+*"     VALUE(LOGS) TYPE  FKK_EXCHANGE_LOG_DATA_TAB OPTIONAL<br />
+*"----------------------------------------------------------------------<br />
+
+<div class="codeComment">*       <a href ="global-z_fkk_cashpoint_reverse.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;&nbsp;&nbsp;me&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_fkk_cashpoint_reverse,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_data&nbsp;TYPE&nbsp;fkk_cashpoint_reverse_in,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_fkk_cashpoint_reversal,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_bapiret1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapiret1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_bapiret2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_cx_ai_fault&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_ai_system_fault,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stand_str&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkk_exchange_fault_data,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_xi_message_header,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverse&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_cash_point_reverse,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rev_message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_cash_point_reverse_message,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rev_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_cash_point_reverse_tab.<br />
+<br />
+&nbsp;&nbsp;header-id-content&nbsp;=&nbsp;header_id.<br />
+&nbsp;&nbsp;header-creation_date_time&nbsp;=&nbsp;create_date.<br />
+&nbsp;&nbsp;reverse-cash_point_reference_id-content&nbsp;=&nbsp;ref_id.<br />
+&nbsp;&nbsp;reverse-cash_point_office_reference_id-content&nbsp;=&nbsp;office_id.<br />
+&nbsp;&nbsp;reverse-payment_transaction_id-content&nbsp;=&nbsp;trans_id.<br />
+&nbsp;&nbsp;reverse-reversal_value_date&nbsp;=&nbsp;rev_date.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;reverse&nbsp;TO&nbsp;rev_tab.<br />
+&nbsp;&nbsp;rev_message-message_header&nbsp;=&nbsp;header.<br />
+&nbsp;&nbsp;rev_message-cash_point_payment_reverse&nbsp;=&nbsp;rev_tab.<br />
+&nbsp;&nbsp;input_data-cash_point_reverse_notif&nbsp;=&nbsp;rev_message.<br />
+&nbsp;&nbsp;ret&nbsp;=&nbsp;'E'.<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;me.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_ai_system_fault&nbsp;INTO&nbsp;lo_cx_ai_fault.<br />
+<br />
+&nbsp;&nbsp;ENDTRY.<br />
+<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;me-&gt;ii_fkk_cashpoint_reverse~execute_asynchronous<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;=&nbsp;input_data.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_fkk_cashpoint_reversal&nbsp;INTO&nbsp;lo_error.<br />
+&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lo_error&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lo_error-&gt;standard-fault_detail&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;lo_error-&gt;standard&nbsp;TO&nbsp;stand_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logs&nbsp;=&nbsp;lo_error-&gt;standard-fault_detail.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;wa_error&nbsp;TYPE&nbsp;&nbsp;fkk_exchange_log_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lo_error-&gt;standard-fault_detail&nbsp;INTO&nbsp;wa_error.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_error-severity&nbsp;EQ&nbsp;'error'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret&nbsp;=&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ret&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

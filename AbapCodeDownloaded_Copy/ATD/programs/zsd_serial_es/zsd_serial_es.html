@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_SERIAL_ES</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSD_SERIAL_ES</h2>
+<h3> Description: Serial numbers</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZSD_SERIAL_ES<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  zsd_serial_es.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;zsd_serial_es&nbsp;for&nbsp;es<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;ERMAL&nbsp;LUSHI<br />
+*&&nbsp;Creation&nbsp;date&nbsp;:&nbsp;06.08.2015<br />
+*&&nbsp;Project&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;ZSD_SERIAL&nbsp;-&nbsp;GET&nbsp;SERIALS<br />
+*&&nbsp;Definition&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Automation&nbsp;of&nbsp;invoice&nbsp;process&nbsp;regarding&nbsp;creation&nbsp;and<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loading&nbsp;of&nbsp;invoice&nbsp;text&nbsp;files&nbsp;into&nbsp;the&nbsp;system<br />
+*&---------------------------------------------------------------------*<br />
+*<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+TABLES:     ekko,bkpf.<br />
+<br />
+TYPE-POOLS: slis.                                 "ALV Declarations<br />
+   </div>
+   <div class="codeComment">
+*Data&nbsp;Declaration<br />
+<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF t_ekko,<br />
+&nbsp;&nbsp;&nbsp;blart&nbsp;TYPE&nbsp;bkpf-blart,<br />
+&nbsp;&nbsp;&nbsp;budat&nbsp;TYPE&nbsp;bkpf-budat,<br />
+&nbsp;&nbsp;&nbsp;belnr&nbsp;TYPE&nbsp;bkpf-belnr,<br />
+&nbsp;&nbsp;&nbsp;gjahr&nbsp;TYPE&nbsp;bkpf-gjahr,<br />
+&nbsp;&nbsp;&nbsp;bktxt&nbsp;TYPE&nbsp;bkpf-bktxt,<br />
+&nbsp;&nbsp;&nbsp;xblnr&nbsp;TYPE&nbsp;bkpf-xblnr,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;xref1_hd&nbsp;LIKE&nbsp;bkpf-xref1_hd,<br />
+*&nbsp;&nbsp;&nbsp;xref2_hd&nbsp;LIKE&nbsp;bkpf-xref2_hd,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;awkey&nbsp;TYPE&nbsp;thead-tdname,<br />
+&nbsp;&nbsp;&nbsp;sd_sr_no&nbsp;TYPE&nbsp;bkpf-xref1_hd,"&nbsp;zxref1_hd,<br />
+&nbsp;&nbsp;&nbsp;sd_nr_fat&nbsp;TYPE&nbsp;bkpf-xref1_hd,"&nbsp;zfatno_hd,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;t_ekko.<br />
+<br />
+DATA : lines TYPE TABLE OF tline.<br />
+<br />
+DATA: it_ekko  TYPE STANDARD TABLE OF t_ekko INITIAL SIZE 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_ekko&nbsp;TYPE&nbsp;t_ekko,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;&nbsp;t_ekko.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*ALV&nbsp;data&nbsp;declarations<br />
+   </div>
+   <div class="code">
+DATA: fieldcatalog TYPE slis_t_fieldcat_alv WITH HEADER LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_tab_group&nbsp;TYPE&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_layout&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_prntparams&nbsp;TYPE&nbsp;slis_print_alv.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;win1&nbsp;WITH&nbsp;FRAME.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;:&nbsp;blart&nbsp;FOR&nbsp;bkpf-blart.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;:&nbsp;budat&nbsp;FOR&nbsp;bkpf-budat.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;:&nbsp;belnr&nbsp;FOR&nbsp;bkpf-belnr.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;:&nbsp;gjahr&nbsp;FOR&nbsp;bkpf-gjahr.<br />
+<br />
+&nbsp;&nbsp;SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;win1.<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*Start-of-selection.<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;data_retrieval.<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_fieldcatalog.<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_layout.<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_events.<br />
+&nbsp;&nbsp;PERFORM&nbsp;build_print_params.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display_alv_report.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_FIELDCATALOG<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Build&nbsp;Fieldcatalog&nbsp;for&nbsp;ALV&nbsp;Report<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_fieldcatalog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;There&nbsp;are&nbsp;a&nbsp;number&nbsp;of&nbsp;ways&nbsp;to&nbsp;create&nbsp;a&nbsp;fieldcat.<br />
+*&nbsp;For&nbsp;the&nbsp;purpose&nbsp;of&nbsp;this&nbsp;example&nbsp;i&nbsp;will&nbsp;build&nbsp;the&nbsp;fieldcatalog&nbsp;manualy<br />
+*&nbsp;by&nbsp;populating&nbsp;the&nbsp;internal&nbsp;table&nbsp;fields&nbsp;individually&nbsp;and&nbsp;then<br />
+*&nbsp;appending&nbsp;the&nbsp;rows.&nbsp;This&nbsp;method&nbsp;can&nbsp;be&nbsp;the&nbsp;most&nbsp;time&nbsp;consuming&nbsp;but&nbsp;can<br />
+*&nbsp;also&nbsp;allow&nbsp;you&nbsp;&nbsp;more&nbsp;control&nbsp;of&nbsp;the&nbsp;final&nbsp;product.<br />
+<br />
+*&nbsp;Beware&nbsp;though,&nbsp;you&nbsp;need&nbsp;to&nbsp;ensure&nbsp;that&nbsp;all&nbsp;fields&nbsp;required&nbsp;are<br />
+*&nbsp;populated.&nbsp;When&nbsp;using&nbsp;some&nbsp;of&nbsp;functionality&nbsp;available&nbsp;via&nbsp;ALV,&nbsp;such&nbsp;as<br />
+*&nbsp;total.&nbsp;You&nbsp;may&nbsp;need&nbsp;to&nbsp;provide&nbsp;more&nbsp;information&nbsp;than&nbsp;if&nbsp;you&nbsp;were<br />
+*&nbsp;simply&nbsp;displaying&nbsp;the&nbsp;result<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I.e.&nbsp;Field&nbsp;type&nbsp;may&nbsp;be&nbsp;required&nbsp;in-order&nbsp;for<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;'TOTAL'&nbsp;function&nbsp;to&nbsp;work.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BLART'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Doc.&nbsp;Type'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;fieldcatalog-do_sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BUDAT'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Posting&nbsp;Date'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BELNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Document&nbsp;Number'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'GJAHR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Fiscal&nbsp;year'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BKTXT'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Doc.Header&nbsp;Text'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'XBLNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Reference'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'XREF1_HD'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Ref.key(head)&nbsp;1'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'XREF2_HD'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Ref.key(head.)2'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'AWKEY'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Reference&nbsp;Key'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'SD_SR_NO'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SD_SR_NO'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'SD_NR_FAT'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SD_NR_FAT'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;fieldcatalog-emphasize&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+ENDFORM.                    " BUILD_FIELDCATALOG<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Build&nbsp;layout&nbsp;for&nbsp;ALV&nbsp;grid&nbsp;report<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_layout.<br />
+&nbsp;&nbsp;gd_layout-no_input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gd_layout-colwidth_optimize&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;gd_layout-totals_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Totals'(201).<br />
+ENDFORM.                    " BUILD_LAYOUT<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_ALV_REPORT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Display&nbsp;report&nbsp;using&nbsp;ALV&nbsp;grid<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_alv_report.<br />
+&nbsp;&nbsp;gd_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'TOP-OF-PAGE'&nbsp;&nbsp;"see&nbsp;FORM<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'USER_COMMAND'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;outtext<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fieldcatalog[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_special_groups&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_tabgroup<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_events<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_print&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_prntparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;z_template<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;MESSAGE&nbsp;ID&nbsp;SY-MSGID&nbsp;TYPE&nbsp;SY-MSGTY&nbsp;NUMBER&nbsp;SY-MSGNO<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SY-MSGV1&nbsp;SY-MSGV2&nbsp;SY-MSGV3&nbsp;SY-MSGV4.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DISPLAY_ALV_REPORT<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DATA_RETRIEVAL<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retrieve&nbsp;data&nbsp;form&nbsp;EKPO&nbsp;table&nbsp;and&nbsp;populate&nbsp;itab&nbsp;it_ekko<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM data_retrieval.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;blart&nbsp;budat&nbsp;belnr&nbsp;gjahr&nbsp;&nbsp;bktxt&nbsp;xblnr&nbsp;&nbsp;awkey&nbsp;xref1_hd&nbsp;xref1_hd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bkpf<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;it_ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;blart&nbsp;IN&nbsp;blart&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;budat&nbsp;IN&nbsp;budat&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;IN&nbsp;belnr&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;IN&nbsp;gjahr.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_ekko&nbsp;INTO&nbsp;wa_ekko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;CLIENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-MANDT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z001'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_ekko-awkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VBBK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lines<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;p_line1&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lines&nbsp;INTO&nbsp;p_line1&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_ekko-sd_sr_no&nbsp;=&nbsp;p_line1-tdline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_ekko&nbsp;FROM&nbsp;&nbsp;wa_ekko&nbsp;TRANSPORTING&nbsp;sd_sr_no.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;CLIENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-MANDT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z002'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_ekko-awkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VBBK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lines<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;p_line2&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lines&nbsp;INTO&nbsp;p_line2&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_ekko-sd_nr_fat&nbsp;=&nbsp;p_line2-tdline.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_ekko&nbsp;FROM&nbsp;&nbsp;wa_ekko&nbsp;TRANSPORTING&nbsp;sd_nr_fat.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    " DATA_RETRIEVAL<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*-------------------------------------------------------------------*<br />
+*&nbsp;Form&nbsp;&nbsp;TOP-OF-PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*-------------------------------------------------------------------*<br />
+*&nbsp;ALV&nbsp;Report&nbsp;Header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*-------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM top-of-page.<br />
+   </div>
+   <div class="codeComment">
+*ALV&nbsp;Header&nbsp;declarations<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;t_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_header&nbsp;TYPE&nbsp;slis_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_line&nbsp;LIKE&nbsp;wa_header-info,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_lines&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_linesc(10)&nbsp;TYPE&nbsp;c.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Title<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_header-typ&nbsp;&nbsp;=&nbsp;'H'.<br />
+<br />
+&nbsp;&nbsp;wa_header-info&nbsp;=&nbsp;'Report'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_header&nbsp;TO&nbsp;t_header.<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_header.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Date<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_header-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;wa_header-key&nbsp;=&nbsp;'Date:&nbsp;'.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;sy-datum+6(2)&nbsp;'.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-datum+4(2)&nbsp;'.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-datum(4)&nbsp;INTO&nbsp;wa_header-info.&nbsp;&nbsp;&nbsp;"todays&nbsp;date<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_header&nbsp;TO&nbsp;t_header.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_header.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Total&nbsp;No.&nbsp;of&nbsp;Records&nbsp;Selected<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;it_ekko&nbsp;LINES&nbsp;ld_lines.<br />
+&nbsp;&nbsp;ld_linesc&nbsp;=&nbsp;ld_lines.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'Total&nbsp;No.&nbsp;of&nbsp;Records&nbsp;Selected:&nbsp;'&nbsp;ld_linesc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;t_line&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;wa_header-typ&nbsp;&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;wa_header-info&nbsp;=&nbsp;t_line.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_header&nbsp;TO&nbsp;t_header.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;wa_header,&nbsp;t_line.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;t_header.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z_LOGO'.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    "top-of-page<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_EVENTS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Build&nbsp;events&nbsp;table<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_events.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:&nbsp;ls_event&nbsp;TYPE&nbsp;slis_alv_event.<br />
+*<br />
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_EVENTS_GET'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_list_type&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_events&nbsp;&nbsp;&nbsp;=&nbsp;gt_events[].<br />
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_events&nbsp;WITH&nbsp;KEY&nbsp;name&nbsp;=&nbsp;&nbsp;slis_ev_end_of_page<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_event.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;'END_OF_PAGE'&nbsp;TO&nbsp;ls_event-form.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_event&nbsp;TO&nbsp;gt_events.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_events&nbsp;WITH&nbsp;KEY&nbsp;name&nbsp;=&nbsp;&nbsp;slis_ev_end_of_list<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_event.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;'END_OF_LIST'&nbsp;TO&nbsp;ls_event-form.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_event&nbsp;TO&nbsp;gt_events.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " BUILD_EVENTS<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_PRINT_PARAMS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Setup&nbsp;print&nbsp;parameters<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_print_params.<br />
+&nbsp;&nbsp;gd_prntparams-reserve_lines&nbsp;=&nbsp;'3'.&nbsp;&nbsp;&nbsp;"Lines&nbsp;reserved&nbsp;for&nbsp;footer<br />
+&nbsp;&nbsp;gd_prntparams-no_coverpage&nbsp;=&nbsp;'X'.<br />
+ENDFORM.                    " BUILD_PRINT_PARAMS<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;END_OF_PAGE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM end_of_page.<br />
+&nbsp;&nbsp;DATA:&nbsp;listwidth&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_pagepos(10)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_page(10)&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;sy-uline(50).<br />
+&nbsp;&nbsp;SKIP.<br />
+&nbsp;&nbsp;WRITE:/40&nbsp;'Page:',&nbsp;sy-pagno&nbsp;.<br />
+ENDFORM.                    "END_OF_PAGE<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;END_OF_LIST<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM end_of_list.<br />
+&nbsp;&nbsp;DATA:&nbsp;listwidth&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_pagepos(10)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_page(10)&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;SKIP.<br />
+&nbsp;&nbsp;WRITE:/40&nbsp;'Page:',&nbsp;sy-pagno&nbsp;.<br />
+ENDFORM.                    "END_OF_LIST<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;BELNR&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;BLART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;BUDAT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;GJAHR&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

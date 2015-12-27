@@ -1,0 +1,799 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRFKKINV_DELETE_SIM_F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRFKKINV_DELETE_SIM_F01</h2>
+<h3> Description: Include ZRFKKINV_DELETE_SIM_F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRFKKINV_DELETE_SIM_F01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;AT_SELECTION_OUTPUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM at_selection_output .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;enable/disable&nbsp;master&nbsp;data&nbsp;category<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lv_only_fica&nbsp;TYPE&nbsp;abap_bool.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'MD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_INV_MDCAT_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_only_fica_active&nbsp;=&nbsp;lv_only_fica.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_only_fica&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-output&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-output&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " AT_SELECTION_OUTPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FIND_CONT_ACC<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM find_cont_acc .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_total_vkont&nbsp;TYPE&nbsp;zrmca_nofca,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_job_counter&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;betrw_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_nofcontacc&nbsp;&nbsp;TYPE&nbsp;zrmca_nofca,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index_low&nbsp;&nbsp;&nbsp;TYPE&nbsp;syindex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index_high&nbsp;&nbsp;TYPE&nbsp;syindex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_low&nbsp;&nbsp;&nbsp;TYPE&nbsp;vkont_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_high&nbsp;&nbsp;TYPE&nbsp;vkont_kk.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;vkont&nbsp;INTO&nbsp;TABLE&nbsp;gt_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;inv_process&nbsp;IN&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;p_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;&nbsp;&nbsp;EQ&nbsp;co_true.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-001&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;gt_vkont&nbsp;BY&nbsp;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;gt_vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Find&nbsp;the&nbsp;number&nbsp;of&nbsp;contract&nbsp;account&nbsp;and&nbsp;divide&nbsp;them&nbsp;to&nbsp;four.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lv_total_vkont&nbsp;=&nbsp;lines(&nbsp;gt_vkont&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_total_vkont&nbsp;/&nbsp;gc_nofpp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_nofcontacc&nbsp;&nbsp;=&nbsp;ceil(&nbsp;lv_temp&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_job_counter&nbsp;=&nbsp;lv_index_low&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_index_high&nbsp;&nbsp;=&nbsp;lv_nofcontacc.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;4&nbsp;parallel&nbsp;processes&nbsp;and&nbsp;submit&nbsp;itself&nbsp;by&nbsp;setting&nbsp;the&nbsp;field&nbsp;p_call&nbsp;=&nbsp;'X'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;gc_nofpp&nbsp;TIMES.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont&nbsp;INDEX&nbsp;lv_index_low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_low&nbsp;=&nbsp;gr_vkont-&gt;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_index_high&nbsp;GT&nbsp;lv_total_vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index_high&nbsp;=&nbsp;lv_total_vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont&nbsp;INDEX&nbsp;lv_index_high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont_high&nbsp;=&nbsp;gr_vkont-&gt;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;submit_prg&nbsp;USING&nbsp;lv_job_counter&nbsp;lv_vkont_low&nbsp;lv_vkont_high.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_index_high&nbsp;EQ&nbsp;lv_total_vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD:&nbsp;lv_nofcontacc&nbsp;TO&nbsp;lv_index_low,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_nofcontacc&nbsp;TO&nbsp;lv_index_high,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;lv_job_counter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " FIND_CONT_ACC<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SUBMIT_PRG<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM submit_prg USING pv_counter    TYPE char1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_vkont_low&nbsp;&nbsp;TYPE&nbsp;vkont_kk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_vkont_high&nbsp;TYPE&nbsp;vkont_kk.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_jobname&nbsp;&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_jobcount&nbsp;TYPE&nbsp;btcjobcnt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_rsparams&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;rsparams,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams&nbsp;TYPE&nbsp;rsparams.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;sy-cprog&nbsp;'_'&nbsp;pv_counter&nbsp;INTO&nbsp;lv_jobname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Job&nbsp;open...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_OPEN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_create_job&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_job_data&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_DELETE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forcedmode&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i047(&gt;u).<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;selection&nbsp;screen&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_BUDAT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_budat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_MDCAT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_mdcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_CALL'.&nbsp;"&nbsp;Submit&nbsp;itself...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_DELTST'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_deltst.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_DELPRD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_delprd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_PROT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_prot.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_PROT_O'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_prot_o.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_CRDATE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_crdate.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_crdate-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_crdate-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_crdate-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_crdate-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_bill&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_BILL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_bill.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_bill-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_bill-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_bill-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_bill-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_gpart&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_GPART'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_gpart.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_gpart-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_gpart-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_gpart-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_gpart-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_VKONT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_bt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_vkont_low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_vkont_high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_crname&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_CRNAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_crname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_crname-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_crname-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_crname-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_crname-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_invprc&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_INVPRC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_invprc.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_invprc-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_invprc-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_invprc-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_invprc-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_docty&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_DOCTY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;s_docty.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;=&nbsp;s_docty-sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;=&nbsp;s_docty-option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_docty-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-high&nbsp;&nbsp;&nbsp;=&nbsp;s_docty-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Submit&nbsp;itself...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;zrfkkinv_delete_sim_invdocs2&nbsp;AND&nbsp;RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SELECTION-TABLE&nbsp;lt_rsparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USER&nbsp;sy-uname&nbsp;VIA&nbsp;JOB&nbsp;lv_jobname&nbsp;NUMBER&nbsp;lv_jobcount.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Job&nbsp;close...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_CLOSE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strtimmed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_start_immediate&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_startdate&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_close_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_nosteps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_notex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lock_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_target&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i050(&gt;u).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SUBMIT_PRG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DELETE_SIM_INVDOC<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_sim_invdoc .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Init&nbsp;protocoll<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_INIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_detailprotocol&nbsp;=&nbsp;p_prot.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Message&nbsp;for&nbsp;test&nbsp;mode<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_deltst&nbsp;=&nbsp;co_true.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'511'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i511(fkkinv).&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Open&nbsp;cursor&nbsp;for&nbsp;DFKKINVDOC_H<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;OPEN&nbsp;CURSOR&nbsp;WITH&nbsp;HOLD&nbsp;v_invdoc_cursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;inv_process&nbsp;IN&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;p_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;&nbsp;&nbsp;EQ&nbsp;co_true.<br />
+<br />
+&nbsp;&nbsp;WHILE&nbsp;lv_eof&nbsp;EQ&nbsp;co_false.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;select&nbsp;records&nbsp;from&nbsp;database<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;FETCH&nbsp;NEXT&nbsp;CURSOR&nbsp;v_invdoc_cursor&nbsp;INTO&nbsp;TABLE&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PACKAGE&nbsp;SIZE&nbsp;co_max_read.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there&nbsp;are&nbsp;no&nbsp;more&nbsp;entries&nbsp;in&nbsp;the&nbsp;database;&nbsp;end&nbsp;processing<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_eof&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;creation&nbsp;date&nbsp;must&nbsp;be&nbsp;older&nbsp;than&nbsp;the&nbsp;retention&nbsp;period&nbsp;for&nbsp;archiving<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;no&nbsp;simulated&nbsp;invoicing&nbsp;documents&nbsp;should&nbsp;be&nbsp;archived<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_dfkkinvdoc_h&nbsp;WHERE&nbsp;crdate&nbsp;&gt;=&nbsp;vd_invdoc.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;analyse&nbsp;the&nbsp;header&nbsp;of&nbsp;the&nbsp;invoicing&nbsp;document<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;analyse_sim_invdocs&nbsp;CHANGING&nbsp;it_dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_rest_sim_invdocs&nbsp;USING&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_sim_invdocs&nbsp;USING&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cnt_doc_tot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_dfkkinvdoc_h&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_delprd&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DB_COMMIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDWHILE.<br />
+<br />
+&nbsp;&nbsp;CLOSE&nbsp;CURSOR&nbsp;v_invdoc_cursor.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'532'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv1&nbsp;&nbsp;&nbsp;=&nbsp;lv_cnt_doc_tot.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i532(fkkinv).&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Call&nbsp;detailed&nbsp;protocol<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_WRITE'.<br />
+ENDFORM.                    " DELETE_SIM_INVDOC<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;analyse_sim_invdocs<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM analyse_sim_invdocs CHANGING ct_dfkkinvdoc_h TYPE dfkkinvdoc_h_tab.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ref_dfkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;ref_dfkkinvdoc_h&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinv_cfc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_dfkkinvdoc_h&gt;-invdocno.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_NOFIELD<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-dbcnt&nbsp;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ct_dfkkinvdoc_h.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "analyse_sim_invdocs<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;delete_sim_invdocs<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_sim_invdocs USING it_dfkkinvdoc_h   TYPE dfkkinvdoc_h_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cnt_doc_tot&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ref_fkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;anz_fkkinvdoc_i(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch(4)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_others(40)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;ref_fkkinvdoc_h&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_cnt_doc_tot.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_delprd&nbsp;=&nbsp;co_true.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_I<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_i&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_P<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_S<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_C<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_CH<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_R<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_r<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_O<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_H<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DB_COMMIT'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+*...simulation&nbsp;mode<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_i&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_r<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'C:&nbsp;'&nbsp;anz_fkkinvdoc_c&nbsp;'&nbsp;/&nbsp;CH:&nbsp;'&nbsp;anz_fkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'R:&nbsp;'&nbsp;anz_fkkinvdoc_r&nbsp;'&nbsp;/&nbsp;O:&nbsp;'&nbsp;anz_fkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;anz_others.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_object&nbsp;&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'525'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv1&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv2&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv3&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv4&nbsp;&nbsp;&nbsp;=&nbsp;anz_others.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i525(fkkinv).&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "analyse_sim_invdocs<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;EXECUTE_PRG<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM execute_prg .<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;p_call.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;abap_off.&nbsp;"&nbsp;Forground&nbsp;or&nbsp;background&nbsp;execution...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;sy-batch.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;abap_on.&nbsp;"&nbsp;Background&nbsp;execution...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;find_cont_acc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;"&nbsp;Forground&nbsp;execution...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_sim_invdoc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;"&nbsp;Parallel&nbsp;process<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_sim_invdoc.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " EXECUTE_PRG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DELETE_REST_SIM_INVDOCS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_rest_sim_invdocs USING p_it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_p_delprd.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;r_fkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sim_coresp&nbsp;TYPE&nbsp;dfkkcoh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_invdocno&nbsp;TYPE&nbsp;srcdocno_kk.<br />
+&nbsp;&nbsp;IF&nbsp;p_delprd&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;r_fkkinvdoc_h&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;INTO&nbsp;ls_sim_coresp&nbsp;FROM&nbsp;dfkkcoh&nbsp;WHERE&nbsp;data2&nbsp;=&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKCOHI<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkcohi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;cotyp&nbsp;=&nbsp;ls_sim_coresp-cotyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;cokey&nbsp;=&nbsp;ls_sim_coresp-cokey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;gpart&nbsp;=&nbsp;ls_sim_coresp-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;vkont&nbsp;=&nbsp;ls_sim_coresp-vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKCOH<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkcoh<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;data2&nbsp;=&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;dfkkinv_trig<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_invdocno&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'00000000'&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno&nbsp;INTO&nbsp;lv_invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinv_trig&nbsp;WHERE&nbsp;srcdocno&nbsp;=&nbsp;lv_invdocno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DELETE_REST_SIM_INVDOCS<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

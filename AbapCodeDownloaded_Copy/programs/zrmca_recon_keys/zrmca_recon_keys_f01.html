@@ -1,0 +1,637 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_RECON_KEYS_F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_RECON_KEYS_F01</h2>
+<h3> Description: Include ZRMCA_RECON_KEYS_F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_RECON_KEYS_F01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;EXIT_PROGRAM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM exit_program .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exit&nbsp;program&nbsp;...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gr_docking-&gt;free.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_cfw=&gt;flush.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_INFORM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titel&nbsp;=&nbsp;gv_cprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt2&nbsp;&nbsp;=&nbsp;sy-subrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt1&nbsp;&nbsp;=&nbsp;text-003.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+ENDFORM.                    " EXIT_PROGRAM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_INIT_VALUE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_init_value .<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_duration&nbsp;TYPE&nbsp;psen_duration,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_default&nbsp;&nbsp;TYPE&nbsp;datum.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;program&nbsp;name...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gv_cprog&nbsp;=&nbsp;sy-cprog.<br />
+<br />
+&nbsp;&nbsp;ls_duration-durmm&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;s_budat-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;s_budat-option&nbsp;=&nbsp;'BT'.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'HR_99S_DATE_ADD_SUB_DURATION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;im_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;im_operator&nbsp;=&nbsp;gc_subtract<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;im_duration&nbsp;=&nbsp;ls_duration<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_default.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;lv_default(6)&nbsp;gc_first_day&nbsp;INTO&nbsp;s_budat-low.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RP_LAST_DAY_OF_MONTHS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;day_in&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;s_budat-low<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_day_of_month&nbsp;=&nbsp;s_budat-high.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;s_budat.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;ernam&nbsp;AS&nbsp;low&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;nr_ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zrmca_bill_users<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;EQ&nbsp;p_bukrs.<br />
+<br />
+&nbsp;&nbsp;ns_ernam-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;ns_ernam-option&nbsp;=&nbsp;'EQ'.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;nr_ernam&nbsp;FROM&nbsp;ns_ernam&nbsp;TRANSPORTING&nbsp;sign&nbsp;option<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;sign&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;buttxt1&nbsp;=&nbsp;'Email&nbsp;Addresses'.<br />
+&nbsp;&nbsp;button1&nbsp;=&nbsp;'Maintain&nbsp;Table'.<br />
+&nbsp;&nbsp;buttxt2&nbsp;=&nbsp;'Billing&nbsp;Operation&nbsp;Users'.<br />
+&nbsp;&nbsp;button2&nbsp;=&nbsp;'Maintain&nbsp;Table'.<br />
+ENDFORM.                    " SET_INIT_VALUE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PREPARE_FIELD_CATALOG<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prepare_field_catalog CHANGING pt_fieldcat TYPE lvc_t_fcat .<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;ls_fcat&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;field&nbsp;catalog&nbsp;and&nbsp;change&nbsp;the&nbsp;control&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LVC_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZRMCA_RECON_LIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_fieldcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-003&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_fieldcat&nbsp;INTO&nbsp;ls_fcat&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_fcat-fieldname&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'FIKEY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-hotspot&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;pt_fieldcat&nbsp;FROM&nbsp;ls_fcat.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PREPARE_FIELD_CATALOG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PREPARE_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prepare_layout CHANGING ps_layout TYPE lvc_s_layo.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;layout&nbsp;structure...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ps_layout-no_keyfix&nbsp;&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ps_layout-zebra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ps_layout-cwidth_opt&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ps_layout-no_rowmark&nbsp;=&nbsp;abap_on.<br />
+ENDFORM.                    " PREPARE_LAYOUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;EXCLUDE_STATUS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM exclude_status CHANGING pt_exclude TYPE ui_functions.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_exclude&nbsp;TYPE&nbsp;ui_func.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;pt_exclude.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exclude&nbsp;function&nbsp;codes...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_graph.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_info.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_mb_sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+ENDFORM.                    " EXCLUDE_STATUS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FETCH_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fetch_data .<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_address&nbsp;TYPE&nbsp;bapiaddr3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_return&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_return&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;bapiret2.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;a~fikey&nbsp;a~cpudt&nbsp;a~ernam&nbsp;a~xuevo&nbsp;a~xclos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_fikeys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;(&nbsp;dfkksumc&nbsp;AS&nbsp;a&nbsp;INNER&nbsp;JOIN&nbsp;dfkksumcb&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~fikey&nbsp;=&nbsp;b~fikey&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~fikey&nbsp;IN&nbsp;s_fikey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;a~ernam&nbsp;IN&nbsp;nr_ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;b~bukrs&nbsp;EQ&nbsp;p_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;a~sumsz&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;fikey&nbsp;budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkksum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;gt_recon_keys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_fikeys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;fikey&nbsp;EQ&nbsp;gt_fikeys-fikey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;bukrs&nbsp;EQ&nbsp;p_bukrs.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;gt_recon_keys.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_recon_keys&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_recon_keys.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_fikeys&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_fikeys&nbsp;WITH&nbsp;KEY&nbsp;fikey&nbsp;=&nbsp;gr_recon_keys-&gt;fikey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_fikeys-&gt;*&nbsp;TO&nbsp;gr_recon_keys-&gt;*.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_USER_GET_DETAIL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;=&nbsp;gr_recon_keys-&gt;ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address&nbsp;&nbsp;=&nbsp;ls_address<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;=&nbsp;lt_return.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_return&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_return&nbsp;WITH&nbsp;KEY&nbsp;type&nbsp;=&nbsp;'E'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_recon_keys-&gt;fullname&nbsp;=&nbsp;ls_address-fullname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_recon_keys&nbsp;BY&nbsp;fikey.<br />
+ENDFORM.                    " FETCH_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CONFIRMATION<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM confirmation CHANGING pv_answer TYPE char1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Confirmation...<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-010&nbsp;"&nbsp;The&nbsp;listed&nbsp;keys&nbsp;will&nbsp;be&nbsp;sent&nbsp;to&nbsp;users...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-011&nbsp;"&nbsp;Do&nbsp;you&nbsp;want&nbsp;to&nbsp;continue?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-012&nbsp;"&nbsp;Yes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-013&nbsp;"&nbsp;No<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_cancel_button&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_button&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_answer<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CONFIRMATION<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SEND_EMAIL<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM send_email .<br />
+&nbsp;&nbsp;DATA&nbsp;lv_answer&nbsp;TYPE&nbsp;char1.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;confirmation&nbsp;CHANGING&nbsp;lv_answer.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_answer&nbsp;EQ&nbsp;'1'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send_prepare_email.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-006&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SEND_EMAIL<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SEND_PREPARE_EMAIL<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM send_prepare_email .<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_mail_user&nbsp;INTO&nbsp;TABLE&nbsp;gt_mail<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;mailg&nbsp;EQ&nbsp;gc_mail_gr.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_mail_body.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;fill_mail_item.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gv_mess_text&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-021&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-008&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SEND_PREPARE_EMAIL<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MAINTAIN_TABLE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM maintain_table .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_tabname&nbsp;TYPE&nbsp;tabname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cust&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Maintain&nbsp;customizing&nbsp;table...<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;lv_cust,&nbsp;lv_tabname.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sscrfields.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'MU'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cust&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tabname&nbsp;=&nbsp;'ZRMCA_MAIL_USER'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cust&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tabname&nbsp;=&nbsp;'ZRMCA_BILL_USERS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_cust&nbsp;EQ&nbsp;abap_on.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'AUTHORITY_CHECK_TCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;gc_sm30<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_ok&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e059(eu)&nbsp;WITH&nbsp;gc_sm30.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_tabname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client_reference&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_lock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_clientindependent_auth&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_database_function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_editor_function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_show_auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_tvdir_entry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_upd_auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only_show_allowed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_failure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_field_in_dba_sellist&nbsp;=&nbsp;12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maintenance_prohibited&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " MAINTAIN_TABLE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FILL_MAIL_BODY<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fill_mail_body.<br />
+<br />
+&nbsp;&nbsp;gs_text&nbsp;=&nbsp;'&lt;i&gt;Dear&nbsp;all,&lt;/i&gt;'.<br />
+&nbsp;&nbsp;ap.<br />
+&nbsp;&nbsp;gs_text&nbsp;=&nbsp;'&lt;br&gt;&lt;br&gt;'.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;i&gt;Please&nbsp;be&nbsp;informed&nbsp;that&nbsp;invoice&nbsp;generation&nbsp;for&nbsp;fix'<br />
+&nbsp;&nbsp;'and&nbsp;mobile&nbsp;has&nbsp;been&nbsp;finished.&nbsp;Please&nbsp;find&nbsp;below&nbsp;reconciliation&nbsp;keys'<br />
+&nbsp;&nbsp;'generated&nbsp;from&nbsp;invoice&nbsp;process.&lt;/i&gt;'&nbsp;INTO&nbsp;gs_text&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;ap.<br />
+&nbsp;&nbsp;gs_text&nbsp;=&nbsp;'&lt;br&gt;&lt;br&gt;'.<br />
+&nbsp;&nbsp;ap.<br />
+&nbsp;&nbsp;gs_text&nbsp;=&nbsp;'&lt;i&gt;Best&nbsp;Regards,&lt;/i&gt;'.<br />
+&nbsp;&nbsp;ap.<br />
+ENDFORM.                    " FILL_MAIL_BODY<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FILL_MAIL_ITEM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fill_mail_item.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_date&nbsp;TYPE&nbsp;char10.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE<br />
+&nbsp;&nbsp;'&lt;br&gt;&lt;br&gt;&lt;table&nbsp;width="2000"&nbsp;border=1&nbsp;celpadding=0&nbsp;celspacing=0'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;bordercolor=black&gt;'<br />
+&nbsp;&nbsp;'&lt;tr&gt;&lt;td&nbsp;width="%100"&nbsp;bgcolor="#FFECC4"&nbsp;align="center"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-009&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+&nbsp;&nbsp;gs_text&nbsp;=&nbsp;'&lt;/table&gt;'.&nbsp;ap.<br />
+&nbsp;&nbsp;CONCATENATE<br />
+&nbsp;&nbsp;'&lt;table&nbsp;width="2000"&nbsp;border=1&nbsp;celpadding=0&nbsp;celspacing=0'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;bordercolor=black&gt;'<br />
+&nbsp;&nbsp;'&lt;tr&gt;&lt;td&nbsp;width="10%"&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-014&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-015&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-016&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-017&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=34%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-018&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=13%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-019&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=13%&nbsp;align="center"&nbsp;bgcolor="#FFD700"&gt;&lt;b&gt;'&nbsp;gc_font<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;text-020&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_recon_keys&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_recon_keys.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;tr&gt;&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;gr_recon_keys-&gt;fikey&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;gr_recon_keys-&gt;budat&nbsp;TO&nbsp;lv_date.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;lv_date&nbsp;&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;gr_recon_keys-&gt;cpudt&nbsp;TO&nbsp;lv_date.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;lv_date&nbsp;&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=10%&nbsp;align="center"&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;gr_recon_keys-&gt;ernam&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=34%&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;gr_recon_keys-&gt;fullname&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=13%&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;gr_recon_keys-&gt;xuevo&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&nbsp;width=13%&nbsp;bgcolor="#D3D3D3"&gt;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;'&lt;/td&gt;&lt;/tr&gt;'&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&q'&nbsp;WITH&nbsp;gr_recon_keys-&gt;xclos&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&x'&nbsp;WITH&nbsp;gc_black&nbsp;INTO&nbsp;gs_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ap.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " FILL_MAIL_ITEM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SEND<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM send .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_ok&nbsp;&nbsp;TYPE&nbsp;so_text001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_bcs&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_bcs.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;gv_mess_text.<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request&nbsp;=&nbsp;cl_bcs=&gt;create_persistent(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject&nbsp;=&nbsp;text-009.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document&nbsp;=&nbsp;cl_document_bcs=&gt;create_document(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_obj_ty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_text&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_subject&nbsp;=&nbsp;subject&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request-&gt;set_document(&nbsp;document&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender&nbsp;=&nbsp;cl_cam_address_bcs=&gt;create_internet_address(&nbsp;gc_sender&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request-&gt;set_sender(&nbsp;sender&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_mail&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_mail&nbsp;WHERE&nbsp;email&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recipient&nbsp;=&nbsp;cl_cam_address_bcs=&gt;create_internet_address(&nbsp;gr_mail-&gt;email&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request-&gt;add_recipient(&nbsp;i_recipient&nbsp;=&nbsp;recipient&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request-&gt;set_send_immediately(&nbsp;'X'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ok&nbsp;=&nbsp;send_request-&gt;send(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_ok&nbsp;=&nbsp;abap_true.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;rsconn01&nbsp;WITH&nbsp;mode&nbsp;EQ&nbsp;'INT'&nbsp;AND&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_address_bcs&nbsp;cx_send_req_bcs&nbsp;cx_bcs&nbsp;INTO&nbsp;ex_bcs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'MESSAGE_TEXT_BUILD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgv1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgv2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgv3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgv3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgv4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ex_bcs-&gt;msgv4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message_text_output&nbsp;=&nbsp;gv_mess_text.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;gv_mess_text.<br />
+&nbsp;&nbsp;ENDTRY.<br />
+ENDFORM.                    " SEND<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_GET_LAST_DAY_OF_MNTH_GM</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_GET_LAST_DAY_OF_MNTH_GM</h2>
+<h3> Description: Get first issue date for step</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION Z_GET_LAST_DAY_OF_MNTH_GM.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(IT_EXPRESSIONS) TYPE  SBRF260A_T<br />
+*"     REFERENCE(IO_EVENT) TYPE REF TO  IF_EVENT_BRF<br />
+*"     REFERENCE(IO_EXPRESSION) TYPE REF TO  IF_EXPRESSION_BRF<br />
+*"  EXPORTING<br />
+*"     REFERENCE(EV_VALUE) TYPE  BRF_RESULT_VALUE<br />
+*"     REFERENCE(EV_TYPE) TYPE  BRF_RESULT_TYPE<br />
+*"     REFERENCE(EV_LENGTH) TYPE  BRF_RESULT_LENGTH<br />
+*"     REFERENCE(EV_CURRENCY) TYPE  BRF_CURRENCY<br />
+*"     REFERENCE(EV_OUTPUT_LENGTH) TYPE  BRF_RESULT_OUTPUT_LENGTH<br />
+*"     REFERENCE(EV_DECIMALS) TYPE  BRF_RESULT_DECIMALS<br />
+*"     REFERENCE(EV_DATA_MISSING) TYPE  BRF_DATA_MISSING<br />
+*"----------------------------------------------------------------------<br />
+<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_get_last_day_of_mnth_gm.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ls_expression&nbsp;&nbsp;TYPE&nbsp;sbrf260a,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_inDate&nbsp;TYPE&nbsp;DATS,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_outDate&nbsp;TYPE&nbsp;DATS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_expressions&nbsp;INTO&nbsp;ls_expression.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_inDate&nbsp;=&nbsp;ls_expression-result_value.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;curr_month&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curr_year&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_cmnt(2)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cyear(4)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ausdate&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;V_DATE1&nbsp;LIKE&nbsp;SY-DATUM.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CACS_DATE_GET_YEAR_MONTH'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_date&nbsp;&nbsp;=&nbsp;lv_inDate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_month&nbsp;=&nbsp;curr_month<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_year&nbsp;&nbsp;=&nbsp;curr_year.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UNPACK&nbsp;curr_month&nbsp;TO&nbsp;lv_cmnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UNPACK&nbsp;curr_year&nbsp;TO&nbsp;lv_cyear.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;curr_month&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LAST_DAY_OF_MONTHS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAY_IN&nbsp;=&nbsp;lv_inDate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LAST_DAY_OF_MONTH&nbsp;=&nbsp;V_DATE1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAY_IN_NO_DATE&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;&lt;&gt;&nbsp;0.<br />
+"           MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO<br />
+"           WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_outDate&nbsp;=&nbsp;V_DATE1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_cyear&nbsp;lv_cmnt&nbsp;'30'&nbsp;INTO&nbsp;lv_ausdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_outDate&nbsp;=&nbsp;lv_ausdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+<br />
+&nbsp;&nbsp;ev_value&nbsp;=&nbsp;lv_outDate.<br />
+&nbsp;&nbsp;ev_type&nbsp;=&nbsp;'D'.<br />
+&nbsp;&nbsp;ev_length&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;ev_output_length&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ev_decimals.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ev_currency.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ev_data_missing.<br />
+ENDFUNCTION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+* Message class: &gt;3<br />
+*825   Transfer parameter &1 of function module &2 is blank<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

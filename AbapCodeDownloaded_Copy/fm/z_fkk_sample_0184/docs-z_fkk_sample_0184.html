@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_0184</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_0184</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Beispiel&nbsp;0184:&nbsp;Überprüfungsdatum&nbsp;für&nbsp;Zahlungsversprechen&nbsp;setzen<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;With&nbsp;the&nbsp;function&nbsp;module&nbsp;processed&nbsp;for&nbsp;event&nbsp;0184,&nbsp;you&nbsp;can&nbsp;define&nbsp;when<br />
+&nbsp;the&nbsp;fulfillment&nbsp;of&nbsp;the&nbsp;promise&nbsp;to&nbsp;pay&nbsp;is&nbsp;to&nbsp;be&nbsp;checked&nbsp;and&nbsp;valuated.<br />
+&nbsp;During&nbsp;the&nbsp;check,&nbsp;the&nbsp;level&nbsp;of&nbsp;fulfillment&nbsp;is&nbsp;determined.&nbsp;At&nbsp;the&nbsp;same<br />
+&nbsp;time,&nbsp;a&nbsp;closing&nbsp;status&nbsp;can&nbsp;be&nbsp;assigned&nbsp;or&nbsp;a&nbsp;new&nbsp;check&nbsp;date&nbsp;defined.<br />
+&nbsp;The&nbsp;following&nbsp;data&nbsp;is&nbsp;available:<br />
+&nbsp;&lt;LS&gt;I_DFKKPP&lt;/&gt;,,Header&nbsp;of&nbsp;the&nbsp;promise&nbsp;to&nbsp;pay.<br />
+&nbsp;&lt;LS&gt;I_DFKKPPD_TAB&lt;/&gt;,,Promised&nbsp;amounts&nbsp;and&nbsp;payment&nbsp;dates<br />
+&nbsp;The&nbsp;system&nbsp;expects&nbsp;the&nbsp;following&nbsp;data&nbsp;to&nbsp;be&nbsp;returned:<br />
+&nbsp;&lt;LS&gt;E_CHDAT&lt;/&gt;,,Next&nbsp;check&nbsp;date<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+E_CHDAT                          Check Date for Status Determination<br />
+I_DFKKPP                         Header Data of Promise to Pay<br />
+I_DFKKPPD_PAY_TAB                Additional Data for Debit Memos<br />
+I_DFKKPPD_TAB                    Due Dates<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

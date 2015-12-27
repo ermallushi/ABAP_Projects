@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_RECON_KEYS_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_RECON_KEYS_TOP</h2>
+<h3> Description: Include ZRMCA_RECON_KEYS_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_RECON_KEYS_TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TABLES: dfkksum, sscrfields.<br />
+<br />
+CLASS lcl_event_receiver DEFINITION DEFERRED.<br />
+<br />
+CONSTANTS : gc_albtelecom TYPE bukrs      VALUE '910',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_subtract&nbsp;&nbsp;&nbsp;TYPE&nbsp;adsub&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'-',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_first_day&nbsp;&nbsp;TYPE&nbsp;char2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'01',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sm30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'SM30',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'U',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_mail_gr&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zcrm_group&nbsp;VALUE&nbsp;'01',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_black&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bp_text5&nbsp;&nbsp;&nbsp;VALUE&nbsp;'black',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_font&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bf_txa50&nbsp;&nbsp;&nbsp;VALUE&nbsp;'&lt;font&nbsp;face="Times&nbsp;New&nbsp;Roman"&nbsp;color=&x&gt;&q&lt;/font&gt;',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_smtpadr&nbsp;VALUE&nbsp;'no-reply@albtelecom.al',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_obj_ty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;so_obj_tp&nbsp;&nbsp;VALUE&nbsp;'HTM'.<br />
+<br />
+DATA: gv_ok_code TYPE syucomm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_cprog&nbsp;&nbsp;&nbsp;TYPE&nbsp;sycprog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+DATA: gr_splitter TYPE REF TO cl_gui_splitter_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_docking&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_docking_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_show&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_viewer&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_html_viewer,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grc_top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_dd_document.<br />
+<br />
+DATA : gt_fieldcat TYPE lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_exclude&nbsp;&nbsp;TYPE&nbsp;ui_functions.<br />
+<br />
+DATA: nr_ernam TYPE RANGE OF usnam_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ns_ernam&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;nr_ernam.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Mail&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+DATA: gt_mail TYPE STANDARD TABLE OF zrmca_mail_user,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_mail&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_mail_user.<br />
+<br />
+DATA: document     TYPE REF TO cl_document_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_sender_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recipient&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_recipient_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;so_obj_des,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_mess_text&nbsp;TYPE&nbsp;text132,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcsy_text,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;soli.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Contract&nbsp;account&nbsp;document&nbsp;items...<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF ty_fikeys,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fikey&nbsp;TYPE&nbsp;fikey_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpudt&nbsp;TYPE&nbsp;cpudt_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ernam&nbsp;TYPE&nbsp;usnam_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xuevo&nbsp;TYPE&nbsp;xuevo_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xclos&nbsp;TYPE&nbsp;xclos_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_fikeys.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV&nbsp;internal&nbsp;tables...<br />
+   </div>
+   <div class="code">
+DATA: gt_fikeys TYPE STANDARD TABLE OF ty_fikeys,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_fikeys&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;ty_fikeys.<br />
+<br />
+DATA: gt_recon_keys TYPE STANDARD TABLE OF zrmca_recon_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_recon_keys&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_recon_list.<br />
+<br />
+DEFINE ap.<br />
+&nbsp;&nbsp;APPEND&nbsp;gs_text&nbsp;TO&nbsp;gt_text.<br />
+END-OF-DEFINITION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS : p_bukrs LIKE dfkksum-bukrs OBLIGATORY DEFAULT gc_albtelecom.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME.<br />
+SELECTION-SCREEN SKIP.<br />
+SELECT-OPTIONS : s_budat FOR dfkksum-budat OBLIGATORY NO-EXTENSION,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_fikey&nbsp;FOR&nbsp;dfkksum-fikey&nbsp;NO-DISPLAY.<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win3 WITH FRAME TITLE text-007.<br />
+<br />
+SELECTION-SCREEN SKIP.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt1.<br />
+SELECTION-SCREEN PUSHBUTTON 33(35) button1 USER-COMMAND mu.<br />
+SELECTION-SCREEN END OF LINE.<br />
+<br />
+SELECTION-SCREEN SKIP.<br />
+<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt2.<br />
+SELECTION-SCREEN PUSHBUTTON 33(35) button2 USER-COMMAND bo.<br />
+SELECTION-SCREEN END OF LINE.<br />
+SELECTION-SCREEN END OF BLOCK win3.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

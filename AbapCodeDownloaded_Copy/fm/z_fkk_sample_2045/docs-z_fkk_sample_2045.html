@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_2045</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_2045</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Muster:&nbsp;Zinsen,&nbsp;Sammelrechnung<br />
+<br />
+&nbsp;trados&nbsp;=&nbsp;docu&nbsp;-&gt;&nbsp;fi&nbsp;-&gt;&nbsp;fica<br />
+&nbsp;Features<br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;processed&nbsp;in&nbsp;event&nbsp;2045&nbsp;is&nbsp;called&nbsp;automatically<br />
+&nbsp;during&nbsp;the&nbsp;posting&nbsp;of&nbsp;an&nbsp;interest&nbsp;document&nbsp;online&nbsp;(transaction&nbsp;FPI1)&nbsp;or<br />
+&nbsp;during&nbsp;the&nbsp;interest&nbsp;run&nbsp;(FPINTM1).&nbsp;The&nbsp;module&nbsp;calls&nbsp;up&nbsp;one&nbsp;or&nbsp;more<br />
+&nbsp;additional&nbsp;function&nbsp;modules&nbsp;before&nbsp;function&nbsp;modules&nbsp;for&nbsp;posting<br />
+&nbsp;(FKK_CREATE_DOC&nbsp;or&nbsp;FKK_CREATE_DOC_AND_CLEAR)&nbsp;are&nbsp;called.&nbsp;All&nbsp;data&nbsp;is<br />
+&nbsp;transferred&nbsp;for&nbsp;the&nbsp;interest&nbsp;document&nbsp;being&nbsp;posted.<br />
+&nbsp;In&nbsp;this&nbsp;event&nbsp;you&nbsp;can&nbsp;update&nbsp;further&nbsp;data&nbsp;for&nbsp;the&nbsp;document,&nbsp;but&nbsp;you<br />
+&nbsp;cannot&nbsp;report&nbsp;errors&nbsp;that&nbsp;the&nbsp;user&nbsp;could&nbsp;still&nbsp;correct.<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+I_FKKKO                          Document header<br />
+T_FKKCL                          Items to Be Cleared<br />
+T_FKKOP                          Line Items (Open Items)<br />
+T_FKKOPK                         Line Items (Offsetting Items)<br />
+T_FKKOPW                         Line Items (Repetition Specifications)<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

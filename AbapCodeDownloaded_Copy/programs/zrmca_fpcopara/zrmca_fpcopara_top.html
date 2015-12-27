@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_FPCOPARA_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_FPCOPARA_TOP</h2>
+<h3> Description: Include ZRMCA_FPCOPARA_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_FPCOPARA_TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TABLES: dfkkinvdoc_h, sscrfields, lvc_s_row.<br />
+<br />
+TYPE-POOLS icon.<br />
+<br />
+CONSTANTS: gc_last_day   TYPE bu_advw_valid_to VALUE '99991231235959',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_zero_amnt&nbsp;&nbsp;TYPE&nbsp;ad_city1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'0_AMOUNT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_ident&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_ident&nbsp;&nbsp;VALUE&nbsp;'FPCOPARA',&nbsp;"&nbsp;Identifier<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_print_lock&nbsp;TYPE&nbsp;ad_city1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'PRINT_LOCK',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_all_cities&nbsp;TYPE&nbsp;ad_city1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'*',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_all_tariff&nbsp;TYPE&nbsp;zrmca_tariff&nbsp;VALUE&nbsp;'*',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_like&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'%',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_multi_prod&nbsp;TYPE&nbsp;atwrt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'MULTI_PROD',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_paramid&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;memoryid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'Z_SET_SCREEN',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_cust_tab&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'ZRMCA_AIP_CUST',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_cont_tab&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'ZRMCA_AIP_CONT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sgrp_tab&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'ZRMCA_AIP_SGRP',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_background&nbsp;TYPE&nbsp;wptyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BGD',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_aktyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;aktyp_kk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'COPR',"&nbsp;Corr&nbsp;Prnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;activ_auth&nbsp;&nbsp;&nbsp;VALUE&nbsp;'32',&nbsp;&nbsp;"&nbsp;Auth<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_max_rec&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;int4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;3000,&nbsp;&nbsp;"&nbsp;Max&nbsp;record<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_und&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'_',&nbsp;&nbsp;&nbsp;"&nbsp;_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_ast&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'*',&nbsp;&nbsp;&nbsp;"&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_back&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'\',&nbsp;&nbsp;&nbsp;"&nbsp;\<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_new&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'N',&nbsp;&nbsp;&nbsp;"&nbsp;New&nbsp;Period<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_from_db&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'D',&nbsp;&nbsp;&nbsp;"&nbsp;Get&nbsp;from&nbsp;DB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sign_in&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'I',&nbsp;&nbsp;&nbsp;"&nbsp;Include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'U',&nbsp;&nbsp;&nbsp;"&nbsp;Update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_eq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EQ',&nbsp;&nbsp;"&nbsp;Equal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_invoice&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;inv_type_kk&nbsp;&nbsp;VALUE&nbsp;'A1',&nbsp;&nbsp;"&nbsp;Invoice<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_cotyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;cotyp_kk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'0042',"&nbsp;Inv.&nbsp;to&nbsp;FI-CA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_saved&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_pstatu&nbsp;VALUE&nbsp;'1',&nbsp;&nbsp;&nbsp;"&nbsp;Saved<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_scheduled&nbsp;&nbsp;TYPE&nbsp;zrmca_pstatu&nbsp;VALUE&nbsp;'2',&nbsp;&nbsp;&nbsp;"&nbsp;Scheduled<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_downloaded&nbsp;TYPE&nbsp;zrmca_pstatu&nbsp;VALUE&nbsp;'3',&nbsp;&nbsp;&nbsp;"&nbsp;Downloaded<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'.PDF',"&nbsp;Format:&nbsp;PDF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_filetype&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BIN',&nbsp;"&nbsp;Format:&nbsp;BIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_jobdata&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcint4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;36,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sm30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'SM30',&nbsp;"&nbsp;Tcode&nbsp;SM30<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_yellow&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'C300',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_green&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'C500',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_red&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'C600',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_orange&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'C700',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;afwch_line&nbsp;&nbsp;&nbsp;VALUE&nbsp;'999',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_schedul&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'P',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_released&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'S',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'R',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_finished&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'F',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_initial&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'A',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_canceled&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'A'.<br />
+<br />
+CLASS lcl_event_receiver DEFINITION DEFERRED.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+DATA: gr_splitter   TYPE REF TO cl_gui_splitter_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_docking&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_docking_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_grp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_details&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_detail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container.<br />
+<br />
+DATA : gt_fieldcat_h TYPE lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_fieldcat_i&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout_h&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout_i&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_exclude_h&nbsp;&nbsp;TYPE&nbsp;ui_functions,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_exclude_i&nbsp;&nbsp;TYPE&nbsp;ui_functions.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV&nbsp;internal&nbsp;tables...<br />
+   </div>
+   <div class="code">
+DATA: gt_group     TYPE STANDARD TABLE OF zrmca_aip_head_str, "Header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_head_str,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_items&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_aip_item,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Related&nbsp;Items<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_items_all&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_aip_item,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;All&nbsp;items<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_items&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_item.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Contract&nbsp;accounts&nbsp;based&nbsp;on&nbsp;type,&nbsp;location,&nbsp;postal&nbsp;code&nbsp;and&nbsp;tariff...<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF ty_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grpid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bu_type,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_city1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;post_code1&nbsp;TYPE&nbsp;ad_pstcd1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tariff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;atwrt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vkont_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_vkont.<br />
+<br />
+DATA:  gt_vkont TYPE STANDARD TABLE OF ty_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_vkont&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;ty_vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Number&nbsp;of&nbsp;contract&nbsp;accounts&nbsp;in&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF ty_grp_cnt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grpid&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter&nbsp;TYPE&nbsp;int4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_grp_cnt.<br />
+<br />
+DATA:  gt_grp_cnt TYPE STANDARD TABLE OF ty_grp_cnt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_grp_cnt&nbsp;TYPE&nbsp;ty_grp_cnt.<br />
+<br />
+TYPES: BEGIN OF ty_tbtco,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;TYPE&nbsp;btcjobcnt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_tbtco.<br />
+<br />
+DATA:  gt_tbtco TYPE STANDARD TABLE OF ty_tbtco.<br />
+<br />
+TYPES: BEGIN OF ty_submit_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grpid&nbsp;TYPE&nbsp;zrmca_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_submit_grpid.<br />
+<br />
+DATA:  gt_submit_grpid TYPE STANDARD TABLE OF ty_submit_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_submit_grpid&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;ty_submit_grpid.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Customizing&nbsp;table...<br />
+   </div>
+   <div class="code">
+DATA:  gt_cust TYPE STANDARD TABLE OF zrmca_aip_cust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_cust&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_cust.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Contract&nbsp;Accounts&nbsp;for&nbsp;Print&nbsp;Lock...<br />
+   </div>
+   <div class="code">
+DATA:  gt_cont TYPE STANDARD TABLE OF zrmca_aip_cont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_cont&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_cont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Contract&nbsp;Accounts&nbsp;for&nbsp;Special&nbsp;group...<br />
+   </div>
+   <div class="code">
+DATA:  gt_sgrp TYPE STANDARD TABLE OF zrmca_aip_sgrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_sgrp&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_sgrp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;DB&nbsp;table...<br />
+   </div>
+   <div class="code">
+DATA: gt_head  TYPE STANDARD TABLE OF zrmca_aip_head,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_head.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Selected&nbsp;rows...<br />
+   </div>
+   <div class="code">
+DATA: gt_rows TYPE lvc_t_row,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_rows&nbsp;TYPE&nbsp;lvc_s_row.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Parameters...<br />
+   </div>
+   <div class="code">
+DATA: gv_ok_code TYPE syucomm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_cprog&nbsp;&nbsp;&nbsp;TYPE&nbsp;sycprog,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_dest&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rfcdes-rfcdest,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_max_bgd&nbsp;TYPE&nbsp;jobs_load_bala_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tabname&nbsp;TYPE&nbsp;tabname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_serial&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_mode&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME.<br />
+SELECT-OPTIONS : s_vkont FOR dfkkinvdoc_h-vkont.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win3 WITH FRAME TITLE text-022.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS : p_laufd LIKE dfkkcoh-laufd MATCHCODE OBJECT zrmca_fpc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi(2)&nbsp;TYPE&nbsp;c.<br />
+SELECTION-SCREEN END OF BLOCK win3.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME TITLE text-023.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS : p_datum LIKE sy-datum.<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win4 WITH FRAME TITLE text-015.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS : p_tddest LIKE fkk2_dynp_3500-tddest DEFAULT 'ZLOCL' MODIF ID sav,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_folder&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;DEFAULT&nbsp;'C:\AIP\'&nbsp;&nbsp;MODIF&nbsp;ID&nbsp;sav.<br />
+SELECTION-SCREEN END OF BLOCK win4.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win6 WITH FRAME TITLE text-042.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS : p_nofs TYPE jobs_load_bala_kk DEFAULT 10 MODIF ID sav.<br />
+SELECTION-SCREEN END OF BLOCK win6.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win5 WITH FRAME TITLE text-030.<br />
+SELECTION-SCREEN SKIP.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt1.<br />
+SELECTION-SCREEN PUSHBUTTON 33(47) button1 USER-COMMAND tm.<br />
+SELECTION-SCREEN END OF LINE.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT 1(30) buttxt2.<br />
+SELECTION-SCREEN PUSHBUTTON 33(23) button2 USER-COMMAND ca.<br />
+SELECTION-SCREEN PUSHBUTTON 57(23) button3 USER-COMMAND mc.<br />
+SELECTION-SCREEN END OF LINE.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(15) buttxt4.<br />
+SELECTION-SCREEN POSITION 26.<br />
+PARAMETERS p_grp_id TYPE char5 OBLIGATORY DEFAULT 'SPGRP' MODIF ID grp.<br />
+SELECTION-SCREEN PUSHBUTTON 33(23) button5 USER-COMMAND sm.<br />
+SELECTION-SCREEN PUSHBUTTON 57(23) button4 USER-COMMAND sg.<br />
+SELECTION-SCREEN END OF LINE.<br />
+SELECTION-SCREEN END OF BLOCK win5.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Ranges...<br />
+   </div>
+   <div class="code">
+SELECT-OPTIONS : s_invdoc FOR dfkkinvdoc_h-invdocno NO-DISPLAY.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

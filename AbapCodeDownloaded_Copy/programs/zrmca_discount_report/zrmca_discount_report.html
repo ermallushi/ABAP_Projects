@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_DISCOUNT_REPORT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_DISCOUNT_REPORT</h2>
+<h3> Description: Contract Account Discount Report</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZEL_005<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT zel_001.<br />
+<br />
+TYPE-POOLS: slis.<br />
+<br />
+TABLES: fkkvkp_chgdisc.<br />
+   </div>
+   <div class="codeComment">
+*tfk2617t,&nbsp;but000,&nbsp;cdhdr.<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF itab1 OCCURS 0,<br />
+&nbsp;&nbsp;gpart&nbsp;LIKE&nbsp;fkkvkp_chgdisc-gpart,<br />
+&nbsp;&nbsp;name&nbsp;LIKE&nbsp;but000-name_org1,<br />
+&nbsp;&nbsp;vkont&nbsp;LIKE&nbsp;fkkvkp_chgdisc-vkont,<br />
+&nbsp;&nbsp;chgkey&nbsp;LIKE&nbsp;fkkvkp_chgdisc-chgkey,<br />
+&nbsp;&nbsp;date_from&nbsp;LIKE&nbsp;fkkvkp_chgdisc-date_from,<br />
+&nbsp;&nbsp;date_to&nbsp;LIKE&nbsp;fkkvkp_chgdisc-date_to,<br />
+&nbsp;&nbsp;text&nbsp;LIKE&nbsp;tfk2617t-text,<br />
+&nbsp;&nbsp;username&nbsp;LIKE&nbsp;cdhdr-username,<br />
+&nbsp;&nbsp;udate&nbsp;LIKE&nbsp;cdhdr-udate,<br />
+&nbsp;&nbsp;utime&nbsp;LIKE&nbsp;cdhdr-utime,<br />
+&nbsp;&nbsp;stat&nbsp;LIKE&nbsp;statusagencyt-text,<br />
+&nbsp;&nbsp;new_value&nbsp;LIKE&nbsp;ewaobjh_dates-date_new,<br />
+&nbsp;&nbsp;old_value&nbsp;LIKE&nbsp;ewaobjh_dates-date_old,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;tabkey&nbsp;LIKE&nbsp;cdpos-tabkey<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;END&nbsp;OF&nbsp;itab1.<br />
+<br />
+DATA: BEGIN OF temp_table OCCURS 0,<br />
+&nbsp;&nbsp;gpart&nbsp;LIKE&nbsp;fkkvkp_chgdisc-gpart,<br />
+&nbsp;&nbsp;name&nbsp;LIKE&nbsp;but000-name_org1,<br />
+&nbsp;&nbsp;vkont&nbsp;LIKE&nbsp;fkkvkp_chgdisc-vkont,<br />
+&nbsp;&nbsp;chgkey&nbsp;LIKE&nbsp;fkkvkp_chgdisc-chgkey,<br />
+&nbsp;&nbsp;date_from&nbsp;LIKE&nbsp;fkkvkp_chgdisc-date_from,<br />
+&nbsp;&nbsp;date_to&nbsp;LIKE&nbsp;fkkvkp_chgdisc-date_to,<br />
+&nbsp;&nbsp;text&nbsp;LIKE&nbsp;tfk2617t-text,<br />
+&nbsp;&nbsp;username&nbsp;LIKE&nbsp;cdhdr-username,<br />
+&nbsp;&nbsp;udate&nbsp;LIKE&nbsp;cdhdr-udate,<br />
+&nbsp;&nbsp;utime&nbsp;LIKE&nbsp;cdhdr-utime,<br />
+&nbsp;&nbsp;stat&nbsp;LIKE&nbsp;statusagencyt-text,<br />
+&nbsp;&nbsp;new_value&nbsp;LIKE&nbsp;ewaobjh_dates-date_new,<br />
+&nbsp;&nbsp;old_value&nbsp;LIKE&nbsp;ewaobjh_dates-date_old,<br />
+&nbsp;&nbsp;chngind&nbsp;LIKE&nbsp;cdpos-chngind,<br />
+&nbsp;&nbsp;changenr&nbsp;LIKE&nbsp;cdpos-changenr,<br />
+&nbsp;&nbsp;tabkey&nbsp;LIKE&nbsp;cdpos-tabkey,<br />
+END OF temp_table.<br />
+<br />
+DATA: BEGIN OF discounts OCCURS 0,<br />
+&nbsp;disc&nbsp;LIKE&nbsp;fkkvkp_chgdisc-chgkey,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;discounts.<br />
+DATA wa_temp_table LIKE temp_table.<br />
+<br />
+DATA itab_details LIKE  TABLE OF itab1.<br />
+<br />
+DATA it_itab1 TYPE cdhdr.<br />
+DATA wa_itab1 LIKE itab1.<br />
+<br />
+DATA: idx TYPE sy-tabix.<br />
+<br />
+DATA: BEGIN OF itab2 OCCURS 0,<br />
+&nbsp;&nbsp;objectid&nbsp;LIKE&nbsp;cdhdr-objectid,<br />
+&nbsp;&nbsp;username&nbsp;LIKE&nbsp;cdhdr-username,<br />
+&nbsp;&nbsp;udate&nbsp;LIKE&nbsp;cdhdr-udate,<br />
+&nbsp;&nbsp;utime&nbsp;LIKE&nbsp;cdhdr-utime,<br />
+&nbsp;&nbsp;tabkey&nbsp;LIKE&nbsp;cdpos-tabkey,<br />
+&nbsp;&nbsp;changenr&nbsp;LIKE&nbsp;cdpos-changenr,<br />
+&nbsp;&nbsp;value_new&nbsp;LIKE&nbsp;cdpos-value_new,<br />
+&nbsp;&nbsp;value_old&nbsp;LIKE&nbsp;cdpos-value_old,<br />
+&nbsp;&nbsp;chngind&nbsp;LIKE&nbsp;cdpos-chngind,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;itab2.<br />
+<br />
+<br />
+DATA: BEGIN OF wa_lfa1 OCCURS 0,<br />
+&nbsp;&nbsp;partner&nbsp;LIKE&nbsp;but000-partner,<br />
+&nbsp;&nbsp;name_first&nbsp;LIKE&nbsp;but000-name_first,<br />
+&nbsp;&nbsp;name_last&nbsp;LIKE&nbsp;but000-name_last,<br />
+&nbsp;&nbsp;name_org1&nbsp;LIKE&nbsp;but000-name_org1,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;wa_lfa1.<br />
+<br />
+<br />
+DATA i_repid LIKE sy-repid.<br />
+<br />
+DATA: int_fcat TYPE slis_t_fieldcat_alv.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat1&nbsp;TYPE&nbsp;slis_t_fieldcat_alv.<br />
+<br />
+*DATA:&nbsp;langu&nbsp;LIKE&nbsp;tfk2617t-langu.<br />
+<br />
+   </div>
+   <div class="code">
+i_repid = sy-repid.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*split&nbsp;tabkey**********************<br />
+   </div>
+   <div class="code">
+DATA lv_tabkey TYPE char255.<br />
+DATA client TYPE string.<br />
+DATA objectid TYPE string.<br />
+DATA objid_count TYPE i.<br />
+DATA validfrom_count TYPE i.<br />
+DATA validfrom TYPE string.<br />
+DATA length TYPE i.<br />
+DATA gpartkey TYPE string.<br />
+DATA changenr_start TYPE i.<br />
+DATA changenr_end TYPE i.<br />
+<br />
+DATA disc_start TYPE i.<br />
+DATA disc_end TYPE i.<br />
+DATA discount TYPE string.<br />
+   </div>
+   <div class="codeComment">
+************************************<br />
+   </div>
+   <div class="code">
+PARAMETERS  p_sing RADIOBUTTON GROUP rg1. "DEFAULT 'X',<br />
+SELECTION-SCREEN BEGIN OF BLOCK bao WITH FRAME TITLE text-001.<br />
+SELECT-OPTIONS: tgpart FOR fkkvkp_chgdisc-gpart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tvkont&nbsp;FOR&nbsp;fkkvkp_chgdisc-vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tchgkey&nbsp;FOR&nbsp;fkkvkp_chgdisc-chgkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tdate_fr&nbsp;FOR&nbsp;fkkvkp_chgdisc-date_from,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tdate_to&nbsp;FOR&nbsp;fkkvkp_chgdisc-date_to.<br />
+SELECTION-SCREEN END OF BLOCK bao.<br />
+<br />
+PARAMETERS  p_det RADIOBUTTON GROUP rg1. "DEFAULT 'X',<br />
+SELECTION-SCREEN BEGIN OF BLOCK check WITH FRAME TITLE text-002.<br />
+SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_vkont&nbsp;FOR&nbsp;fkkvkp_chgdisc-vkont.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK check.<br />
+<br />
+IF p_det EQ 'X'.<br />
+&nbsp;&nbsp;IF&nbsp;p_vkont&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;detaillist.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Please&nbsp;fill&nbsp;in&nbsp;CA'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ELSE.<br />
+&nbsp;&nbsp;PERFORM&nbsp;singlelist.<br />
+ENDIF.<br />
+PERFORM alv_display.<br />
+<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DETAILLIST<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM detaillist .<br />
+<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_local&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'%'&nbsp;itab1-vkont&nbsp;itab1-gpart<br />
+&nbsp;&nbsp;itab1-chgkey&nbsp;'%'&nbsp;INTO&nbsp;lv_local.<br />
+&nbsp;&nbsp;SELECT&nbsp;&nbsp;changenr&nbsp;tabkey&nbsp;value_new&nbsp;value_old&nbsp;chngind<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;itab2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;tabname&nbsp;EQ&nbsp;'FKKVKP_CHGDISC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objectid&nbsp;IN&nbsp;p_vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*delete&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;itab2&nbsp;comparing&nbsp;changenr.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;index&nbsp;TYPE&nbsp;sy-index&nbsp;VALUE&nbsp;0.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;split_tabkey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;=&nbsp;index&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;wa_itab2&nbsp;LIKE&nbsp;itab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab2&nbsp;INTO&nbsp;wa_itab2&nbsp;INDEX&nbsp;index&nbsp;+&nbsp;1.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;lv_date_to&nbsp;TYPE&nbsp;fkkvkp_chgdisc-date_to.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdhdr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objectclas&nbsp;=&nbsp;'MKK_VKONT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;changenr&nbsp;=&nbsp;itab2-changenr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;date_to&nbsp;INTO&nbsp;lv_date_to<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp_chgdisc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;=&nbsp;objectid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chgkey&nbsp;=&nbsp;discount.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;partner&nbsp;name_first&nbsp;name_last&nbsp;name_org1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;wa_lfa1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;partner&nbsp;EQ&nbsp;itab1-gpart.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;wa_lfa1&nbsp;WITH&nbsp;KEY&nbsp;partner&nbsp;=&nbsp;itab1-gpart.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;wa_lfa1-name_first&nbsp;wa_lfa1-name_last<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_lfa1-name_org1&nbsp;&nbsp;INTO&nbsp;itab1-name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;lv_text&nbsp;TYPE&nbsp;tfk2617t-text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;text&nbsp;INTO&nbsp;lv_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tfk2617t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;chgkey&nbsp;=&nbsp;itab1-chgkey.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Fill&nbsp;temporary&nbsp;table<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-gpart&nbsp;=&nbsp;itab1-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-name&nbsp;=&nbsp;itab1-name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-vkont&nbsp;=&nbsp;objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-chgkey&nbsp;=&nbsp;discount.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-date_from&nbsp;=&nbsp;validfrom.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-date_to&nbsp;=&nbsp;validfrom.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-text&nbsp;=&nbsp;lv_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-username&nbsp;=&nbsp;it_itab1-username.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-udate&nbsp;=&nbsp;it_itab1-udate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-utime&nbsp;=&nbsp;it_itab1-utime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-new_value&nbsp;=&nbsp;itab2-value_new.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-old_value&nbsp;=&nbsp;itab2-value_old.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-chngind&nbsp;&nbsp;=&nbsp;itab2-chngind.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-changenr&nbsp;=&nbsp;itab2-changenr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_temp_table-tabkey&nbsp;=&nbsp;itab2-tabkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_temp_table&nbsp;TO&nbsp;temp_table.<br />
+   </div>
+   <div class="codeComment">
+*end&nbsp;temporary&nbsp;table<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;SORT&nbsp;temp_table&nbsp;ASCENDING&nbsp;BY&nbsp;chgkey&nbsp;udate&nbsp;utime.<br />
+&nbsp;&nbsp;DATA&nbsp;sec_temp_table&nbsp;LIKE&nbsp;temp_table.<br />
+&nbsp;&nbsp;DATA&nbsp;third_temp_table&nbsp;LIKE&nbsp;temp_table.<br />
+&nbsp;&nbsp;DATA&nbsp;valid_to_table&nbsp;LIKE&nbsp;temp_table.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA&nbsp;next_temp_table&nbsp;LIKE&nbsp;temp_table.<br />
+*&nbsp;&nbsp;DATA&nbsp;lv_temp_table&nbsp;LIKE&nbsp;temp_table&nbsp;OCCURS&nbsp;0.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;count&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;temp_table.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;temp_table-chgkey&nbsp;TO&nbsp;discounts.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;discounts.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;discounts.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;lv_disc&nbsp;TYPE&nbsp;fkkvkp_chgdisc-chgkey.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;lv_disc&nbsp;=&nbsp;temp_table-chgkey.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;temp_table&nbsp;WHERE&nbsp;chgkey&nbsp;EQ&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;=&nbsp;count&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;temp_table&nbsp;INTO&nbsp;sec_temp_table&nbsp;INDEX&nbsp;count&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;temp_table&nbsp;INTO&nbsp;valid_to_table&nbsp;INDEX&nbsp;count&nbsp;+&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;temp_table-chngind&nbsp;=&nbsp;'I'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;temp_table-tabkey+0(3)&nbsp;NE&nbsp;sy-mandt.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-stat&nbsp;=&nbsp;'***Created***'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_from&nbsp;=&nbsp;temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sec_temp_table&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sec_temp_table-chgkey&nbsp;EQ&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;sec_temp_table-old_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab1-date_to&nbsp;IS&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;wa_itab1-date_to&nbsp;EQ&nbsp;'00000000'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;wa_itab1-date_to&nbsp;EQ&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;temp_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;third_temp_table&nbsp;INDEX&nbsp;count&nbsp;+&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;third_temp_table&nbsp;IS&nbsp;NOT&nbsp;INITIAL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;third_temp_table-chgkey&nbsp;EQ&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;third_temp_table-old_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;date_to&nbsp;INTO&nbsp;lv_date_to<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp_chgdisc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;=&nbsp;temp_table-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chgkey&nbsp;=&nbsp;temp_table-chgkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;lv_date_to.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;temp_table-chngind&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-stat&nbsp;=&nbsp;'***Updated-Valid&nbsp;To***'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_from&nbsp;=&nbsp;temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;temp_table-new_value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-new_value&nbsp;=&nbsp;temp_table-new_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-old_value&nbsp;=&nbsp;temp_table-old_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;temp_table-chngind&nbsp;=&nbsp;'E'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sec_temp_table-changenr&nbsp;NE&nbsp;temp_table-changenr<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sec_temp_table-chgkey&nbsp;NE&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-stat&nbsp;=&nbsp;'***Deleted***'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_from&nbsp;=&nbsp;temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;temp_table-old_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-chgkey&nbsp;=&nbsp;temp_table-chgkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-username&nbsp;=&nbsp;temp_table-username.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-udate&nbsp;&nbsp;=&nbsp;temp_table-udate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-utime&nbsp;=&nbsp;temp_table-utime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-vkont&nbsp;=&nbsp;temp_table-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-gpart&nbsp;=&nbsp;temp_table-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-name&nbsp;=&nbsp;temp_table-name.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-text&nbsp;=&nbsp;temp_table-text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sec_temp_table&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;temp_table-chgkey&nbsp;=&nbsp;sec_temp_table-chgkey.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;temp_table-changenr&nbsp;=&nbsp;sec_temp_table-changenr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sec_temp_table-chgkey&nbsp;=&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-stat&nbsp;=&nbsp;'***Updated-Valid&nbsp;From***'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;temp_table-chngind&nbsp;EQ&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_from&nbsp;=&nbsp;temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;sec_temp_table-old_value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-new_value&nbsp;=&nbsp;temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-old_value&nbsp;=&nbsp;sec_temp_table-date_from.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;'valid&nbsp;to'&nbsp;from&nbsp;FKKVKP_CHGDISC&nbsp;for&nbsp;last&nbsp;value<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;valid_to_table-chgkey&nbsp;NE&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;date_to&nbsp;INTO&nbsp;lv_date_to<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp_chgdisc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;=&nbsp;temp_table-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chgkey&nbsp;=&nbsp;temp_table-chgkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;lv_date_to.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;temp_table&nbsp;INDEX&nbsp;count&nbsp;+&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_from&nbsp;=&nbsp;sec_temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;temp_table-old_value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-new_value&nbsp;=&nbsp;sec_temp_table-date_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-old_value&nbsp;=&nbsp;temp_table-date_from.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Get&nbsp;'valid&nbsp;to'&nbsp;from&nbsp;FKKVKP_CHGDISC&nbsp;for&nbsp;last&nbsp;value<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;valid_to_table-chgkey&nbsp;NE&nbsp;discounts-disc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;date_to&nbsp;INTO&nbsp;lv_date_to<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp_chgdisc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkont&nbsp;=&nbsp;temp_table-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;chgkey&nbsp;=&nbsp;temp_table-chgkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-date_to&nbsp;=&nbsp;lv_date_to.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;temp_table&nbsp;INDEX&nbsp;count&nbsp;+&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab1&nbsp;TO&nbsp;itab_details.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_itab1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;sec_temp_table.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;valid_to_table.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;next_temp_table.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;lv_disc.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;index.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;CLEAR&nbsp;itab1.<br />
+&nbsp;&nbsp;REFRESH&nbsp;itab1.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_details&nbsp;INTO&nbsp;wa_itab1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab1&nbsp;TO&nbsp;itab1.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " DETAILLIST<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;alv_build_fieldcat<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;alv_build_fieldcat<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM alv_display.<br />
+   </div>
+   <div class="codeComment">
+*PERFORM&nbsp;alv_build_fieldcat.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_program_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_internal_tabname&nbsp;=&nbsp;'ITAB1'&nbsp;"capital&nbsp;letters!<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_internal_tabname&nbsp;=&nbsp;'ITAB_DETAILS'&nbsp;"capital&nbsp;letters!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_inclname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;wa_fcat&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;int_fcat.<br />
+&nbsp;&nbsp;DATA:&nbsp;idx&nbsp;TYPE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;int_fcat&nbsp;INTO&nbsp;wa_fcat&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;idx&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_fcat-fieldname&nbsp;EQ&nbsp;'STAT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;=&nbsp;'STATUS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;int_fcat&nbsp;FROM&nbsp;wa_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;seltext_s.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_fcat-fieldname&nbsp;EQ&nbsp;'NEW_VALUE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;=&nbsp;'NEW&nbsp;Value'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;int_fcat&nbsp;FROM&nbsp;wa_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;seltext_s.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_fcat-fieldname&nbsp;EQ&nbsp;'OLD_VALUE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;=&nbsp;'OLD&nbsp;Value'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;int_fcat&nbsp;FROM&nbsp;wa_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;seltext_s.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_FIELDCATALOG_MERGE'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab1<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_details<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_GRID_DISPLAY'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "alv_display<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SINGLELIST<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM singlelist .<br />
+&nbsp;&nbsp;SELECT&nbsp;a~gpart&nbsp;a~vkont&nbsp;a~chgkey&nbsp;a~date_from&nbsp;a~date_to&nbsp;b~text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;fkkvkp_chgdisc&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;tfk2617t&nbsp;AS&nbsp;b<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;a~chgkey&nbsp;=&nbsp;b~chgkey<br />
+<br />
+&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~gpart&nbsp;IN&nbsp;tgpart&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~vkont&nbsp;IN&nbsp;tvkont&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~chgkey&nbsp;IN&nbsp;tchgkey&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~date_from&nbsp;IN&nbsp;tdate_fr&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~date_to&nbsp;IN&nbsp;tdate_to&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;langu&nbsp;EQ&nbsp;'E'.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;partner&nbsp;name_first&nbsp;name_last&nbsp;name_org1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;but000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;wa_lfa1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;partner&nbsp;EQ&nbsp;itab1-gpart.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;wa_lfa1&nbsp;WITH&nbsp;KEY&nbsp;partner&nbsp;=&nbsp;itab1-gpart.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;wa_lfa1-name_first&nbsp;wa_lfa1-name_last<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_lfa1-name_org1&nbsp;&nbsp;INTO&nbsp;itab1-name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;idx&nbsp;=&nbsp;idx&nbsp;+&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;lv_local&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'%'&nbsp;itab1-vkont&nbsp;itab1-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab1-chgkey&nbsp;'%'&nbsp;INTO&nbsp;lv_local.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;&nbsp;changenr&nbsp;tabkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;itab2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectclas&nbsp;EQ&nbsp;'MKK_VKONT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;tabname&nbsp;EQ&nbsp;'FKKVKP_CHGDISC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objectid&nbsp;EQ&nbsp;itab1-vkont.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;tabkey&nbsp;LIKE&nbsp;lv_local&nbsp;.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;tabkey&nbsp;cs&nbsp;lv_local.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;Get&nbsp;last&nbsp;line&nbsp;of&nbsp;internal&nbsp;table<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;w_lines&nbsp;TYPE&nbsp;i.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;itab3&nbsp;LIKE&nbsp;itab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;itab2&nbsp;LINES&nbsp;w_lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;itab2&nbsp;INTO&nbsp;itab3&nbsp;INDEX&nbsp;w_lines.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;cdhdr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objectclas&nbsp;=&nbsp;'MKK_VKONT'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;objectid&nbsp;=&nbsp;itab3-objectid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;changenr&nbsp;=&nbsp;itab3-changenr.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;changenr&nbsp;=&nbsp;itab3-changenr.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-username&nbsp;=&nbsp;it_itab1-username.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-udate&nbsp;=&nbsp;it_itab1-udate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab1-utime&nbsp;=&nbsp;it_itab1-utime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab1&nbsp;FROM&nbsp;wa_itab1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;&nbsp;username&nbsp;udate&nbsp;utime.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+ENDFORM.                    " SINGLELIST<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SPLIT_TABKEY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM split_tabkey .<br />
+<br />
+&nbsp;&nbsp;MOVE&nbsp;itab2-tabkey&nbsp;TO&nbsp;lv_tabkey.<br />
+&nbsp;&nbsp;CONDENSE&nbsp;lv_tabkey.<br />
+&nbsp;&nbsp;length&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;).<br />
+&nbsp;&nbsp;IF&nbsp;sy-mandt&nbsp;EQ&nbsp;'100'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;sy-mandt&nbsp;EQ&nbsp;'200'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;sy-mandt&nbsp;EQ&nbsp;'300'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;objid_count&nbsp;=&nbsp;12."strlen(&nbsp;itab1-vkont&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_tabkey+0(3)&nbsp;EQ&nbsp;'100'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;lv_tabkey+0(3)&nbsp;EQ&nbsp;'200'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;lv_tabkey+0(3)&nbsp;EQ&nbsp;'300'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tabkey&nbsp;=&nbsp;lv_tabkey+3(length).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objid_count&nbsp;=&nbsp;12."strlen(&nbsp;itab1-vkont&nbsp;).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;=&nbsp;lv_tabkey+0(3).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objid_count&nbsp;=&nbsp;objid_count.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectid&nbsp;=&nbsp;lv_tabkey+0(objid_count).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validfrom_count&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;)&nbsp;-&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validfrom&nbsp;=&nbsp;lv_tabkey+validfrom_count(length).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr_start&nbsp;=&nbsp;strlen(&nbsp;client&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;strlen(&nbsp;objectid&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr_end&nbsp;=&nbsp;10."strlen(&nbsp;itab1-gpart&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpartkey&nbsp;&nbsp;=&nbsp;lv_tabkey+changenr_start(changenr_end).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disc_start&nbsp;=&nbsp;strlen(&nbsp;client&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;strlen(&nbsp;objectid&nbsp;)&nbsp;+&nbsp;strlen(&nbsp;gpartkey&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disc_end&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;)&nbsp;-&nbsp;disc_start&nbsp;-&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;=&nbsp;lv_tabkey+disc_start(disc_end).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client&nbsp;=&nbsp;lv_tabkey+0(3).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objid_count&nbsp;=&nbsp;objid_count.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objectid&nbsp;=&nbsp;lv_tabkey+0(objid_count).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validfrom_count&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;)&nbsp;-&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validfrom&nbsp;=&nbsp;lv_tabkey+validfrom_count(length).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr_start&nbsp;=&nbsp;strlen(&nbsp;client&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;strlen(&nbsp;objectid&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changenr_end&nbsp;=&nbsp;10."strlen(&nbsp;itab1-gpart&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpartkey&nbsp;=&nbsp;lv_tabkey+changenr_start(changenr_end).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disc_start&nbsp;=&nbsp;strlen(&nbsp;client&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;strlen(&nbsp;objectid&nbsp;)&nbsp;+&nbsp;strlen(&nbsp;gpartkey&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disc_end&nbsp;=&nbsp;strlen(&nbsp;lv_tabkey&nbsp;)&nbsp;-&nbsp;disc_start&nbsp;-&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;=&nbsp;lv_tabkey+disc_start(disc_end).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab1-date_from&nbsp;=&nbsp;validfrom.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab1-chgkey&nbsp;=&nbsp;discount.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab1-vkont&nbsp;=&nbsp;objectid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab1-gpart&nbsp;=&nbsp;gpartkey.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " SPLIT_TABKEY<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_DET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change&nbsp;History<br />
+*&nbsp;P_SING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Existing&nbsp;Discount<br />
+*&nbsp;P_VKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;TCHGKEY&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;TDATE_FR&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;TDATE_TO&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;TGPART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;TVKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;Please&nbsp;fill&nbsp;in&nbsp;CA<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

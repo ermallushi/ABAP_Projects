@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_INVCREATE</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZSD_INVCREATE</h2>
+<h3> Description: Otomatik Fatura</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION ZSD_INVCREATE.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     VALUE(EVENT) LIKE  SWETYPECOU-EVENT<br />
+*"     VALUE(RECTYPE) LIKE  SWETYPECOU-RECTYPE<br />
+*"     VALUE(OBJTYPE) LIKE  SWETYPECOU-OBJTYPE<br />
+*"     VALUE(OBJKEY) LIKE  SWEINSTCOU-OBJKEY<br />
+*"     VALUE(EXCEPTIONS_ALLOWED) LIKE  SWEFLAGS-EXC_OK DEFAULT SPACE<br />
+*"  EXPORTING<br />
+*"     VALUE(REC_ID) LIKE  SWELOG-RECID<br />
+*"  TABLES<br />
+*"      EVENT_CONTAINER STRUCTURE  SWCONT<br />
+*"  EXCEPTIONS<br />
+*"      READ_FAILED<br />
+*"      CREATE_FAILED<br />
+*"----------------------------------------------------------------------<br />
+
+<div class="codeComment">*       <a href ="global-zsd_invcreate.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;TABLES:&nbsp;ZSD_AUTOINV&nbsp;.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;LS_CREATORDATAIN&nbsp;LIKE&nbsp;&nbsp;BAPICREATORDATA,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_AUTOINV&nbsp;LIKE&nbsp;ZSD_AUTOINV&nbsp;.<br />
+&nbsp;&nbsp;DATA:&nbsp;&nbsp;&nbsp;GS_VBAK&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;VBAK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_VBAP&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;VBAP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING&nbsp;LIKE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;BAPIVBRK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_RETURN&nbsp;&nbsp;LIKE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;BAPIRET1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_SUCCESS&nbsp;LIKE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;BAPIVBRKSUCCESS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;HEADER&nbsp;LINE.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;GS_VBAK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_VBAP[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_RETURN[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GT_SUCCESS[].<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;VBAK&nbsp;INTO&nbsp;GS_VBAK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;VBELN&nbsp;=&nbsp;OBJKEY.<br />
+&nbsp;&nbsp;CHECK&nbsp;SY-SUBRC&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;ZSD_AUTOINV&nbsp;INTO&nbsp;LS_AUTOINV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;FKART&nbsp;EQ&nbsp;GS_VBAK-AUART&nbsp;.<br />
+&nbsp;&nbsp;CHECK&nbsp;NOT&nbsp;LS_AUTOINV-ZCHECK&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;VBAP&nbsp;INTO&nbsp;TABLE&nbsp;GT_VBAP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;VBELN&nbsp;EQ&nbsp;GS_VBAK-VBELN.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GT_VBAP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-SALESORG&nbsp;&nbsp;&nbsp;=&nbsp;GS_VBAK-VKORG.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-REF_DOC&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GS_VBAK-VBELN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-REF_ITEM&nbsp;&nbsp;&nbsp;=&nbsp;GT_VBAP-POSNR.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-DOC_NUMBER&nbsp;=&nbsp;GS_VBAK-VBELN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-ITM_NUMBER&nbsp;=&nbsp;GT_VBAP-POSNR.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-ORDBILLTYP&nbsp;=&nbsp;ZSD_AUTOINV-FKART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-PRICE_DATE&nbsp;=&nbsp;GS_VBAK-AUDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-REF_DOC_CA&nbsp;=&nbsp;GS_VBAK-VBTYP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-MATERIAL&nbsp;&nbsp;&nbsp;=&nbsp;GT_VBAP-MATNR.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-PLANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GT_VBAP-WERKS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GT_BILLING-CREATED_BY&nbsp;=&nbsp;GS_VBAK-ERNAM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GT_BILLING.&nbsp;CLEAR&nbsp;GT_BILLING.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;LS_CREATORDATAIN-CREATED_BY&nbsp;=&nbsp;GS_VBAK-ERNAM.<br />
+&nbsp;&nbsp;LS_CREATORDATAIN-CREATED_ON&nbsp;=&nbsp;SY-DATUM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*  data : XXXX(1) type c .<br />
+*  while XXXX is initial.<br />
+*  endwhile .<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CREATEMULTIPLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATORDATAIN&nbsp;=&nbsp;LS_CREATORDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDATAIN&nbsp;=&nbsp;GT_BILLING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GT_RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GT_SUCCESS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_RETURN&nbsp;WITH&nbsp;KEY&nbsp;ID&nbsp;=&nbsp;'VF'&nbsp;NUMBER&nbsp;=&nbsp;'311'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;GT_RETURN&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGID&nbsp;=&nbsp;GT_RETURN-ID.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGTY&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGNO&nbsp;=&nbsp;GT_RETURN-NUMBER.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGV1&nbsp;=&nbsp;GT_RETURN-MESSAGE_V1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGV2&nbsp;=&nbsp;GT_RETURN-MESSAGE_V2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGV3&nbsp;=&nbsp;GT_RETURN-MESSAGE_V3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SY-MSGV4&nbsp;=&nbsp;GT_RETURN-MESSAGE_V4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;SY-MSGID&nbsp;TYPE&nbsp;SY-MSGTY&nbsp;NUMBER&nbsp;SY-MSGNO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SY-MSGV1&nbsp;SY-MSGV2&nbsp;SY-MSGV3&nbsp;SY-MSGV4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

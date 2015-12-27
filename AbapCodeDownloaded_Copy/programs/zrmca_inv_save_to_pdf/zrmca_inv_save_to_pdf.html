@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_INV_SAVE_TO_PDF</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_INV_SAVE_TO_PDF</h2>
+<h3> Description: Invoice Cycle Based on Provider Contract : Create E-Bill</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZRMCA_INV_SAVE_TO_PDF<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Eyup&nbsp;Ozdener<br />
+*&&nbsp;Creation&nbsp;date&nbsp;:&nbsp;17.11.2014<br />
+*&&nbsp;Project&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Invoice&nbsp;Process<br />
+*&&nbsp;Definition&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Invoice&nbsp;Cycle&nbsp;Based&nbsp;on&nbsp;Provider&nbsp;Contract&nbsp;:&nbsp;Create&nbsp;E-Bill<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zrmca_inv_save_to_pdf.<br />
+<br />
+include <a href ="zrmca_inv_save_to_pdf_top.html">zrmca_inv_save_to_pdf_top</a>.<br />
+include <a href ="zrmca_inv_save_to_pdf_f01.html">zrmca_inv_save_to_pdf_f01</a>.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_directory.<br />
+<br />
+AT SELECTION-SCREEN OUTPUT.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_screen.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;PERFORM&nbsp;check_input.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_ranges.<br />
+&nbsp;&nbsp;PERFORM&nbsp;select_invoices.<br />
+&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;Selection&nbsp;Criteria<br />
+*&nbsp;002&nbsp;Document&nbsp;Status<br />
+*&nbsp;003&nbsp;Additional&nbsp;Selection&nbsp;Criteria<br />
+*&nbsp;E01&nbsp;Please&nbsp;select&nbsp;one&nbsp;of&nbsp;the&nbsp;document&nbsp;status!...<br />
+*&nbsp;E02&nbsp;Directory&nbsp;not&nbsp;found!...Please&nbsp;maintain&nbsp;table&nbsp;ZRMCA_AIP_DIR...<br />
+*&nbsp;E03&nbsp;Wrong&nbsp;entry&nbsp;in&nbsp;table&nbsp;ZRMCA_AIP_DIR.&nbsp;Directory&nbsp;not&nbsp;found&nbsp;in&nbsp;app&nbsp;server!...<br />
+*&nbsp;E04&nbsp;Please&nbsp;set&nbsp;number&nbsp;of&nbsp;process!...<br />
+*&nbsp;E05&nbsp;Please&nbsp;fill&nbsp;directory&nbsp;name!...<br />
+*&nbsp;E06&nbsp;Please&nbsp;fill&nbsp;one&nbsp;of&nbsp;the&nbsp;additional&nbsp;selection&nbsp;criteria!...<br />
+*&nbsp;E07&nbsp;No&nbsp;data&nbsp;found&nbsp;for&nbsp;selected&nbsp;criteria!...<br />
+*&nbsp;E08&nbsp;Error&nbsp;:&nbsp;Printing&nbsp;simulation&nbsp;document!...<br />
+*&nbsp;E09&nbsp;Error&nbsp;:&nbsp;Converting&nbsp;to&nbsp;PDF&nbsp;document!...<br />
+*&nbsp;E10&nbsp;There&nbsp;is&nbsp;not&nbsp;enough&nbsp;space&nbsp;in&nbsp;shared&nbsp;folder!...<br />
+*&nbsp;E11&nbsp;Check&nbsp;available&nbsp;space&nbsp;-&nbsp;Format&nbsp;error!...<br />
+*&nbsp;S01&nbsp;Downloaded&nbsp;successfully...<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_FOLDER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;name&nbsp;[Foreground]<br />
+*&nbsp;P_INVOIC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-Reversed&nbsp;Documents<br />
+*&nbsp;P_INVPR&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_NOFS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number&nbsp;of&nbsp;Process&nbsp;[Background]<br />
+*&nbsp;P_PERIOD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Period<br />
+*&nbsp;P_REVDOC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reversed&nbsp;Documents<br />
+*&nbsp;P_RVLDOC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reversal&nbsp;Documents<br />
+*&nbsp;P_SIMDOC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simulated&nbsp;documents<br />
+*&nbsp;S_BUDAT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_CRDATE&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_GPART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_VKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;6<br />
+*008&nbsp;&nbsp;&nbsp;&1&nbsp;&2&nbsp;&3&nbsp;&4<br />
+*176&nbsp;&nbsp;&nbsp;&1&nbsp;jobs&nbsp;is&nbsp;too&nbsp;many;&nbsp;maximum&nbsp;number&nbsp;is&nbsp;&2<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;U<br />
+*047&nbsp;&nbsp;&nbsp;Job&nbsp;cannot&nbsp;be&nbsp;created<br />
+*050&nbsp;&nbsp;&nbsp;Error&nbsp;in&nbsp;job&nbsp;step<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

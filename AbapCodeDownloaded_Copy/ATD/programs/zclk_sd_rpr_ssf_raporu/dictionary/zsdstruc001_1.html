@@ -1,0 +1,765 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Dictionary object- ZSDSTRUC001_1</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZSDSTRUC001_1</h2>
+  <h3>Description: </h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>VBELN</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>VBELN_VA</td>
+  <td>VBELN</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Sales Document</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>POSNR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>POSNR_VA</td>
+  <td>POSNR</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Sales Document Item</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>AUART</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>AUART</td>
+  <td>AUART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Sales Document Type</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>ABSTA</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>ABSTA_VB</td>
+  <td>STATV</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Rejection status for SD item</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>MATNR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>Material Number</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>MAKTX</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MAKTX</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>Material Description (Short Text)</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>MATKL</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MATKL</td>
+  <td>MATKL</td>
+  <td>CHAR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>Material Group</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>WERKS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>WERKS_EXT</td>
+  <td>WERKS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Plant (Own or External)</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>PLNNR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>PLNNR</td>
+  <td>PLNNR</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Key for Task List Group</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>BZIRK</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BZIRK</td>
+  <td>BZIRK</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Sales district</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>SDABW</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>SDABW</td>
+  <td>SDABW</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Special processing indicator</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>KUNNR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>KUNAG</td>
+  <td>KUNNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Sold-to party</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>WMENG_O</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>WMENG</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Order quantity in sales units</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>NAMEAG</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>NAME1_GP</td>
+  <td>NAME</td>
+  <td>CHAR</td>
+  <td>35</td>
+  <td>X</td>
+  <td>Name 1</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>KUNWE</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>KUNWE</td>
+  <td>KUNNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Ship-to party</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>NAMEWE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>NAME1_GP</td>
+  <td>NAME</td>
+  <td>CHAR</td>
+  <td>35</td>
+  <td>X</td>
+  <td>Name 1</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>UNTTO</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>UNTTO</td>
+  <td>PRZ21</td>
+  <td>DEC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Underdelivery Tolerance Limit</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>BSTDK</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>BSTDK</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Customer purchase order date</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>SPART</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>SPART</td>
+  <td>SPART</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Division</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>KWMENG</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>KWMENG</td>
+  <td>MENG15</td>
+  <td>QUAN</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>Cumulative Order Quantity in Sales Units</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>LFIMG</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>LFIMG</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Actual quantity delivered (in sales units)</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>LFIMG2</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>ZZMALMIKTAR</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Material exit</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>BAKIY</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>ZZKALAN</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Balance</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>KALAB</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>LABST</td>
+  <td>MENG13V</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Valuated Unrestricted-Use Stock</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>KAINS</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>INSME</td>
+  <td>MENG13V</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Stock in Quality Inspection</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>KASPE</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>SPEME</td>
+  <td>MENG13V</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Blocked Stock</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>URETK</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>ZZURETK</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>Quantity will be produced</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>VRKME</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>VRKME</td>
+  <td>MEINS</td>
+  <td>UNIT</td>
+  <td>3</td>
+  <td>X</td>
+  <td>Sales unit</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>ETENR</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>ETENR</td>
+  <td>ETENR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Delivery Schedule Line Number</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>LDDAT</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>LDDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Loading Date</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>NETPR</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>NETPR</td>
+  <td>WERTV6</td>
+  <td>CURR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>Net price</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>LPLPR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>CK_LPLPR</td>
+  <td>WERT11</td>
+  <td>CURR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>Current Planned Price</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>WAERK</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>WAERK</td>
+  <td>WAERS</td>
+  <td>CUKY</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>SD Document Currency</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>AUDAT</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>AUDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Document Date (Date Received/Sent)</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>DONEM</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>ZKDONEM</td>
+  <td>CHAR6</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Posting Period</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>ZORAN</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>ZANZHL</td>
+  <td>ANZHL</td>
+  <td>DEC</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>Profit Ratio</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>LIFNR</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>ZLIFNR</td>
+  <td>LIFNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>procurement place</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>NAMEZT</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>NAME1_GP</td>
+  <td>NAME</td>
+  <td>CHAR</td>
+  <td>35</td>
+  <td>X</td>
+  <td>Name 1</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>BSTDK_E</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>ZBSTDK_E</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>date of ready to Hambez</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>NOTE</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>TDLINE</td>
+  <td>TDSTXLLINE</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>X</td>
+  <td>Text Line</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>PROSES</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Proses</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>RENK</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Color</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>MARKA_C</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>ZGAPGD_MARKA_C</td>
+  <td>KUNNR</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Mark Code</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>MARKA_T</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>ZGAPGD_MARKA_T</td>
+  <td>NAME</td>
+  <td>CHAR</td>
+  <td>35</td>
+  <td>X</td>
+  <td>Mark Text</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>IHREZ</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>ZZ_IHREZ</td>
+  <td>TEXT12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>X</td>
+  <td>Warp Date</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>TNETPR</td>
+  <td>46</td>
+  <td>&nbsp;</td>
+  <td>ZNETPR</td>
+  <td>WERTV6</td>
+  <td>CURR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>Net price</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>TWAERS</td>
+  <td>47</td>
+  <td>&nbsp;</td>
+  <td>ZWAERS</td>
+  <td>WAERS</td>
+  <td>CUKY</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Currency Key</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>STPRS_EUR</td>
+  <td>48</td>
+  <td>&nbsp;</td>
+  <td>ZSTPRS_EUR</td>
+  <td>WERT11V</td>
+  <td>CURR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>Standard Price</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>ZKOMPOZISYON</td>
+  <td>49</td>
+  <td>&nbsp;</td>
+  <td>ZKOMPOZISYON</td>
+  <td>ZKOMPOZISYON</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>C_MATNR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>ZC_MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>C_MENGE</td>
+  <td>51</td>
+  <td>&nbsp;</td>
+  <td>ZC_MENGE</td>
+  <td>MENG13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>H_MATNR</td>
+  <td>52</td>
+  <td>&nbsp;</td>
+  <td>ZH_MATNR</td>
+  <td>MATNR</td>
+  <td>CHAR</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>H_MENGE</td>
+  <td>53</td>
+  <td>&nbsp;</td>
+  <td>ZH_MENGE</td>
+  <td>MENGE13</td>
+  <td>QUAN</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>ERNAM</td>
+  <td>54</td>
+  <td>&nbsp;</td>
+  <td>ERNAM</td>
+  <td>USNAM</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Name of Person who Created the Object</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>STATV</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>Not Relevant</td>
+</tr>
+<tr class="cell">
+  <td>STATV</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>Not yet processed</td>
+</tr>
+<tr class="cell">
+  <td>STATV</td>
+  <td>B</td>
+  <td>&nbsp;</td>
+  <td>Partially processed</td>
+</tr>
+<tr class="cell">
+  <td>STATV</td>
+  <td>C</td>
+  <td>&nbsp;</td>
+  <td>Completely processed</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

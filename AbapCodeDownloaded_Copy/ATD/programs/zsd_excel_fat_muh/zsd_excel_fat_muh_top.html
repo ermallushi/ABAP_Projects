@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_EXCEL_FAT_MUH_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSD_EXCEL_FAT_MUH_TOP</h2>
+<h3> Description: Include ZSD_EXCEL_FAT_MUH_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZSD_EXCEL_FAT_MUH_TOP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+tables : vbrk.<br />
+<br />
+TYPE-POOLS : slis .<br />
+<br />
+DATA : er_layout   TYPE  slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_fieldcat&nbsp;TYPE&nbsp;&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_sp_group&nbsp;TYPE&nbsp;&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_save(1)&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_variant&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;disvariant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_events&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_fieldcat&nbsp;TYPE&nbsp;&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_sp_group&nbsp;TYPE&nbsp;&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_events&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_t_event.<br />
+DATA : gt_list_top_of_page TYPE slis_t_listheader .<br />
+DATA : t_sort      TYPE  slis_t_sortinfo_alv WITH HEADER LINE ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_print&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_print_alv&nbsp;.<br />
+<br />
+DATA : x_er_layout   TYPE  slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_er_fieldcat&nbsp;TYPE&nbsp;&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_er_events&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_ex_fieldcat&nbsp;TYPE&nbsp;&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_ex_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_ex_events&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;slis_t_event.<br />
+<br />
+data: IT_VBRK like VBRK  occurs 0 with header line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XKOMFK&nbsp;&nbsp;like&nbsp;KOMFK&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XKOMV&nbsp;&nbsp;&nbsp;like&nbsp;KOMV&nbsp;&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XTHEAD&nbsp;&nbsp;like&nbsp;THEADVB&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBFS&nbsp;&nbsp;&nbsp;like&nbsp;VBFS&nbsp;&nbsp;&nbsp;&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBPA&nbsp;&nbsp;&nbsp;like&nbsp;VBPAVB&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBRK&nbsp;&nbsp;&nbsp;like&nbsp;VBRKVB&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBRP&nbsp;&nbsp;&nbsp;like&nbsp;VBRPVB&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBRL&nbsp;&nbsp;&nbsp;like&nbsp;VBRLVB&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XVBSS&nbsp;&nbsp;&nbsp;like&nbsp;VBSS&nbsp;&nbsp;&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line.<br />
+data : gv_ok.<br />
+data : begin of itab occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seri_no(20),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;like&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_note(80),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoice_no(20),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;itab.<br />
+data : begin of itabx occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seri_no(20),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;like&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_note(80),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoice_no(20),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok1&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok2&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;itabx.<br />
+<br />
+DATA : L_INDEX     TYPE I.<br />
+DATA : L_INTERN    TYPE ALSMEX_TABLINE OCCURS 0 WITH HEADER LINE.<br />
+DATA : L_START_COL TYPE I VALUE '1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L_START_ROW&nbsp;TYPE&nbsp;I&nbsp;VALUE&nbsp;'1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L_END_COL&nbsp;&nbsp;&nbsp;TYPE&nbsp;I&nbsp;VALUE&nbsp;'256',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L_END_ROW&nbsp;&nbsp;&nbsp;TYPE&nbsp;I&nbsp;VALUE&nbsp;'65536'.<br />
+DATA : off  TYPE i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bul&nbsp;&nbsp;TYPE&nbsp;i,&nbsp;filetype(4)&nbsp;,gv_devam.<br />
+data : xfilename LIKE  RLGRAP-FILENAME.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK block1  WITH FRAME TITLE text-t01 .<br />
+PARAMETERS : p_file type SWR_URL .<br />
+parameters : p_baslik  as checkbox .<br />
+SELECTION-SCREEN END OF BLOCK block1.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

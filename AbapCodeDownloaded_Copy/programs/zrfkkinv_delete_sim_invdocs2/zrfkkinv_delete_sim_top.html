@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRFKKINV_DELETE_SIM_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRFKKINV_DELETE_SIM_TOP</h2>
+<h3> Description: Include ZRFKKINV_DELETE_SIM_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRFKKINV_DELETE_SIM_TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+INCLUDE: rfkkinv_arch_top.<br />
+<br />
+DATA: lv_eof TYPE boolean.<br />
+<br />
+DATA: lv_cnt_doc_tot TYPE i.<br />
+<br />
+DATA: it_dfkkinvdoc_h   TYPE TABLE OF dfkkinvdoc_h.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK sel_scr WITH FRAME TITLE text-002.<br />
+SELECTION-SCREEN BEGIN OF BLOCK ret_per WITH FRAME TITLE text-003.<br />
+PARAMETERS: p_budat  TYPE budat_kk OBLIGATORY.<br />
+SELECT-OPTIONS: s_crdate FOR dfkkinvdoc_h-crdate NO-EXTENSION OBLIGATORY. "deldate.<br />
+SELECTION-SCREEN END OF BLOCK ret_per.<br />
+SELECTION-SCREEN BEGIN OF BLOCK invdoc WITH FRAME TITLE text-005.<br />
+SELECT-OPTIONS: s_bill  FOR dfkkinvdoc_h-invdocno.<br />
+SELECT-OPTIONS: s_gpart FOR dfkkinvdoc_h-gpart.<br />
+SELECT-OPTIONS: s_vkont FOR dfkkinvdoc_h-vkont.<br />
+SELECT-OPTIONS: s_crname FOR dfkkinvdoc_h-crname.<br />
+SELECT-OPTIONS: s_invprc  FOR dfkkinvdoc_h-inv_process.<br />
+PARAMETERS:     p_mdcat TYPE mdcat_ci_kk                      MODIF ID md.<br />
+SELECT-OPTIONS: s_docty FOR dfkkinvdoc_h-doctype.<br />
+SELECTION-SCREEN END OF BLOCK invdoc.<br />
+SELECTION-SCREEN END OF BLOCK sel_scr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;tech_ctrl&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;text-006.<br />
+   </div>
+   <div class="code">
+INCLUDE arch_delete_prg_standard2.<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;tech_ctrl.<br />
+<br />
+   </div>
+   <div class="code">
+PARAMETERS p_call TYPE char1 NO-DISPLAY.<br />
+<br />
+CONSTANTS: gc_nofpp   TYPE jobs_load_bala_kk VALUE 4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sign_in&nbsp;TYPE&nbsp;s_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'I',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_eq&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EQ',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_bt&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BT'.<br />
+<br />
+TYPES: BEGIN OF ty_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;TYPE&nbsp;vkont_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_vkont.<br />
+<br />
+DATA: gt_vkont TYPE STANDARD TABLE OF ty_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_vkont&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;ty_vkont.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRBUS2037</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRBUS2037</h2>
+<h3> Description: Program for object type VBRK</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+INCLUDE &lt;OBJECT&gt;.<br />
+BEGIN_DATA OBJECT. " Do not change.. DATA is generated<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;only&nbsp;private&nbsp;members&nbsp;may&nbsp;be&nbsp;inserted&nbsp;into&nbsp;structure&nbsp;private<br />
+   </div>
+   <div class="code">
+DATA:<br />
+" begin of private,<br />
+"   to declare private attributes remove comments and<br />
+"   insert private attributes here ...<br />
+" end of private,<br />
+&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;KEY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;LIKE&nbsp;VBRK-VBELN,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;KEY.<br />
+END_DATA OBJECT. " Do not change.. DATA is generated<br />
+<br />
+DEFINE bor_RETURN.<br />
+&nbsp;&nbsp;EXIT_RETURN&nbsp;&1&nbsp;SPACE&nbsp;SPACE&nbsp;SPACE&nbsp;SPACE.<br />
+END-OF-DEFINITION.<br />
+<br />
+TABLES VBRK .<br />
+<br />
+BEGIN_METHOD CREATEFROMDATA CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDATAIN&nbsp;LIKE&nbsp;BAPIVBRK&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITIONDATAIN&nbsp;LIKE&nbsp;BAPIKOMV&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOGOUT&nbsp;LIKE&nbsp;BAPIRETURN1&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCARDDATAIN&nbsp;LIKE&nbsp;BAPICCARD_VF&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'BillingDataIn'&nbsp;BILLINGDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ConditionDataIn'&nbsp;CONDITIONDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'CcardDataIn'&nbsp;CCARDDATAIN.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CREATEFROMDATA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLING_DATA_IN&nbsp;=&nbsp;BILLINGDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITION_DATA_IN&nbsp;=&nbsp;CONDITIONDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOG_OUT&nbsp;=&nbsp;RETURNLOGOUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCARD_DATA_IN&nbsp;=&nbsp;CCARDDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'BillingDataIn'&nbsp;BILLINGDATAIN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'ConditionDataIn'&nbsp;CONDITIONDATAIN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'CcardDataIn'&nbsp;CCARDDATAIN.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD SIMULATE CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDATAIN&nbsp;LIKE&nbsp;BAPIVBRK&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITIONDATAIN&nbsp;LIKE&nbsp;BAPIKOMV&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOGOUT&nbsp;LIKE&nbsp;BAPIRETURN1&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESSDOCOUT&nbsp;LIKE&nbsp;BAPISUCC&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'BillingDataIn'&nbsp;BILLINGDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ConditionDataIn'&nbsp;CONDITIONDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'SuccessDocOut'&nbsp;SUCCESSDOCOUT.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_SIMULATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLING_DATA_IN&nbsp;=&nbsp;BILLINGDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITION_DATA_IN&nbsp;=&nbsp;CONDITIONDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOG_OUT&nbsp;=&nbsp;RETURNLOGOUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS_DOC_OUT&nbsp;=&nbsp;SUCCESSDOCOUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'BillingDataIn'&nbsp;BILLINGDATAIN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'ConditionDataIn'&nbsp;CONDITIONDATAIN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'SuccessDocOut'&nbsp;SUCCESSDOCOUT.<br />
+END_METHOD.<br />
+<br />
+<br />
+<br />
+BEGIN_METHOD ISCANCELLED CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCNUMBER&nbsp;LIKE&nbsp;BAPIVBRK-REF_DOC,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCISCANCELLE&nbsp;LIKE&nbsp;RVSEL-XFELD,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOGOUT&nbsp;LIKE&nbsp;BAPIRETURN1.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'BillingdocNumber'&nbsp;BILLINGDOCNUMBER.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_IS_CANCELLED'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOC_NUMBER&nbsp;=&nbsp;BILLINGDOCNUMBER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOC_IS_CANCELLED&nbsp;=&nbsp;BILLINGDOCISCANCELLE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOG_OUT&nbsp;=&nbsp;RETURNLOGOUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'BillingdocIsCancelle'&nbsp;BILLINGDOCISCANCELLE.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD CANCELFROMDATA CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXTREFDOC&nbsp;LIKE&nbsp;BAPIVBRK-REF_DOC,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCUMENTDATAIN&nbsp;LIKE&nbsp;BAPIKOMFK&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOGOUT&nbsp;LIKE&nbsp;BAPIRETURN1&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'ExtRefDoc'&nbsp;EXTREFDOC.<br />
+&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;SPACE&nbsp;TO&nbsp;EXTREFDOC.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'DocumentDataIn'&nbsp;DOCUMENTDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CANCEL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXT_REF_DOC&nbsp;=&nbsp;EXTREFDOC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCUMENT_DATA_IN&nbsp;=&nbsp;DOCUMENTDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURNLOG_OUT&nbsp;=&nbsp;RETURNLOGOUT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'DocumentDataIn'&nbsp;DOCUMENTDATAIN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'ReturnlogOut'&nbsp;RETURNLOGOUT.<br />
+END_METHOD.<br />
+<br />
+<br />
+<br />
+BEGIN_METHOD CANCEL CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TESTRUN&nbsp;LIKE&nbsp;BAPIVBRKTESTRUN-TESTRUN,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;LIKE&nbsp;BAPIRETURN1&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;LIKE&nbsp;BAPIVBRKSUCCESS&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'TestRun'&nbsp;TESTRUN.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CANCEL1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TESTRUN&nbsp;=&nbsp;Testrun<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;=&nbsp;success<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Return'&nbsp;RETURN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Success'&nbsp;SUCCESS.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD EXISTENCECHECK CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_RETURN&nbsp;LIKE&nbsp;BAPIRETURN1.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_EXISTENCECHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;LS_RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;LS_RETURN&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BOR_RETURN&nbsp;1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'Return'&nbsp;LS_RETURN.<br />
+END_METHOD.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+BEGIN_METHOD GETLIST CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFDOCRANGE&nbsp;LIKE&nbsp;BAPI_REF_DOC_RANGE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;LIKE&nbsp;BAPIRETURN1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;LIKE&nbsp;BAPIVBRKSUCCESS&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENTDETAIL&nbsp;LIKE&nbsp;BAPIVBRKOUT&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'RefDocRange'&nbsp;REFDOCRANGE.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_GETLIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFDOCRANGE&nbsp;=&nbsp;refdocrange<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;=&nbsp;success<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENTDETAIL&nbsp;=&nbsp;billingdocumentdetail<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'Return'&nbsp;RETURN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Success'&nbsp;SUCCESS.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'BillingDocumentDetail'&nbsp;BILLINGDOCUMENTDETAIL.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD CREATEMULTIPLE CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATORDATAIN&nbsp;LIKE&nbsp;BAPICREATORDATA,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TESTRUN&nbsp;LIKE&nbsp;BAPIVBRKTESTRUN-TESTRUN,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDATAIN&nbsp;LIKE&nbsp;BAPIVBRK&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITIONDATAIN&nbsp;LIKE&nbsp;BAPIKOMV&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCARDDATAIN&nbsp;LIKE&nbsp;BAPICCARD_VF&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;LIKE&nbsp;BAPIRET1&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;LIKE&nbsp;BAPIVBRKSUCCESS&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'CreatorDataIn'&nbsp;CREATORDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_ELEMENT&nbsp;CONTAINER&nbsp;'TestRun'&nbsp;TESTRUN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'BillingDataIn'&nbsp;BILLINGDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'ConditionDataIn'&nbsp;CONDITIONDATAIN.<br />
+&nbsp;&nbsp;SWC_GET_TABLE&nbsp;CONTAINER&nbsp;'CCardDataIn'&nbsp;CCARDDATAIN.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CREATEMULTIPLE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREATORDATAIN&nbsp;=&nbsp;CREATORDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TESTRUN&nbsp;=&nbsp;TESTRUN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUCCESS&nbsp;=&nbsp;SUCCESS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCARDDATAIN&nbsp;=&nbsp;CCARDDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDITIONDATAIN&nbsp;=&nbsp;CONDITIONDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDATAIN&nbsp;=&nbsp;BILLINGDATAIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Return'&nbsp;RETURN.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Success'&nbsp;SUCCESS.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD GETDETAIL CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENTDETAIL&nbsp;LIKE&nbsp;BAPIVBRKOUT,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;LIKE&nbsp;BAPIRETURN1.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_GETDETAIL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENTDETAIL&nbsp;=&nbsp;BILLINGDOCUMENTDETAIL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'BillingDocumentDetail'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENTDETAIL.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'Return'&nbsp;RETURN.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD EDIT CHANGING CONTAINER.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_EDIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD DISPLAY CHANGING CONTAINER.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD CREATE CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;LIKE&nbsp;BAPIRETURN1&nbsp;OCCURS&nbsp;0.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;SWC_SET_TABLE&nbsp;CONTAINER&nbsp;'Return'&nbsp;RETURN.<br />
+END_METHOD.<br />
+<br />
+BEGIN_METHOD CONFIRM CHANGING CONTAINER.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_RETURN&nbsp;LIKE&nbsp;BAPIRETURN1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LS_CONFIRMATION.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_BILLINGDOC_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILLINGDOCUMENT&nbsp;=&nbsp;OBJECT-KEY-BILLINGDOCUMENT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LS_RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFIRMATION&nbsp;=&nbsp;LS_CONFIRMATION<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;01.<br />
+&nbsp;&nbsp;CASE&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;to&nbsp;be&nbsp;implemented<br />
+&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;LS_RETURN&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BOR_RETURN&nbsp;1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;LS_CONFIRMATION&nbsp;=&nbsp;SPACE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BOR_RETURN&nbsp;2.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;SWC_SET_ELEMENT&nbsp;CONTAINER&nbsp;'Return'&nbsp;LS_RETURN.<br />
+END_METHOD.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

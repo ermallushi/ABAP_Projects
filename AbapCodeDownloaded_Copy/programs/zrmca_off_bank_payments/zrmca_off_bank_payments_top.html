@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_OFF_BANK_PAYMENTS_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_OFF_BANK_PAYMENTS_TOP</h2>
+<h3> Description: Include ZRMCA_OFF_BANK_PAYMENTS_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_OFF_BANK_PAYMENTS_TOP<br />
+*&---------------------------------------------------------------------*<br />
+************************************************************************<br />
+<br />
+*T&nbsp;Y&nbsp;P&nbsp;E&nbsp;S<br />
+************************************************************************<br />
+   </div>
+   <div class="code">
+TYPES:<br />
+BEGIN OF x_cmdout,<br />
+&nbsp;&nbsp;line(200)&nbsp;TYPE&nbsp;c,<br />
+END OF x_cmdout.<br />
+<br />
+TYPE-POOLS : slis.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;D&nbsp;A&nbsp;T&nbsp;A<br />
+************************************************************************<br />
+*data&nbsp;specifications&nbsp;of&nbsp;FTP&nbsp;server<br />
+<br />
+*Handler&nbsp;and&nbsp;Key<br />
+   </div>
+   <div class="code">
+DATA: w_cmd(200) TYPE c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_hdl&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_logid&nbsp;TYPE&nbsp;char4&nbsp;VALUE&nbsp;1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_key&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;26101957,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w_slen&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_iplftp&nbsp;TYPE&nbsp;ztbl_ipl_ftp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_iplftp&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;ztbl_ipl_ftp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_cmdout&nbsp;TYPE&nbsp;x_cmdout,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_cmdout&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;x_cmdout.<br />
+<br />
+DATA lv_bank TYPE STANDARD TABLE OF zbankname.<br />
+DATA wa_bank LIKE LINE OF lv_bank.<br />
+DATA lv_bankname TYPE banka.<br />
+DATA lv_filesin TYPE db2filepath.<br />
+DATA lv_path TYPE string.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*local&nbsp;variable&nbsp;for&nbsp;filename&nbsp;found&nbsp;in&nbsp;table&nbsp;ZTBL_IPL_FTP<br />
+   </div>
+   <div class="code">
+DATA lv_filename TYPE string.<br />
+<br />
+DATA: lv_bal_log_handle TYPE balloghndl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_msg&nbsp;TYPE&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_return&nbsp;&nbsp;TYPE&nbsp;bapiret2.<br />
+<br />
+CONSTANTS: co_bal_object TYPE balobj_d VALUE 'ZBANK_PAY',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co_bal_subobject&nbsp;TYPE&nbsp;balsubobj&nbsp;VALUE&nbsp;'PAYMENTS_IN'.<br />
+<br />
+DATA:  lt_rsparams TYPE TABLE OF rsparams,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams&nbsp;TYPE&nbsp;rsparams.<br />
+DATA fullpath TYPE char255.<br />
+CONSTANTS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gc_sign_in&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'I',&nbsp;&nbsp;&nbsp;"&nbsp;Include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_eq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EQ'.&nbsp;&nbsp;"&nbsp;Equal<br />
+<br />
+<br />
+DATA lv_ztbl_ipl_ftp TYPE STANDARD TABLE OF ztbl_ipl_ftp.<br />
+DATA wa_ztbl_ipl_ftp TYPE ztbl_ipl_ftp.<br />
+<br />
+<br />
+DATA: lv_subrc(1) TYPE n.<br />
+   </div>
+   <div class="codeComment">
+*Constant&nbsp;declarations<br />
+   </div>
+   <div class="code">
+CONSTANTS:  c_dest TYPE rfcdes-rfcdest VALUE 'SAPFTPA',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_host(15)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'79.106.255.134',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ftp(60)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'/CreditAgricole/FilesIn/Mobile/',<br />
+<br />
+&nbsp;c_sap(255)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'/albtelecom/rmca/inbound/payments/',<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;c_sap(255)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'/albtelecom/rmca/inbound/payments/CreditAgricole/FilesIn/Mobile/',<br />
+   </div>
+   <div class="code">
+&nbsp;c_arch(100)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'/archive/'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_sap(16)&nbsp;TYPE&nbsp;c&nbsp;VALUE&nbsp;'/sap/inbound/SAPDIRECTORY'.<br />
+<br />
+************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;A&nbsp;R&nbsp;A&nbsp;M&nbsp;E&nbsp;T&nbsp;E&nbsp;R&nbsp;S<br />
+************************************************************************<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+PARAMETERS  p_trans RADIOBUTTON GROUP rg1. "DEFAULT 'X',<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.<br />
+PARAMETERS: p_user(30) TYPE c LOWER CASE DEFAULT 'directdebit' ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_pwd(30)&nbsp;TYPE&nbsp;c&nbsp;LOWER&nbsp;CASE&nbsp;DEFAULT&nbsp;'%Lule2012#'&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_host(64)&nbsp;TYPE&nbsp;c&nbsp;LOWER&nbsp;CASE&nbsp;DEFAULT&nbsp;c_host&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_edi&nbsp;TYPE&nbsp;zedi,&nbsp;"&nbsp;5-character&nbsp;domain&nbsp;containing&nbsp;EDI&nbsp;profiles<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_ftp&nbsp;TYPE&nbsp;e_dexcommfilepath&nbsp;LOWER&nbsp;CASE&nbsp;DEFAULT&nbsp;c_ftp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sap&nbsp;TYPE&nbsp;esefilepath&nbsp;LOWER&nbsp;CASE&nbsp;DEFAULT&nbsp;c_sap.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+PARAMETERS  p_proc RADIOBUTTON GROUP rg1.<br />
+SELECTION-SCREEN BEGIN OF BLOCK b9 WITH FRAME TITLE text-001.<br />
+<br />
+SELECTION-SCREEN SKIP 1.<br />
+<br />
+PARAMETERS: p_fileu TYPE localfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'/albtelecom/rmca/inbound/payments/CreditAgricole/FilesIn/Mobile/'.<br />
+<br />
+PARAMETERS: p_filed TYPE localfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'/albtelecom/rmca/outbound/pay_lot/'&nbsp;NO-DISPLAY.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b9.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.<br />
+<br />
+PARAMETERS: p_xcont LIKE fkkzepar-xcont DEFAULT ' ' NO-DISPLAY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_xclos&nbsp;LIKE&nbsp;fkkzepar-xclos&nbsp;DEFAULT&nbsp;'X'&nbsp;NO-DISPLAY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_xbuch&nbsp;LIKE&nbsp;fkkzepar-xbuch&nbsp;DEFAULT&nbsp;'X'&nbsp;NO-DISPLAY.<br />
+<br />
+SELECTION-SCREEN SKIP 1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETERS:&nbsp;p_wsu&nbsp;AS&nbsp;CHECKBOX&nbsp;USER-COMMAND&nbsp;flag&nbsp;DEFAULT&nbsp;'&nbsp;'.<br />
+<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN END OF BLOCK b2.<br />
+PARAMETERS  p_arch RADIOBUTTON GROUP rg1.<br />
+SELECTION-SCREEN BEGIN OF BLOCK b10 WITH FRAME TITLE text-001.<br />
+<br />
+SELECTION-SCREEN SKIP 1.<br />
+<br />
+PARAMETERS: p_src TYPE localfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'/albtelecom/rmca/inbound/payments/CreditAgricole/FilesIn/Mobile/'.<br />
+<br />
+PARAMETERS: p_dest TYPE localfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'/albtelecom/rmca/inbound/payments/CreditAgricole/archive/'.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK b10.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

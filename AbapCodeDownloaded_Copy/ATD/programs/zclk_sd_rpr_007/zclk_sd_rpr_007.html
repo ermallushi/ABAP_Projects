@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCLK_SD_RPR_007</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZCLK_SD_RPR_007</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;&nbsp;Program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;ZCLK_SD_RPR_007<br />
+*&nbsp;&nbsp;Transaction&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;ZSD57<br />
+************************************************************************<br />
+   </div>
+   <div class="code">
+report zclk_sd_rpr_007 no standard page heading message-id zz.<br />
+<br />
+include <a href ="zzrpinc02.html">zzrpinc02</a>.<br />
+tables: vbcom, kna1, knvv, knvp.<br />
+<br />
+data: default_tab_name like dfies-tabname value 'ZSDSTRUC004',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_recname&nbsp;type&nbsp;slis_tabname&nbsp;value&nbsp;'IT_REPORT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_report_name&nbsp;like&nbsp;disvariant-report&nbsp;value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZCLK_SD_RPR_007'.<br />
+<br />
+data : tabix like sy-tabix.<br />
+<br />
+data : begin of it_report occurs 0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include&nbsp;structure&nbsp;<a&nbsp;href&nbsp;="zsdstruc004/dictionary-zsdstruc004.html">zsdstruc004</a>.<br />
+data : end of it_report.<br />
+<br />
+data: begin of it_knvk occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;type&nbsp;knvk-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;type&nbsp;knvk-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;it_knvk.<br />
+<br />
+data : sdatum  like sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suzeit&nbsp;&nbsp;like&nbsp;sy-uzeit.<br />
+<br />
+selection-screen begin of block bko with frame .<br />
+   </div>
+   <div class="codeComment">
+*selection-screen&nbsp;skip.<br />
+   </div>
+   <div class="code">
+select-options : kunnr for kna1-kunnr.<br />
+selection-screen end   of block bko.<br />
+<br />
+selection-screen begin of block bco with frame .<br />
+   </div>
+   <div class="codeComment">
+*selection-screen&nbsp;skip.<br />
+   </div>
+   <div class="code">
+select-options : vkorg for vbcom-vkorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtweg&nbsp;for&nbsp;vbcom-vtweg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;for&nbsp;vbcom-spart.<br />
+selection-screen end   of block bco.<br />
+<br />
+selection-screen begin of block bdo with frame .<br />
+   </div>
+   <div class="codeComment">
+*selection-screen&nbsp;skip.<br />
+   </div>
+   <div class="code">
+select-options : aufsd for kna1-aufsd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifsd&nbsp;for&nbsp;kna1-lifsd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;faksd&nbsp;for&nbsp;kna1-faksd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cassd&nbsp;for&nbsp;kna1-cassd.<br />
+selection-screen end   of block bdo.<br />
+<br />
+SELECTION-SCREEN begin of BLOCK blo WITH FRAME.<br />
+select-OPTIONS: pernr for knvp-pernr .<br />
+SELECTION-SCREEN end of BLOCK blo.<br />
+<br />
+selection-screen begin of block bso with frame title text-006.<br />
+parameters     : pvari like ltdx-variant default '/GENEL'.<br />
+selection-screen end   of block bso.<br />
+<br />
+initialization.<br />
+&nbsp;&nbsp;gs_variant-report&nbsp;=&nbsp;default_report_name.<br />
+<br />
+at selection-screen output.<br />
+<br />
+at selection-screen on value-request for pvari.<br />
+&nbsp;&nbsp;perform&nbsp;lt_f4_for_variants&nbsp;using&nbsp;pvari.<br />
+<br />
+start-of-selection.<br />
+&nbsp;&nbsp;perform&nbsp;comment_build&nbsp;using&nbsp;gt_list_top_of_page[].<br />
+&nbsp;&nbsp;perform&nbsp;get_report_data.<br />
+&nbsp;&nbsp;describe&nbsp;table&nbsp;it_report&nbsp;lines&nbsp;xline.<br />
+&nbsp;&nbsp;check&nbsp;xline&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;message&nbsp;i999(zz)&nbsp;with&nbsp;'Seçim&nbsp;kriterlerine&nbsp;ili#kin&nbsp;veri&nbsp;bulunamad#!'.<br />
+<br />
+end-of-selection.<br />
+&nbsp;&nbsp;check&nbsp;xline&nbsp;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;perform&nbsp;show_report&nbsp;tables&nbsp;it_report<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;&nbsp;pvari<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_variant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_report_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_tab_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_recname.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_REPORT_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_report_data.<br />
+<br />
+<br />
+&nbsp;&nbsp;select&nbsp;kna1~kunnr&nbsp;kna1~land1&nbsp;kna1~name1&nbsp;kna1~ort01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kna1~pstlz&nbsp;kna1~stras&nbsp;kna1~telf1&nbsp;kna1~telfx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kna1~adrnr&nbsp;kna1~kukla&nbsp;kna1~ort02&nbsp;kna1~stcd1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kna1~aufsd&nbsp;kna1~lifsd&nbsp;kna1~faksd&nbsp;kna1~cassd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kna1~stcd2&nbsp;kna1~telf2&nbsp;knvv~kdgrp&nbsp;knvv~vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knvv~vtweg&nbsp;knvv~spart&nbsp;knvv~bzirk&nbsp;knvv~vkgrp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knvv~vkbur&nbsp;knvv~inco1&nbsp;knvv~inco2&nbsp;knvv~zterm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;knvv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;kna1&nbsp;on&nbsp;knvv~kunnr&nbsp;eq&nbsp;kna1~kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;it_report<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;knvv~kunnr&nbsp;in&nbsp;kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;knvv~vkorg&nbsp;in&nbsp;vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;knvv~vtweg&nbsp;in&nbsp;vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;knvv~spart&nbsp;in&nbsp;spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;kna1~aufsd&nbsp;in&nbsp;aufsd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;kna1~lifsd&nbsp;in&nbsp;lifsd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;kna1~faksd&nbsp;in&nbsp;faksd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;kna1~cassd&nbsp;in&nbsp;cassd.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;kunnr&nbsp;name1&nbsp;from&nbsp;knvk&nbsp;into&nbsp;table&nbsp;it_knvk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;all&nbsp;entries&nbsp;in&nbsp;it_report<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;kunnr&nbsp;eq&nbsp;it_report-kunnr&nbsp;.<br />
+<br />
+&nbsp;&nbsp;sort&nbsp;:&nbsp;it_report&nbsp;by&nbsp;kunnr&nbsp;vkorg&nbsp;vtweg&nbsp;spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_knvk&nbsp;&nbsp;&nbsp;by&nbsp;kunnr.<br />
+<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;it_report.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;landx&nbsp;into&nbsp;it_report-landx&nbsp;from&nbsp;t005t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;spras&nbsp;eq&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;land1&nbsp;eq&nbsp;it_report-land1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;smtp_addr&nbsp;into&nbsp;it_report-smtpa&nbsp;from&nbsp;adr6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;addrnumber&nbsp;eq&nbsp;it_report-adrnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;it_knvk&nbsp;with&nbsp;key&nbsp;kunnr&nbsp;=&nbsp;it_report-kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_report-namei&nbsp;=&nbsp;it_knvk-name1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;lifnr&nbsp;into&nbsp;it_report-lifnr&nbsp;from&nbsp;knvp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;kunnr&nbsp;eq&nbsp;it_report-kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vkorg&nbsp;eq&nbsp;it_report-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vtweg&nbsp;eq&nbsp;it_report-vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;spart&nbsp;eq&nbsp;it_report-spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;parvw&nbsp;eq&nbsp;'ZG'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;name1&nbsp;into&nbsp;it_report-name2&nbsp;from&nbsp;lfa1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;lifnr&nbsp;eq&nbsp;it_report-lifnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pernr&nbsp;into&nbsp;it_report-pernr&nbsp;from&nbsp;knvp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;kunnr&nbsp;eq&nbsp;it_report-kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vkorg&nbsp;eq&nbsp;it_report-vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vtweg&nbsp;eq&nbsp;it_report-vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;spart&nbsp;eq&nbsp;it_report-spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;parvw&nbsp;eq&nbsp;'ZM'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data:&nbsp;etp0001&nbsp;type&nbsp;bapip0001&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etp0000&nbsp;type&nbsp;TABLE&nbsp;OF&nbsp;p0000,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etp0002&nbsp;type&nbsp;TABLE&nbsp;OF&nbsp;bapip0002,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etp0006&nbsp;type&nbsp;TABLE&nbsp;OF&nbsp;bapip0006,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etp0009&nbsp;type&nbsp;TABLE&nbsp;OF&nbsp;bapip0009,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etp0105&nbsp;type&nbsp;TABLE&nbsp;OF&nbsp;bapip0105.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'CACS_READ_HR_INFOTYPES'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_person_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_report-pernr<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;IV_REFERENCEDATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;SY-DATUM<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0002<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0006<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0009<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_p0105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;etp0105<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_report-ename&nbsp;=&nbsp;etp0001-ename.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;bezei&nbsp;into&nbsp;it_report-bezei<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;tvgrt&nbsp;where&nbsp;spras&nbsp;eq&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vkgrp&nbsp;eq&nbsp;it_report-vkgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;it_report.<br />
+&nbsp;&nbsp;endloop.<br />
+endform.                    "get_report_data<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_FCAT_USER_EXIT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_fcat_user_exit using    p_itname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sgrp.<br />
+endform.                               " SET_FCAT_USER_EXIT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_LAYOUT_USER_EXIT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_layout_user_exit using    p_pvari<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_drname.<br />
+<br />
+endform.                               " SET_LAYOUT_USER_EXIT<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_top_of_page.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;gt_list_top_of_page.<br />
+endform.                    "set_top_of_page<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;COMMENT_BUILD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form comment_build using lt_top_of_page type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slis_t_listheader.<br />
+&nbsp;&nbsp;data:&nbsp;ls_line&nbsp;type&nbsp;slis_listheader.<br />
+&nbsp;&nbsp;data:&nbsp;tarh(10)&nbsp;type&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saat(8)&nbsp;&nbsp;type&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tarh1(10)&nbsp;type&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tarh2(10)&nbsp;type&nbsp;c.<br />
+&nbsp;&nbsp;sdatum&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;suzeit&nbsp;=&nbsp;sy-uzeit.<br />
+<br />
+&nbsp;&nbsp;write&nbsp;:&nbsp;&nbsp;sdatum&nbsp;to&nbsp;tarh&nbsp;dd/mm/yyyy.<br />
+&nbsp;&nbsp;write&nbsp;:&nbsp;&nbsp;suzeit&nbsp;to&nbsp;saat&nbsp;using&nbsp;edit&nbsp;mask&nbsp;'__:__:__'.<br />
+<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;&nbsp;=&nbsp;'H'.<br />
+<br />
+&nbsp;&nbsp;ls_line-info&nbsp;=&nbsp;'Mü#teri&nbsp;Bilgileri'.<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;lt_top_of_page.<br />
+<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ls_line-key&nbsp;=&nbsp;'Tarih&nbsp;-&nbsp;Saat'.<br />
+&nbsp;&nbsp;concatenate&nbsp;tarh&nbsp;'-'&nbsp;saat&nbsp;into&nbsp;ls_line-info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;separated&nbsp;by&nbsp;space.<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;lt_top_of_page.<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;&nbsp;=&nbsp;'A'.<br />
+<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;lt_top_of_page.<br />
+endform.                    "comment_build<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;FORM&nbsp;f01_user_command<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_user_command using r_ucomm     like sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rs_selfield&nbsp;type&nbsp;slis_selfield.<br />
+<br />
+&nbsp;&nbsp;gs_selfield&nbsp;=&nbsp;rs_selfield.<br />
+&nbsp;&nbsp;check&nbsp;not&nbsp;gs_selfield-fieldname&nbsp;is&nbsp;initial.<br />
+&nbsp;&nbsp;clear&nbsp;it_report.<br />
+&nbsp;&nbsp;read&nbsp;table&nbsp;it_report&nbsp;index&nbsp;gs_selfield-tabindex.<br />
+<br />
+&nbsp;&nbsp;case&nbsp;r_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&IC1'&nbsp;or&nbsp;'&ETA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;trans_xd03.<br />
+&nbsp;&nbsp;endcase.<br />
+endform.                    "f01_user_command<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;FORM&nbsp;f01_set_status<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_pf_status_set using rt_extab type slis_t_extab .<br />
+&nbsp;&nbsp;perform&nbsp;set_excluding_tab&nbsp;tables&nbsp;rt_extab.<br />
+&nbsp;&nbsp;set&nbsp;pf-status&nbsp;'STANDARD'&nbsp;excluding&nbsp;rt_extab[].<br />
+endform.                    "f01_set_status<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;excluding_events<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form excluding_events.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'CALLER_EXIT'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'TOP_OF_COVERPAGE'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'END_OF_COVERPAGE'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'FOREIGN_TOP_OF_PAGE'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'FOREIGN_END_OF_PAGE'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'LIST_MODIFY'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'TOP_OF_LIST'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'END_OF_PAGE'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'END_OF_LIST'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'AFTER_LINE_OUTPUT'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'BEFORE_LINE_OUTPUT'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'REPREP_SEL_MODIFY'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'SUBTOTAL_TEXT'.<br />
+&nbsp;&nbsp;perform&nbsp;exclude_events&nbsp;tables&nbsp;ex_events&nbsp;using&nbsp;'GROUPLEVEL_CHANGE'.<br />
+endform.                    " excluding_events<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_excluding_tab<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_excluding_tab tables extab.<br />
+&nbsp;&nbsp;refresh&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&INFO'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&REFRESH'.&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&ETA'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&EB9'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&ALL'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&SAL'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&ABC'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'CURR'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'&EB3'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+&nbsp;&nbsp;extab&nbsp;=&nbsp;'DETAIL'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;extab.<br />
+endform.                    " set_excluding_tab<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;trans_xd03<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form trans_xd03 .<br />
+&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'KUN'&nbsp;field&nbsp;it_report-kunnr.<br />
+&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'VKO'&nbsp;field&nbsp;it_report-vkorg.<br />
+&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'VTW'&nbsp;field&nbsp;it_report-vtweg.<br />
+&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'SPA'&nbsp;field&nbsp;it_report-spart.<br />
+&nbsp;&nbsp;call&nbsp;transaction&nbsp;'XD03'&nbsp;and&nbsp;skip&nbsp;first&nbsp;screen.<br />
+endform.                    " trans_xd03<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

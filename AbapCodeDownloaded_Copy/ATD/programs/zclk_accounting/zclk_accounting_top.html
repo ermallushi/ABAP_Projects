@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCLK_ACCOUNTING_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZCLK_ACCOUNTING_TOP</h2>
+<h3> Description: Include ZCLK_ACCOUNTING_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZCLK_ACCOUNTING_TOP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+TYPE-POOLS: slis.<br />
+TABLES: bsis.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bsas.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+DATA:BEGIN OF itab OCCURS 0,<br />
+&nbsp;&nbsp;hkont&nbsp;LIKE&nbsp;bsis-hkont,<br />
+&nbsp;&nbsp;waers&nbsp;LIKE&nbsp;bsis-waers,<br />
+&nbsp;&nbsp;gsber&nbsp;LIKE&nbsp;bsis-gsber,<br />
+&nbsp;&nbsp;vbund&nbsp;LIKE&nbsp;bsis-vbund,<br />
+&nbsp;&nbsp;dmbtr&nbsp;LIKE&nbsp;bsis-dmbtr,<br />
+&nbsp;&nbsp;wrbtr&nbsp;LIKE&nbsp;bsis-wrbtr,<br />
+&nbsp;&nbsp;dmbe2&nbsp;LIKE&nbsp;bsis-dmbe2,<br />
+&nbsp;&nbsp;dmbe3&nbsp;LIKE&nbsp;bsis-dmbe3,<br />
+&nbsp;&nbsp;shkzg&nbsp;LIKE&nbsp;bsis-shkzg,<br />
+<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;itab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*DATA&nbsp;itab_bsas&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;itab.<br />
+<br />
+   </div>
+   <div class="code">
+DATA wa_itab LIKE LINE OF itab.<br />
+   </div>
+   <div class="codeComment">
+*DATA&nbsp;itab2&nbsp;LIKE&nbsp;itab&nbsp;OCCURS&nbsp;0.<br />
+   </div>
+   <div class="code">
+DATA:BEGIN OF itab2 OCCURS 0,<br />
+&nbsp;&nbsp;hkont&nbsp;LIKE&nbsp;bsis-hkont,<br />
+&nbsp;&nbsp;waers&nbsp;LIKE&nbsp;bsis-waers,<br />
+&nbsp;&nbsp;gsber&nbsp;LIKE&nbsp;bsis-gsber,<br />
+&nbsp;&nbsp;vbund&nbsp;LIKE&nbsp;bsis-vbund,<br />
+&nbsp;&nbsp;dmbtr&nbsp;LIKE&nbsp;bsis-dmbtr,<br />
+&nbsp;&nbsp;wrbtr&nbsp;LIKE&nbsp;bsis-wrbtr,<br />
+&nbsp;&nbsp;dmbe2&nbsp;LIKE&nbsp;bsis-dmbe2,<br />
+&nbsp;&nbsp;dmbe3&nbsp;LIKE&nbsp;bsis-dmbe3,<br />
+&nbsp;&nbsp;shkzg&nbsp;LIKE&nbsp;bsis-shkzg,<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;itab2.<br />
+<br />
+DATA:BEGIN OF itab_vbund OCCURS 0,<br />
+&nbsp;&nbsp;hkont&nbsp;LIKE&nbsp;bsis-hkont,<br />
+&nbsp;&nbsp;waers&nbsp;LIKE&nbsp;bsis-waers,<br />
+&nbsp;&nbsp;vbund&nbsp;LIKE&nbsp;bsis-vbund,<br />
+&nbsp;&nbsp;gsber&nbsp;LIKE&nbsp;bsis-gsber,<br />
+&nbsp;&nbsp;dmbtr&nbsp;LIKE&nbsp;bsis-dmbtr,<br />
+&nbsp;&nbsp;wrbtr&nbsp;LIKE&nbsp;bsis-wrbtr,<br />
+&nbsp;&nbsp;dmbe2&nbsp;LIKE&nbsp;bsis-dmbe2,<br />
+&nbsp;&nbsp;dmbe3&nbsp;LIKE&nbsp;bsis-dmbe3,<br />
+&nbsp;&nbsp;shkzg&nbsp;LIKE&nbsp;bsis-shkzg,<br />
+<br />
+&nbsp;&nbsp;END&nbsp;OF&nbsp;itab_vbund.<br />
+<br />
+DATA wa_itab_vbund LIKE LINE OF itab_vbund.<br />
+DATA:BEGIN OF itab2_vbund OCCURS 0,<br />
+hkont LIKE bsis-hkont,<br />
+waers LIKE bsis-waers,<br />
+vbund LIKE bsis-vbund,<br />
+gsber LIKE bsis-gsber,<br />
+dmbtr LIKE bsis-dmbtr,<br />
+wrbtr LIKE bsis-wrbtr,<br />
+dmbe2 LIKE bsis-dmbe2,<br />
+dmbe3 LIKE bsis-dmbe3,<br />
+shkzg LIKE bsis-shkzg,<br />
+END OF itab2_vbund.<br />
+DATA i_repid LIKE sy-repid.<br />
+<br />
+DATA: int_fcat TYPE slis_t_fieldcat_alv.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME TITLE text-001.<br />
+SELECT-OPTIONS: s_bukrs   FOR bsis-bukrs OBLIGATORY.<br />
+SELECT-OPTIONS: s_hkont   FOR bsis-hkont.<br />
+SELECT-OPTIONS: s_budat   FOR bsis-budat OBLIGATORY.<br />
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME TITLE text-002.<br />
+   </div>
+   <div class="codeComment">
+*PARAMETERS:&nbsp;p_waers&nbsp;AS&nbsp;CHECKBOX.<br />
+   </div>
+   <div class="code">
+PARAMETERS: p_gsber AS CHECKBOX.<br />
+PARAMETERS: p_vbund AS CHECKBOX .<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

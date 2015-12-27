@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_003</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSD_003</h2>
+<h3> Description: Delivery & Sales Order  Relations With Stock</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZSD_003<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  ZSD_003.<br />
+<br />
+include /1BCDWB/IQG000000000015DAT.<br />
+<br />
+data %dtab type standard table of /1BCDWB/IQG000000000015 with header line.<br />
+<br />
+data %subrc type sy-subrc.<br />
+<br />
+include /1BCDWB/IQG000000000015SSCR.<br />
+<br />
+include /1BCDWB/IQG000000000015SSCRAT.<br />
+<br />
+<br />
+start-of-selection.<br />
+&nbsp;&nbsp;if&nbsp;%runmode-extr_on&nbsp;&lt;&gt;&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'/1BCDWB/IQG000000000015EXTR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%selopt&nbsp;=&nbsp;%seloptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%dtab&nbsp;&nbsp;&nbsp;=&nbsp;%dtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changing&nbsp;&nbsp;&nbsp;%rtmode&nbsp;=&nbsp;%runmode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exceptions&nbsp;no_data&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;%subrc&nbsp;=&nbsp;sy-subrc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'RSAQRT_CHECK_EXTR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting&nbsp;extr_subrc&nbsp;=&nbsp;%subrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables&nbsp;&nbsp;&nbsp;&nbsp;dtab&nbsp;&nbsp;&nbsp;=&nbsp;%dtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changing&nbsp;&nbsp;rtmode&nbsp;=&nbsp;%runmode.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+<br />
+end-of-selection.<br />
+&nbsp;&nbsp;if&nbsp;%runmode-show_on&nbsp;&lt;&gt;&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'/1BCDWB/IQG000000000015SHOW'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables&nbsp;&nbsp;&nbsp;%dtab&nbsp;&nbsp;&nbsp;=&nbsp;%dtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changing&nbsp;%rtmode&nbsp;=&nbsp;%runmode.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;special&nbsp;code&nbsp;for&nbsp;old&nbsp;API&nbsp;and&nbsp;BW&nbsp;extractor&nbsp;calls<br />
+*----------------------------------------------------------------<br />
+<br />
+   </div>
+   <div class="code">
+form %set_data changing p_lines type i.<br />
+<br />
+&nbsp;&nbsp;import&nbsp;ldata&nbsp;to&nbsp;%dtab&nbsp;from&nbsp;memory&nbsp;id&nbsp;'AQLISTDATA'.<br />
+&nbsp;&nbsp;describe&nbsp;table&nbsp;%dtab&nbsp;lines&nbsp;p_lines.<br />
+&nbsp;&nbsp;free&nbsp;memory&nbsp;id&nbsp;'AQLISTDATA'.<br />
+<br />
+endform.<br />
+<br />
+form %get_data tables p_dtab  structure %dtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;&nbsp;p_first&nbsp;type&nbsp;i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_last&nbsp;&nbsp;type&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;append&nbsp;lines&nbsp;of&nbsp;%dtab&nbsp;from&nbsp;p_first&nbsp;to&nbsp;p_last&nbsp;to&nbsp;p_dtab.<br />
+<br />
+endform.<br />
+<br />
+form %get_ref_to_table using p_lid   type aql_lid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_ref&nbsp;&nbsp;&nbsp;type&nbsp;ref&nbsp;to&nbsp;data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_subrc&nbsp;type&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;p_lid&nbsp;=&nbsp;%iqid-lid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;create&nbsp;data&nbsp;p_ref&nbsp;like&nbsp;%dtab[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p_subrc&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+endform.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;%LAYOUT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Layout<br />
+*&nbsp;SP$00001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery<br />
+*&nbsp;SP$00002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery&nbsp;Item<br />
+*&nbsp;SP$00003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Customer&nbsp;Number&nbsp;1<br />
+*&nbsp;SP$00004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equipment&nbsp;Number<br />
+*&nbsp;SP$00005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial&nbsp;number<br />
+*&nbsp;SP$00006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;Number<br />
+*&nbsp;SP$00007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plant<br />
+*&nbsp;SP$00008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Storage&nbsp;Location<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

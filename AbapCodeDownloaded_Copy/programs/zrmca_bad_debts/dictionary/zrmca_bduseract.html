@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Dictionary object- ZRMCA_BDUSERACT</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: ZRMCA_BDUSERACT</h2>
+  <h3>Description: Bad Dept User activities</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>CREATEDATE</td>
+  <td>2</td>
+  <td>X</td>
+  <td>RSAUDATE</td>
+  <td>&nbsp;</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>SecAudit: Date audit entry created</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>CREATETIME</td>
+  <td>3</td>
+  <td>X</td>
+  <td>RSAUTIME</td>
+  <td>&nbsp;</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>SecAudit: Time at which audit entry was created</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>ACTUSER</td>
+  <td>4</td>
+  <td>X</td>
+  <td>DDUSER</td>
+  <td>XUBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Dictionary: user who made the last change</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>MESSAGE</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BICS_PROV_MESSAGE_TEXT</td>
+  <td>BICS_PROV_MESSAGE_TEXT</td>
+  <td>CHAR</td>
+  <td>220</td>
+  <td>X</td>
+  <td>Message Text</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>TERMINAL</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>RSAUTERM</td>
+  <td>TERMINAL</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>SecAudit: Terminal name</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>MSGTY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MSGTY</td>
+  <td>MSGAR</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Message Type</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+<br/>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Fixed Domain Values </h2>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Domain Name</th>
+  <th>Value Low</th>
+  <th>Value High</th>
+  <th>Text</th>
+</tr>
+<tr class="cell">
+  <td>MSGAR</td>
+  <td>S</td>
+  <td>&nbsp;</td>
+  <td>Message on next screen</td>
+</tr>
+<tr class="cell">
+  <td>MSGAR</td>
+  <td>I</td>
+  <td>&nbsp;</td>
+  <td>Information</td>
+</tr>
+<tr class="cell">
+  <td>MSGAR</td>
+  <td>A</td>
+  <td>&nbsp;</td>
+  <td>Cancel</td>
+</tr>
+<tr class="cell">
+  <td>MSGAR</td>
+  <td>E</td>
+  <td>&nbsp;</td>
+  <td>Error</td>
+</tr>
+<tr class="cell">
+  <td>MSGAR</td>
+  <td>W</td>
+  <td>&nbsp;</td>
+  <td>Warning</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

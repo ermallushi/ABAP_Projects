@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_2627</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_2627</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;INV:&nbsp;Supplement&nbsp;Invoicing&nbsp;Order&nbsp;for&nbsp;Source&nbsp;Documents&nbsp;of&nbsp;Category&nbsp;ACTIT<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;Event&nbsp;2627&nbsp;is&nbsp;processed&nbsp;when&nbsp;an&nbsp;invoicing&nbsp;order&nbsp;is&nbsp;created&nbsp;for&nbsp;an&nbsp;open<br />
+&nbsp;item&nbsp;that&nbsp;is&nbsp;to&nbsp;be&nbsp;activated&nbsp;in&nbsp;invoicing&nbsp;(items&nbsp;with<br />
+&nbsp;&lt;DS:DE.AUGRS_KK&gt;clearing&nbsp;restriction&nbsp;8&lt;/&gt;).&nbsp;In&nbsp;this&nbsp;event,&nbsp;you&nbsp;have&nbsp;the<br />
+&nbsp;option&nbsp;of&nbsp;changing&nbsp;or&nbsp;suppressing&nbsp;this&nbsp;invoicing&nbsp;order.<br />
+&nbsp;Invoicing&nbsp;order&nbsp;&lt;ZH&gt;&lt;ZK&gt;C_INVTRIG&lt;/&gt;&lt;/&gt;&nbsp;of&nbsp;&lt;DS:DE.SRCDOCCAT_KK&gt;&nbsp;source<br />
+&nbsp;document&nbsp;category&nbsp;ACTIT&lt;/&gt;,&nbsp;which&nbsp;was&nbsp;created&nbsp;based&nbsp;on&nbsp;the&nbsp;system<br />
+&nbsp;configuration,&nbsp;is&nbsp;transferred&nbsp;to&nbsp;the&nbsp;interface.&nbsp;Except&nbsp;for&nbsp;the&nbsp;source<br />
+&nbsp;document&nbsp;number,&nbsp;source&nbsp;document&nbsp;category,&nbsp;business&nbsp;partner,&nbsp;and<br />
+&nbsp;contract&nbsp;account,&nbsp;you&nbsp;can&nbsp;change&nbsp;any&nbsp;other&nbsp;fields&nbsp;of&nbsp;this&nbsp;invoicing<br />
+&nbsp;order.<br />
+&nbsp;If&nbsp;you&nbsp;do&nbsp;not&nbsp;want&nbsp;the&nbsp;invoicing&nbsp;order&nbsp;to&nbsp;be&nbsp;created,&nbsp;initialize&nbsp;the<br />
+&nbsp;parameter&nbsp;C_INVTRIG.<br />
+&nbsp;<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;The&nbsp;event&nbsp;is&nbsp;called&nbsp;both&nbsp;at&nbsp;the&nbsp;posting&nbsp;of&nbsp;one&nbsp;of&nbsp;the&nbsp;documents&nbsp;to&nbsp;be<br />
+&nbsp;activated&nbsp;in&nbsp;invoicing,&nbsp;and&nbsp;at&nbsp;the&nbsp;reversal&nbsp;of&nbsp;the&nbsp;invoice.&nbsp;If&nbsp;the&nbsp;event<br />
+&nbsp;is&nbsp;called&nbsp;for&nbsp;an&nbsp;invoicing&nbsp;reversal,&nbsp;the&nbsp;invoicing&nbsp;document&nbsp;being<br />
+&nbsp;reversed&nbsp;is&nbsp;made&nbsp;available&nbsp;in&nbsp;the&nbsp;I_REVERSED_INVDOC&nbsp;parameter.<br />
+FURTHER_SOURCES_OF_INF <br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_INVTRIG                        Invoicing Order<br />
+I_FKKKO                          Header Data for Open Item Accounting Document<br />
+I_FKKOP_TAB                      Table Type for FKKOP<br />
+I_REVERSED_INVDOC                Invoicing Document<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

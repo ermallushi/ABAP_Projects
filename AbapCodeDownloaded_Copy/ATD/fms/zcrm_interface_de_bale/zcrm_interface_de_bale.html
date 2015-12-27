@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCRM_INTERFACE_DE_BALE</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZCRM_INTERFACE_DE_BALE</h2>
+<h3> Description: Schnittstellenbeschreibung zum Event DE_BALE</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION zcrm_interface_de_bale.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     VALUE(IS_COMPLEX_STRUCTURE) TYPE  BUSEI_COM_EXTERN<br />
+*"     VALUE(IS_COMPLEX_STRUCTURE_RELATIONS) TYPE  BUSEI_RCOM_EXTERN<br />
+*"     VALUE(IT_COMPLEX_STRUCTURE) TYPE  BUSEI_COM_EXTERN_T<br />
+*"     VALUE(IT_COMPLEX_STRUCTURE_RELATIONS) TYPE  BUSEI_RCOM_EXTERN_T<br />
+*"  TABLES<br />
+*"      CT_IDOC_CONTROL STRUCTURE  EDIDC<br />
+*"      CT_IDOC_DATA STRUCTURE  EDIDD<br />
+*"      IT_BAPIMTCS STRUCTURE  BAPIMTCS<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-zcrm_interface_de_bale.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;&nbsp;&nbsp;ls_knvv&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knvv,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mü#teri&nbsp;sat##&nbsp;verileri<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_knb1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knb1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvvm&nbsp;LIKE&nbsp;e1knvvm,&nbsp;&nbsp;&nbsp;"mü#teri&nbsp;sat##&nbsp;verileri<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1kna1m&nbsp;LIKE&nbsp;e1kna1m,&nbsp;&nbsp;&nbsp;"mü#teri&nbsp;temel&nbsp;anaveri<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knb1m&nbsp;LIKE&nbsp;e1knb1m,&nbsp;&nbsp;&nbsp;"Mü#teri&nbsp;ana&nbsp;verileri-#irket&nbsp;kodu&nbsp;(KNB1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvim&nbsp;LIKE&nbsp;e1knvim,&nbsp;&nbsp;&nbsp;"Mü#teri&nbsp;ana&nbsp;verileri-Vergi&nbsp;göstergesi&nbsp;(KNV1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvpm&nbsp;LIKE&nbsp;e1knvpm,&nbsp;&nbsp;&nbsp;"Mü#teri&nbsp;rolleri<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_nodata.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*  DATA: lv_ktgrd LIKE knvv-ktgrd.<br />
+<br />
+*Initialization of IDOC structures<br />
+<br />
+*  CALL FUNCTION 'PI_BP_INIT_IDOC_STRUCTURES'<br />
+*    EXPORTING<br />
+*      iv_initial_value      = gc_nodata<br />
+*    IMPORTING<br />
+*      es_e1kna1m            = gs_initial_idoc-e1kna1m<br />
+*      es_e1knasm            = gs_initial_idoc-e1knasm<br />
+*      es_e1knbkm            = gs_initial_idoc-e1knbkm<br />
+*      es_e1knvam            = gs_initial_idoc-e1knvam<br />
+*      es_e1knvkm            = gs_initial_idoc-e1knvkm<br />
+*      es_e1knb1m            = gs_initial_idoc-e1knb1m<br />
+*      es_e1knb5m            = gs_initial_idoc-e1knb5m<br />
+*      es_e1knvvm            = gs_initial_idoc-e1knvvm<br />
+*      es_e1knvim            = gs_initial_idoc-e1knvim<br />
+*      es_e1knvpm            = gs_initial_idoc-e1knvpm<br />
+*      es_e1kna1h            = gs_initial_idoc-e1kna1h<br />
+*      es_e1kna1l            = gs_initial_idoc-e1kna1l<br />
+*    EXCEPTIONS<br />
+*      initialization_failed = 1<br />
+*      OTHERS                = 2.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;break&nbsp;disik.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_idoc_data&nbsp;WHERE&nbsp;segnam&nbsp;=&nbsp;'E1KNA1M'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1kna1m&nbsp;=&nbsp;ct_idoc_data-sdata.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1kna1m-gform&nbsp;=&nbsp;'/'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ct_idoc_data-sdata&nbsp;=&nbsp;ls_e1kna1m.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ct_idoc_data.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_idoc_data&nbsp;WHERE&nbsp;segnam&nbsp;=&nbsp;'E1KNVIM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvim&nbsp;=&nbsp;ct_idoc_data-sdata.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_idoc_data&nbsp;WHERE&nbsp;segnam&nbsp;=&nbsp;'E1KNVPM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvpm&nbsp;=&nbsp;ct_idoc_data-sdata.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*SD Verileri<br />
+*CRM deki SD Verilerine istinaden R3 te #irket kodu belirleniyor.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_idoc_data&nbsp;WHERE&nbsp;segnam&nbsp;=&nbsp;'E1KNVVM'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_e1knvvm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvvm&nbsp;=&nbsp;ct_idoc_data-sdata.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvvm-versg&nbsp;=&nbsp;'1'.&nbsp;"(Mü#teri&nbsp;istatistik&nbsp;grubu)<br />
+<br />
+   </div>
+   <div class="codeComment">
+*    IF ls_e1knvvm-vkorg EQ '1000'.<br />
+*      ls_e1knvvm-vwerk = '1000'.<br />
+*    ELSEIF ls_e1knvvm-vkorg EQ '2000'.<br />
+*      ls_e1knvvm-vwerk = '2000'.<br />
+*    ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_e1knvvm-vkorg&nbsp;EQ&nbsp;'0910'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvvm-vwerk&nbsp;=&nbsp;'9100'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ct_idoc_data-sdata&nbsp;=&nbsp;ls_e1knvvm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ct_idoc_data.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Mutabakat hesab#<br />
+*CRM den gelen SD alan# verilerine istinaden mutabakat hesab# belirleniyor. (Burada if condition var ama bizim kullanmam#z gerekmiyor)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_idoc_data&nbsp;WHERE&nbsp;segnam&nbsp;=&nbsp;'E1KNVVM'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_e1knvvm,ls_e1knb1m.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knvvm&nbsp;=&nbsp;ct_idoc_data-sdata.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*    ls_e1knb1m       = gs_initial_idoc-e1knb1m.  "r<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knb1m-msgfn&nbsp;=&nbsp;ls_e1knvvm-msgfn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knb1m-zterm&nbsp;=&nbsp;ls_e1knvvm-zterm.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*    IF ls_e1knvvm-vkorg EQ '1000'.<br />
+*      ls_e1knb1m-bukrs = '1000'.<br />
+*    ELSEIF ls_e1knvvm-vkorg EQ '2000'.<br />
+*      ls_e1knb1m-bukrs = '2000'.<br />
+*    ENDIF.<br />
+*<br />
+*    IF ls_e1kna1m-ktokd EQ 'Z201'.<br />
+*      IF ls_e1knvvm-ktgrd = '01'.<br />
+*        ls_e1knb1m-akont = '1200100001'."Yurtiçi<br />
+*      ELSEIF ls_e1knvvm-ktgrd = '02'.<br />
+*        ls_e1knb1m-akont = '1200200001'."Yurtd###<br />
+*      ENDIF.<br />
+*    ELSEIF ls_e1kna1m-ktokd EQ 'Z101'.<br />
+*      IF ls_e1knvvm-vkorg EQ '1000' OR<br />
+*         ls_e1knvvm-vkorg EQ '2000'.<br />
+*<br />
+*        ls_e1knb1m-akont = '1200200000'.<br />
+*      ENDIF.<br />
+*    ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_e1knvvm-vkorg&nbsp;EQ&nbsp;'0910'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knb1m-bukrs&nbsp;=&nbsp;'910'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_e1knb1m-akont&nbsp;=&nbsp;'4110102040'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ct_idoc_data-segnam&nbsp;=&nbsp;'E1KNB1M'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ct_idoc_data-sdata&nbsp;=&nbsp;ls_e1knb1m.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ct_idoc_data.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

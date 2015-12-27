@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_INV_SAVE_TO_PDF_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_INV_SAVE_TO_PDF_TOP</h2>
+<h3> Description: Include ZRMCA_INV_SAVE_TO_PDF_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_INV_SAVE_TO_PDF_TOP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+TABLES: dfkkinvdoc_h, sscrfields.<br />
+<br />
+CONSTANTS: gc_background TYPE wptyp       VALUE 'BGD',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sign_in&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'I',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_eq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EQ',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Equal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_telecomm&nbsp;&nbsp;&nbsp;TYPE&nbsp;applk_kk&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'T',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_und&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'_',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_back&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'\',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_memid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'PDF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'.PDF',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_filetype&nbsp;&nbsp;&nbsp;TYPE&nbsp;char10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BIN',&nbsp;"&nbsp;Format:&nbsp;BIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_ident&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_ident&nbsp;VALUE&nbsp;'SAVE_PDF'.&nbsp;"&nbsp;Identifier<br />
+<br />
+DATA: gt_inv_process_ranges TYPE fkk_rt_inv_process,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_inv_process_range&nbsp;&nbsp;TYPE&nbsp;fkkr_inv_process,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_fkkinvdoc_h_tab&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkinvdoc_h_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_fkkinvdoc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;fkkinvdoc_h.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Parameters...<br />
+   </div>
+   <div class="code">
+DATA: gv_max_bgd TYPE jobs_load_bala_kk.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK win5 WITH FRAME.<br />
+PARAMETERS : p_nofs   TYPE jobs_load_bala_kk DEFAULT 10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_folder&nbsp;LIKE&nbsp;rlgrap-filename&nbsp;DEFAULT&nbsp;'C:\'.<br />
+SELECTION-SCREEN END OF BLOCK win5.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME TITLE text-001.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS: p_invpr  LIKE tfk2602-inv_process OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_period&nbsp;TYPE&nbsp;char6&nbsp;OBLIGATORY.<br />
+SELECTION-SCREEN SKIP.<br />
+SELECT-OPTIONS: s_crdate FOR dfkkinvdoc_h-crdate,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_budat&nbsp;&nbsp;FOR&nbsp;dfkkinvdoc_h-budat&nbsp;OBLIGATORY.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME TITLE text-003.<br />
+SELECTION-SCREEN SKIP.<br />
+SELECT-OPTIONS: s_gpart FOR dfkkinvdoc_h-gpart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vkont&nbsp;FOR&nbsp;dfkkinvdoc_h-vkont.<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win3 WITH FRAME TITLE text-002.<br />
+SELECTION-SCREEN SKIP.<br />
+PARAMETERS: p_invoic TYPE xnotrev_sel_kk AS CHECKBOX DEFAULT 'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_revdoc&nbsp;TYPE&nbsp;xrevdoc_sel_kk&nbsp;AS&nbsp;CHECKBOX,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_rvldoc&nbsp;TYPE&nbsp;xrvldoc_sel_kk&nbsp;AS&nbsp;CHECKBOX,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_simdoc&nbsp;TYPE&nbsp;xsimdoc_sel_kk&nbsp;AS&nbsp;CHECKBOX.<br />
+SELECTION-SCREEN END OF BLOCK win3.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

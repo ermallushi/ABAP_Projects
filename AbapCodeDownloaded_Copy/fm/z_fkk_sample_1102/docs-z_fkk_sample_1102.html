@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_1102</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_1102</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Muster:&nbsp;Substitution&nbsp;in&nbsp;einer&nbsp;OP-Zeile<br />
+<br />
+&nbsp;Scope&nbsp;of&nbsp;Functions<br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;called&nbsp;at&nbsp;event&nbsp;1102&nbsp;is&nbsp;responsible&nbsp;for&nbsp;performing<br />
+&nbsp;substitutions&nbsp;in&nbsp;a&nbsp;manually&nbsp;entered&nbsp;business&nbsp;partner&nbsp;item.&nbsp;To&nbsp;this&nbsp;end,<br />
+&nbsp;the&nbsp;entire&nbsp;business&nbsp;partner&nbsp;item&nbsp;(FKKOP)&nbsp;is&nbsp;transferred&nbsp;and&nbsp;expected<br />
+&nbsp;back.<br />
+&nbsp;The&nbsp;document&nbsp;header&nbsp;(&lt;ZH&gt;I_FKKKO&lt;/&gt;)&nbsp;and&nbsp;an&nbsp;identification&nbsp;of&nbsp;the<br />
+&nbsp;caller&nbsp;(&lt;ZH&gt;I_CALLID&lt;/&gt;)&nbsp;are&nbsp;also&nbsp;transferred.<br />
+&nbsp;Implementation&nbsp;Area<br />
+&nbsp;Entry&nbsp;and&nbsp;creation&nbsp;of&nbsp;business&nbsp;partner&nbsp;items&nbsp;in&nbsp;the&nbsp;following&nbsp;processes<br />
+&nbsp;for&nbsp;document&nbsp;creation:<br />
+&nbsp;SAPLFKP1:&nbsp;&nbsp;Post&nbsp;Document<br />
+&nbsp;SAPLFKU1:&nbsp;&nbsp;Transfer&nbsp;Customer&nbsp;Account<br />
+&nbsp;SAPLFKBAV:&nbsp;Create&nbsp;Payment&nbsp;on&nbsp;Account&nbsp;Posting&nbsp;in&nbsp;Case&nbsp;of&nbsp;Overpayment<br />
+&nbsp;with&nbsp;Payment&nbsp;Advice&nbsp;Note<br />
+&nbsp;SPACE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create&nbsp;Document&nbsp;from&nbsp;Settlement&nbsp;Runs<br />
+&nbsp;Programming&nbsp;Notes<br />
+&nbsp;The&nbsp;related&nbsp;substitution&nbsp;for&nbsp;general&nbsp;ledger&nbsp;items&nbsp;takes&nbsp;place&nbsp;with<br />
+&nbsp;event&nbsp;1108.<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+E_FKKOP                          Open Item with Substituted Data<br />
+I_CALLID                         Identification of Caller<br />
+I_FKKKO                          Header Data<br />
+I_FKKOP                          Open Item<br />
+T_MESSA                          Messages<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

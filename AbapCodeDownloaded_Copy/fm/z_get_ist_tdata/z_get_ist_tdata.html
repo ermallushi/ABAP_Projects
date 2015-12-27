@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_GET_IST_TDATA</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_GET_IST_TDATA</h2>
+<h3> Description: Get ist_tdata</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_get_ist_tdata.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     VALUE(OBJECT_ID) TYPE  CHAR25<br />
+*"  EXPORTING<br />
+*"     VALUE(VKONT) TYPE  CHAR12<br />
+*"     VALUE(ORDER_REFNR) TYPE  CHAR35<br />
+*"     VALUE(VALID_FROM) TYPE  TIMESTAMP<br />
+*"     VALUE(VALID_TO) TYPE  TIMESTAMP<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_get_ist_tdata.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;iv_groupsearch&nbsp;TYPE&nbsp;ist_char1x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_ist_tdata&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ist_tdata,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_ist_tdata&nbsp;TYPE&nbsp;ist_tdata,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_ist_tdata&nbsp;TYPE&nbsp;ist_tdata.<br />
+<br />
+&nbsp;&nbsp;is_ist_tdata-object_id&nbsp;=&nbsp;object_id.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IST_TDATA_SEARCH'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_ist_tdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;is_ist_tdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iv_groupsearch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_groupsearch<br />
+   </div>
+   <div class="codeComment">
+*     IV_DUEDATE         =<br />
+*     NMAX               = '200'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+   </div>
+   <div class="codeComment">
+*     IT_OBJECT_ID_RT    =<br />
+*     IT_GROUP_ID_RT     =<br />
+*     IT_TNUM_COMP_RT    =<br />
+*     IT_COUNTRY_CODE_RT =<br />
+*     IT_AREA_CODE_RT    =<br />
+*     IT_TELNUM_RT       =<br />
+*     IT_VKONT_RT        =<br />
+*     IT_VALFROM_RT      =<br />
+*     IT_VALTO_RT        =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_ist_tdata&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;et_ist_tdata.<br />
+&nbsp;&nbsp;SORT&nbsp;et_ist_tdata&nbsp;DESCENDING&nbsp;BY&nbsp;valid_to.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;et_ist_tdata&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;et_ist_tdata&nbsp;INTO&nbsp;wa_ist_tdata&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;=&nbsp;wa_ist_tdata-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;order_refnr&nbsp;=&nbsp;wa_ist_tdata-order_refnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;valid_from&nbsp;=&nbsp;wa_ist_tdata-valid_from.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;valid_to&nbsp;=&nbsp;wa_ist_tdata-valid_to.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

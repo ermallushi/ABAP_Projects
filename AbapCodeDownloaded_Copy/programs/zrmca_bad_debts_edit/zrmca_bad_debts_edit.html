@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_BAD_DEBTS_EDIT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_BAD_DEBTS_EDIT</h2>
+<h3> Description: Maintain table details</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+REPORT zrmca_bad_debts_edit.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZRMCA_DISCOUNT_REPORT<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*START-OF-SELECTION.<br />
+   </div>
+   <div class="code">
+DATA mytable    TYPE zrmca_baddept.<br />
+DATA selections TYPE TABLE OF vimsellist.<br />
+DATA selection  TYPE vimsellist.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME.<br />
+SELECT-OPTIONS: s_gpart    FOR mytable-gpart.<br />
+SELECT-OPTIONS: s_vkont   FOR mytable-vkont.<br />
+SELECT-OPTIONS: p_datum   FOR mytable-first_unpaid_inv.<br />
+SELECT-OPTIONS: p_bal     FOR mytable-balance NO-EXTENSION NO INTERVALS..<br />
+SELECT-OPTIONS: p_duedt   FOR mytable-last_producet_inv.<br />
+SELECT-OPTIONS: p_phnr    FOR mytable-phone_number.<br />
+SELECT-OPTIONS: p_adslnr  FOR mytable-adsl_number.<br />
+SELECT-OPTIONS: p_acctyp  FOR mytable-account_type.<br />
+SELECT-OPTIONS: p_status  FOR mytable-status.<br />
+SELECT-OPTIONS: p_bpk     FOR mytable-bpkind.<br />
+SELECT-OPTIONS: p_bpktxt  FOR mytable-bpkind_text.<br />
+SELECT-OPTIONS: p_name2   FOR mytable-mc_name2.<br />
+SELECT-OPTIONS: p_name1   FOR mytable-mc_name1.<br />
+SELECT-OPTIONS: p_city    FOR mytable-mc_city1.<br />
+SELECT-OPTIONS: p_contnr  FOR mytable-contact_number.<br />
+SELECT-OPTIONS: p_email   FOR mytable-smtp_addr.<br />
+SELECT-OPTIONS: p_call    FOR mytable-makecall.<br />
+SELECT-OPTIONS: p_sms     FOR mytable-smsprocess.<br />
+SELECT-OPTIONS: p_mail    FOR mytable-emailprocess.<br />
+SELECT-OPTIONS: p_let1    FOR mytable-letter1process.<br />
+SELECT-OPTIONS: p_let2    FOR mytable-letter2process.<br />
+SELECT-OPTIONS: p_last    FOR mytable-lastchangedby.<br />
+SELECT-OPTIONS: p_ldt     FOR mytable-lastchangeddate.<br />
+SELECT-OPTIONS: p_uzeit   FOR mytable-lastchangedtime.<br />
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+DEFINE addsel.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'VIEW_RANGETAB_TO_SELLIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fieldname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append_conjunction&nbsp;=&nbsp;'AND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sellist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;selections<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rangetab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&2[].<br />
+END-OF-DEFINITION.<br />
+<br />
+DEFINE addparam.<br />
+&nbsp;&nbsp;if&nbsp;&2&nbsp;is&nbsp;not&nbsp;initial.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;clear&nbsp;selection.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;selection-viewfield&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;selection-value&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;selection-and_or&nbsp;=&nbsp;'AND'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;selection-operator&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;selection&nbsp;to&nbsp;selections.<br />
+&nbsp;&nbsp;endif.<br />
+END-OF-DEFINITION.<br />
+addsel 'GPART' s_gpart.<br />
+addsel 'VKONT' s_vkont.<br />
+addsel 'FIRST_UNPAID_INV' p_datum .<br />
+addsel 'BALANCE' p_bal .<br />
+addsel 'LAST_PRODUCET_INV' p_duedt.<br />
+addsel 'PHONE_NUMBER' p_phnr.<br />
+addsel 'ADSL_NUMBER' p_adslnr.<br />
+addsel 'ACCOUNT_TYPE' p_acctyp.<br />
+addsel 'STATUS' p_status.<br />
+addsel 'BPKIND' p_bpk.<br />
+addsel 'BPKIND_TEXT' p_bpktxt.<br />
+addsel 'MC_NAME2' p_name2.<br />
+addsel 'MC_NAME1' p_name1.<br />
+addsel 'MC_CITY1' p_city.<br />
+addsel 'CONTACT_NUMBER' p_contnr.<br />
+addsel 'SMTP_ADDR' p_email.<br />
+addsel 'MAKECALL' p_call.<br />
+addsel 'SMSPROCESS' p_sms.<br />
+addsel 'EMAILPROCESS' p_mail.<br />
+addsel 'LETTER1PROCESS' p_let1.<br />
+addsel 'LETTER2PROCESS' p_let2.<br />
+<br />
+addsel 'LASTCHANGEDBY' p_last.<br />
+addsel 'LASTCHANGEDDATE' p_ldt.<br />
+addsel 'LASTCHANGEDTIME' p_uzeit.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;addparam&nbsp;'MAKECALL'&nbsp;p_param1.<br />
+*&nbsp;&nbsp;addparam&nbsp;'SMSPROCESS'&nbsp;p_param2.<br />
+<br />
+   </div>
+   <div class="code">
+CALL FUNCTION 'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'U'&nbsp;"for&nbsp;Update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZRMCA_BADDEPT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;complex_selconds_used&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dba_sellist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;selections<br />
+&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+IF sy-subrc = 1.<br />
+&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_ACCTYP&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_ADSLNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADSL&nbsp;Number<br />
+*&nbsp;P_BAL&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_BPK&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_BPKTXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BP&nbsp;Type&nbsp;Text<br />
+*&nbsp;P_CALL&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_CITY&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_CONTNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact&nbsp;Number<br />
+*&nbsp;P_DATUM&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_DUEDT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_EMAIL&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LAST&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LDT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LET1&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LET2&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_MAIL&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_NAME1&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_NAME2&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_PHNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telephone&nbsp;Number<br />
+*&nbsp;P_SMS&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_STATUS&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_UZEIT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_GPART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_VKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

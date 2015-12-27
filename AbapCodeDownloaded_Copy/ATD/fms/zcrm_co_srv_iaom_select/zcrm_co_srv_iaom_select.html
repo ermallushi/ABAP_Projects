@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCRM_CO_SRV_IAOM_SELECT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZCRM_CO_SRV_IAOM_SELECT</h2>
+<h3> Description: Auslesen der Kontierung von CRM Servicebelegen</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION ZCRM_CO_SRV_IAOM_SELECT.<br />
+   </div>
+   <div class="codeComment">
+*"--------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(IV_ITEM_GUID) TYPE  IAOM_EXT_OBJECT_ID<br />
+*"     REFERENCE(IV_MEINS) TYPE  MEINS OPTIONAL<br />
+*"     REFERENCE(IV_GJAHR) TYPE  GJAHR OPTIONAL<br />
+*"  EXPORTING<br />
+*"     REFERENCE(ES_COBL) TYPE  COBL<br />
+*"  EXCEPTIONS<br />
+*"      NOT_IAOM_RELEVANT<br />
+*"      ERROR_OCCURRED<br />
+*"--------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-zcrm_co_srv_iaom_select.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;TYPES:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;iaom_buf,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item_guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_ext_object_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iaom_relevant&nbsp;TYPE&nbsp;&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gsber&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;cobl-gsber,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;paobjnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;cobl-paobjnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prctr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;cobl-prctr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;cobl-aufnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_posid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;&nbsp;cobl-ps_posid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;iaom_buf,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iaom_buf_tab&nbsp;TYPE&nbsp;SORTED&nbsp;TABLE&nbsp;OF&nbsp;iaom_buf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;UNIQUE&nbsp;KEY&nbsp;item_guid.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;sy-tabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_iaom_buf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_buf,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_scenario_srv&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_bs_identification&nbsp;VALUE&nbsp;'CRMSRV',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_acc_assigm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_account_assignment,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_acc_info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_add_acc_info.<br />
+<br />
+&nbsp;&nbsp;STATICS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_iaom_buf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;iaom_buf_tab.<br />
+<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_iaom_buf&nbsp;INTO&nbsp;ls_iaom_buf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;item_guid&nbsp;&nbsp;=&nbsp;iv_item_guid.<br />
+<br />
+&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_iaom_buf-iaom_relevant&nbsp;EQ&nbsp;false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i020&nbsp;WITH&nbsp;iv_item_guid&nbsp;RAISING&nbsp;not_iaom_relevant.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_iaom_buf&nbsp;TO&nbsp;es_cobl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_iaom_buf.<br />
+&nbsp;&nbsp;ls_iaom_buf-item_guid&nbsp;&nbsp;=&nbsp;iv_item_guid.<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'IAOM_GET_ACCOUNT_ASSIGNMENT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bus_scenario_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lc_scenario_srv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_ext_object_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_item_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_base_uom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_posting_year&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_account_assignment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_assigm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_add_acc_info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bus_scenario_unknown&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_object_id_unknown&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object_locked&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_object_not_co_relevant&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posting_year_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prof_segment_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;other_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ext_object_acc_ass_pending&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_iaom_buf-iaom_relevant&nbsp;=&nbsp;false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;ls_iaom_buf&nbsp;INTO&nbsp;lt_iaom_buf&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i020&nbsp;WITH&nbsp;iv_item_guid&nbsp;RAISING&nbsp;not_iaom_relevant.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;sy-subrc&nbsp;EQ&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;i029(iaom).<br />
+&nbsp;&nbsp;ELSEIF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISING&nbsp;error_occurred.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;es_cobl-paobjnr&nbsp;&nbsp;=&nbsp;ls_acc_assigm-profit_segm_no.<br />
+&nbsp;&nbsp;es_cobl-aufnr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_assigm-order_no.<br />
+&nbsp;&nbsp;es_cobl-kdauf&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_assigm-sales_document.<br />
+&nbsp;&nbsp;es_cobl-kdpos&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_assigm-sales_document_pos.<br />
+&nbsp;&nbsp;es_cobl-prctr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_assigm-profit_centre.<br />
+&nbsp;&nbsp;es_cobl-ps_posid&nbsp;=&nbsp;ls_acc_assigm-wbs_element.<br />
+&nbsp;&nbsp;es_cobl-gsber&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_info-business_area.<br />
+&nbsp;&nbsp;es_cobl-werks&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_acc_info-plant.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--&gt;&gt;Ercan Kocak, 13.05.2010<br />
+*Setting Bussiness Area<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;es_cobl-gsber&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'T000'.<br />
+   </div>
+   <div class="codeComment">
+*&lt;&lt;--Ercan Kocak<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_iaom_buf-iaom_relevant&nbsp;=&nbsp;true.<br />
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;es_cobl&nbsp;TO&nbsp;ls_iaom_buf.<br />
+&nbsp;&nbsp;INSERT&nbsp;ls_iaom_buf&nbsp;INTO&nbsp;lt_iaom_buf&nbsp;INDEX&nbsp;lv_tabix.<br />
+<br />
+<br />
+ENDFUNCTION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+* Message class: IAOM<br />
+*029   &1 &2 is not controlling-relevant<br />
+*<br />
+* Message class: IAOM_CRMSRV<br />
+*020   There are no externally created account assignment objects for item &1<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

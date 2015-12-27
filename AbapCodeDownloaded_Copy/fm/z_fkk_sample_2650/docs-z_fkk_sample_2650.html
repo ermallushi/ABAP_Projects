@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_2650</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_2650</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;INV:&nbsp;Create&nbsp;Additional&nbsp;(Customer-Specific/Industry-Specific)&nbsp;Documents<br />
+<br />
+&nbsp;trados&nbsp;=&nbsp;fi<br />
+FUNCTIONALITY <br />
+&nbsp;With&nbsp;the&nbsp;function&nbsp;module&nbsp;called&nbsp;for&nbsp;event&nbsp;2650,&nbsp;you&nbsp;can&nbsp;create&nbsp;own<br />
+&nbsp;posting&nbsp;documents&nbsp;in&nbsp;invoicing&nbsp;that&nbsp;are&nbsp;to&nbsp;be&nbsp;integrated&nbsp;in&nbsp;the<br />
+&nbsp;invoicing&nbsp;document.&nbsp;You&nbsp;can&nbsp;create&nbsp;the&nbsp;invoicing&nbsp;items&nbsp;for&nbsp;these&nbsp;posting<br />
+&nbsp;documents&nbsp;yourself,&nbsp;or&nbsp;have&nbsp;them&nbsp;created&nbsp;automatically&nbsp;by&nbsp;the&nbsp;invoicing<br />
+&nbsp;program.<br />
+&nbsp;In&nbsp;this&nbsp;event&nbsp;you&nbsp;can&nbsp;use&nbsp;the&nbsp;data&nbsp;of&nbsp;the&nbsp;invoicing&nbsp;unit.<br />
+&nbsp;The&nbsp;tables&nbsp;of&nbsp;posting&nbsp;document&nbsp;headers&nbsp;&lt;LS&gt;C_FKKKO_2650_TAB&lt;/&gt;,&nbsp;business<br />
+&nbsp;partner&nbsp;items&nbsp;&lt;LS&gt;C_FKKOP_2650_TAB&lt;/&gt;,&nbsp;and&nbsp;general&nbsp;ledger&nbsp;items<br />
+&nbsp;&lt;LS&gt;C_FKKOPK_2650_TAB&lt;/&gt;&nbsp;can&nbsp;be&nbsp;transferred&nbsp;to&nbsp;the&nbsp;invoicing&nbsp;program.&nbsp;In<br />
+&nbsp;table&nbsp;&lt;ZK&gt;C_INVDOC_I_2611_TAB&lt;/&gt;&nbsp;you&nbsp;can&nbsp;transfer&nbsp;the&nbsp;prepared&nbsp;invoicing<br />
+&nbsp;items.<br />
+&nbsp;You&nbsp;can&nbsp;create&nbsp;one&nbsp;or&nbsp;several&nbsp;documents.&nbsp;You&nbsp;differentiate&nbsp;the&nbsp;documents<br />
+&nbsp;using&nbsp;the&nbsp;temporary&nbsp;numbering&nbsp;of&nbsp;documents&nbsp;in&nbsp;field&nbsp;&lt;LS&gt;OPBEL&lt;/&gt;.<br />
+&nbsp;The&nbsp;invoicing&nbsp;program&nbsp;takes&nbsp;the&nbsp;posting&nbsp;documents&nbsp;unchanged&nbsp;and&nbsp;checks<br />
+&nbsp;them&nbsp;for&nbsp;completeness&nbsp;and&nbsp;consistency.<br />
+&nbsp;You&nbsp;can&nbsp;use&nbsp;a&nbsp;separate&nbsp;&lt;DS:DE.CADOCTYPE_KK&gt;reference&nbsp;document&nbsp;type&lt;/&gt;<br />
+&nbsp;(field&nbsp;&lt;LS&gt;FKKKO_2650-CADOCTYPE&lt;/&gt;)&nbsp;per&nbsp;posting&nbsp;document.<br />
+&nbsp;For&nbsp;each&nbsp;business&nbsp;partner&nbsp;item&nbsp;you&nbsp;can&nbsp;define&nbsp;whether&nbsp;the&nbsp;invoicing<br />
+&nbsp;program&nbsp;is&nbsp;create&nbsp;an&nbsp;invoicing&nbsp;item&nbsp;automatically&nbsp;(by&nbsp;setting&nbsp;the<br />
+&nbsp;indicator&nbsp;&lt;LS&gt;FKKOP_2650-&lt;/&gt;&lt;ZK&gt;INVDOC_I_REL&lt;/&gt;).&lt;ZK&gt;&nbsp;&lt;/&gt;You&nbsp;can&nbsp;also<br />
+&nbsp;return&nbsp;the&nbsp;invoicing&nbsp;items&nbsp;you&nbsp;create&nbsp;in&nbsp;table&nbsp;&lt;ZK&gt;C_INVDOC_I_2611_TAB<br />
+&nbsp;&lt;/&gt;.<br />
+&nbsp;For&nbsp;the&nbsp;purposes&nbsp;of&nbsp;identification&nbsp;and&nbsp;display&nbsp;in&nbsp;the&nbsp;invoicing<br />
+&nbsp;document,&nbsp;you&nbsp;can&nbsp;assign&nbsp;the&nbsp;&lt;DS:DE.INV_ITEMTYPE_KK&gt;invoicing&nbsp;item&nbsp;type<br />
+&nbsp;&lt;/&gt;&nbsp;to&nbsp;the&nbsp;business&nbsp;partner&nbsp;items&nbsp;(in&nbsp;field&nbsp;&lt;LS&gt;FKKOP_2650-ITEMTYPE&lt;/&gt;)<br />
+&nbsp;and&nbsp;decide&nbsp;whether&nbsp;the&nbsp;amount&nbsp;of&nbsp;the&nbsp;business&nbsp;partner&nbsp;items&nbsp;is&nbsp;to&nbsp;be<br />
+&nbsp;included&nbsp;in&nbsp;the&nbsp;final&nbsp;invoice&nbsp;amount&nbsp;(field&nbsp;&lt;LS&gt;FKKOP_2650-TOTALREL&lt;/&gt;).<br />
+&nbsp;The&nbsp;event&nbsp;is&nbsp;triggered&nbsp;in&nbsp;invoicing&nbsp;before&nbsp;the&nbsp;function&nbsp;modules&nbsp;for<br />
+&nbsp;account&nbsp;maintenance&nbsp;are&nbsp;called.&nbsp;The&nbsp;postings&nbsp;documents&nbsp;created&nbsp;in&nbsp;this<br />
+&nbsp;event&nbsp;are&nbsp;available&nbsp;for&nbsp;clearing,&nbsp;influence&nbsp;the&nbsp;final&nbsp;invoice&nbsp;amount,<br />
+&nbsp;and&nbsp;can&nbsp;be&nbsp;displayed&nbsp;in&nbsp;the&nbsp;invoice.<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;If&nbsp;you&nbsp;create&nbsp;the&nbsp;invoicing&nbsp;items&nbsp;&lt;ZK&gt;C_INVDOC_I_2611_TAB&nbsp;&lt;/&gt;yourself,<br />
+&nbsp;make&nbsp;sure&nbsp;that&nbsp;for&nbsp;each&nbsp;posting&nbsp;document,&nbsp;the&nbsp;balance&nbsp;of&nbsp;the&nbsp;business<br />
+&nbsp;partners&nbsp;with&nbsp;&lt;ZK&gt;TOTALREL&nbsp;&lt;/&gt;&nbsp;(in&nbsp;the&nbsp;field&nbsp;&lt;ZK&gt;BETRW&lt;/&gt;)&nbsp;agrees&nbsp;with<br />
+&nbsp;the&nbsp;balance&nbsp;of&nbsp;the&nbsp;related&nbsp;invoicing&nbsp;items&nbsp;(also&nbsp;with&nbsp;&lt;ZK&gt;&nbsp;TOTALREL&lt;/&gt;).<br />
+FURTHER_SOURCES_OF_INF <br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_FKKKO_2650_TAB                 Table of Posting Document Headers<br />
+C_FKKOPK_2650_TAB                Table of General Ledger Items<br />
+C_FKKOP_2650_TAB                 Table of Business Partner Items<br />
+C_INVDOC_I_2650_TAB              Invoicing Document Items<br />
+I_INV_UNIT_PUBLIC                Invoicing Unit (Public Data)<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_FATURA_UPDATE</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZSD_FATURA_UPDATE</h2>
+<h3> Description: fatura metin alanlar# update etme</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZSD_FATURA_UPDATE<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  ZSD_FATURA_UPDATE.<br />
+<br />
+tables: bkdf, bkpf, bsec, bsed, bseg, bset.<br />
+PARAMETERS: c_belnr type bkpf-belnr.<br />
+<br />
+constants:  c_bukrs type bkpf-bukrs value '910',<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_belnr&nbsp;type&nbsp;bkpf-belnr&nbsp;value&nbsp;'',<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_gjahr&nbsp;type&nbsp;bkpf-gjahr&nbsp;value&nbsp;'2013'.<br />
+<br />
+data: t_bkdf  type standard table of bkdf with header line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bkpf&nbsp;&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;bkpf&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bsec&nbsp;&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;bsec&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bsed&nbsp;&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;bsed&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bseg&nbsp;&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;bseg&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bset&nbsp;&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;bset&nbsp;with&nbsp;header&nbsp;line.<br />
+<br />
+start-of-selection.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BKDF<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bkdf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bkdf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BKPF<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bkpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bkpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;t_bkpf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;concatenate&nbsp;t_bkpf-bktxt&nbsp;'XYZZZZZ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;t_bkpf-bktxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;t_bkpf.<br />
+&nbsp;&nbsp;endloop.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BSEC<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bsec<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bsec<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BSED<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bsed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bsed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BSEG<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;BSET<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;table&nbsp;t_bset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;eq&nbsp;c_bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;eq&nbsp;c_belnr&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;eq&nbsp;c_gjahr.<br />
+<br />
+end-of-selection.<br />
+<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'CHANGE_DOCUMENT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bkdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bkdf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bkpf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bkpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bsec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bsec<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bsed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bsed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bseg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_bset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;t_bset<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;T_BSEG_ADD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;C_BELNR&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

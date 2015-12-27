@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_CTRACCONTRACTACCOUNT_CH1</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Z_CTRACCONTRACTACCOUNT_CH1</h2>
+<h3> Description: Program Z_CTRACCONTRACTACCOUNT_CH1</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;Z_CTRACCONTRACTACCOUNT_CH1<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT Z_CTRACCONTRACTACCOUNT_CH1.<br />
+<br />
+TYPES: BEGIN OF t_fkkvkp,<br />
+&nbsp;&nbsp;vkont&nbsp;TYPE&nbsp;fkkvkp-vkont,<br />
+&nbsp;&nbsp;gpart&nbsp;TYPE&nbsp;fkkvkp-gpart,<br />
+&nbsp;END&nbsp;OF&nbsp;t_fkkvkp.<br />
+<br />
+DATA: it_fkkvkp TYPE STANDARD TABLE OF t_fkkvkp INITIAL SIZE 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fkkvkp&nbsp;TYPE&nbsp;t_fkkvkp.<br />
+<br />
+DATA: lv_BAPIRET2 TYPE BAPIRET2.<br />
+DATA: l_retValue type table of bapiret2.<br />
+field-symbols:  &lt;return_line&gt; like line of l_retValue.<br />
+DATA: ch_CTRACCHARGESDISCOUNTS TYPE TABLE OF BAPIFKKVKP_CHGDISCI.<br />
+DATA: ch_CTRACCHARGESDISCOUNTSX TYPE TABLE OF BAPIFKKVKP_CHGDISCIX.<br />
+<br />
+DATA: lch_CTRACCHARGESDISCOUNTS like line of ch_CTRACCHARGESDISCOUNTS,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lch_CTRACCHARGESDISCOUNTSX&nbsp;like&nbsp;line&nbsp;of&nbsp;ch_CTRACCHARGESDISCOUNTSX.<br />
+<br />
+DATA: s_CTRACDETAIL type BAPIFKKVK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_RETURN&nbsp;type&nbsp;BAPIRET2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_CTRACPARTNERDETAIL&nbsp;type&nbsp;table&nbsp;of&nbsp;BAPIFKKVKP1.<br />
+DATA: ch_CTRACDETAIL type BAPIFKKVKI,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ch_CTRACDETAILX&nbsp;type&nbsp;BAPIFKKVKIX,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_RETURN_2&nbsp;type&nbsp;table&nbsp;of&nbsp;BAPIRET2.<br />
+<br />
+data: gv_cont_acc type VKONT_KK.<br />
+types: tr_gv_cont_accln like RANGE OF gv_cont_acc.<br />
+<br />
+<br />
+SELECT-OPTIONS: gs_coac for gv_cont_acc.<br />
+PARAMETERS:<br />
+&nbsp;&nbsp;p_chdf&nbsp;TYPE&nbsp;CHGDISC_DATE_FR_KK&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;p_chdt&nbsp;TYPE&nbsp;CHGDISC_DATE_TO_KK&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;p_chkey&nbsp;TYPE&nbsp;CHGKEY_KK&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;p_sim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;CHECKBOX&nbsp;DEFAULT&nbsp;'X'.<br />
+<br />
+SELECT VKONT GPART FROM FKKVKP INTO table it_fkkvkp WHERE VKONT in gs_coac.<br />
+<br />
+lch_CTRACCHARGESDISCOUNTSX-CHARGE_KEY = 'X'.<br />
+lch_CTRACCHARGESDISCOUNTSX-CHARGE_DATE_FROM = 'X'.<br />
+lch_CTRACCHARGESDISCOUNTSX-CHARGE_DATE_TO = 'X'.<br />
+lch_CTRACCHARGESDISCOUNTSX-PROCESSING_MODE = 'X'.<br />
+lch_CTRACCHARGESDISCOUNTSX-BUSPARTNER = 'X'.<br />
+<br />
+APPEND lch_CTRACCHARGESDISCOUNTSX to ch_CTRACCHARGESDISCOUNTSX.<br />
+<br />
+lch_CTRACCHARGESDISCOUNTS-CHARGE_KEY = p_chkey.<br />
+lch_CTRACCHARGESDISCOUNTS-CHARGE_DATE_FROM = p_chdf.<br />
+lch_CTRACCHARGESDISCOUNTS-CHARGE_DATE_TO = p_chdt.<br />
+lch_CTRACCHARGESDISCOUNTS-PROCESSING_MODE = 'I'.<br />
+<br />
+loop at it_fkkvkp INTO wa_fkkvkp.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_CTRACCONTRACTACCOUNT_GD1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTRACTACCOUNT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_fkkvkp-VKONT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUSINESSPARTNER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_fkkvkp-GPART<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACDETAIL&nbsp;=&nbsp;s_CTRACDETAIL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;=&nbsp;s_RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACPARTNERDETAIL&nbsp;=&nbsp;s_CTRACPARTNERDETAIL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;s_RETURN&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;write:&nbsp;/&nbsp;'FAIL&nbsp;(read)',&nbsp;wa_fkkvkp-GPART,&nbsp;wa_fkkvkp-VKONT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;s_CTRACDETAIL&nbsp;to&nbsp;ch_CTRACDETAIL.<br />
+<br />
+&nbsp;&nbsp;ch_CTRACDETAILX-ACCT_NAME&nbsp;=&nbsp;'&nbsp;'.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;ch_CTRACCHARGESDISCOUNTS.<br />
+&nbsp;&nbsp;lch_CTRACCHARGESDISCOUNTS-BUSPARTNER&nbsp;=&nbsp;wa_fkkvkp-GPART.<br />
+&nbsp;&nbsp;APPEND&nbsp;lch_CTRACCHARGESDISCOUNTS&nbsp;to&nbsp;ch_CTRACCHARGESDISCOUNTS.<br />
+<br />
+&nbsp;&nbsp;DO&nbsp;10&nbsp;TIMES.&nbsp;&nbsp;&nbsp;"&nbsp;try&nbsp;to&nbsp;insert&nbsp;new&nbsp;data&nbsp;for&nbsp;20&nbsp;seconds&nbsp;(10x2sec)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_CTRACCONTRACTACCOUNT_CH1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contractaccount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_fkkvkp-VKONT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businesspartner&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_fkkvkp-GPART<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACDETAIL&nbsp;=&nbsp;ch_CTRACDETAIL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACDETAILX&nbsp;=&nbsp;ch_CTRACDETAILX<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testrun&nbsp;=&nbsp;p_sim<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACCHARGESDISCOUNTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ch_CTRACCHARGESDISCOUNTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRACCHARGESDISCOUNTSX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ch_CTRACCHARGESDISCOUNTSX<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_retValue.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_retValue[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait&nbsp;up&nbsp;to&nbsp;2&nbsp;seconds.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_retValue[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_sim&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write:&nbsp;/&nbsp;'OK&nbsp;(sim)',&nbsp;wa_fkkvkp-GPART,&nbsp;wa_fkkvkp-VKONT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_BAPIRET2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_COMMIT'&nbsp;EXPORTING&nbsp;WAIT&nbsp;=&nbsp;'X'&nbsp;IMPORTING&nbsp;RETURN&nbsp;=&nbsp;lv_BAPIRET2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_BAPIRET2&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write:&nbsp;/&nbsp;'FAIL&nbsp;to&nbsp;commit',&nbsp;wa_fkkvkp-GPART,&nbsp;wa_fkkvkp-VKONT,&nbsp;lv_BAPIRET2-MESSAGE,&nbsp;lv_BAPIRET2-MESSAGE_V1,&nbsp;lv_BAPIRET2-MESSAGE_V2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write:&nbsp;/&nbsp;'OK',&nbsp;wa_fkkvkp-GPART,&nbsp;wa_fkkvkp-VKONT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;l_retValue&nbsp;assigning&nbsp;&lt;return_line&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write:&nbsp;/&nbsp;'FAIL',&nbsp;wa_fkkvkp-GPART,&nbsp;wa_fkkvkp-VKONT,&nbsp;&lt;return_line&gt;-MESSAGE,&nbsp;&lt;return_line&gt;-MESSAGE_V1,&nbsp;&lt;return_line&gt;-MESSAGE_V2,&nbsp;&lt;return_line&gt;-MESSAGE_V3,&nbsp;&lt;return_line&gt;-MESSAGE_V4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+endloop.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;GS_COAC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract&nbsp;accounts<br />
+*&nbsp;P_CHDF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charge&nbsp;date&nbsp;from<br />
+*&nbsp;P_CHDT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charge&nbsp;date&nbsp;to<br />
+*&nbsp;P_CHKEY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charge&nbsp;key<br />
+*&nbsp;P_SIM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simulation<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

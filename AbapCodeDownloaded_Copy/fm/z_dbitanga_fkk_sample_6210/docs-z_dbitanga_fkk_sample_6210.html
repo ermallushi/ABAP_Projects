@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_DBITANGA_FKK_SAMPLE_6210</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_DBITANGA_FKK_SAMPLE_6210</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;External&nbsp;Cash&nbsp;Desk&nbsp;Services:&nbsp;Check&nbsp;and&nbsp;Add&nbsp;Payment&nbsp;Information<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;In&nbsp;this&nbsp;event&nbsp;you&nbsp;can&nbsp;adjust&nbsp;and&nbsp;check&nbsp;a&nbsp;data&nbsp;record&nbsp;for&nbsp;external<br />
+&nbsp;payments.<br />
+&nbsp;Both&nbsp;structures&nbsp;&lt;LS&gt;DFKKEXC&lt;/&gt;&nbsp;(&lt;LS&gt;External&nbsp;Payment&nbsp;Information&lt;/&gt;)&nbsp;and<br />
+&nbsp;&nbsp;&lt;LS&gt;DFKKEXC_CL&lt;/&gt;&nbsp;(&lt;LS&gt;Payment&nbsp;Information&nbsp;Clearing&nbsp;Proposals&lt;/&gt;)&nbsp;are<br />
+&nbsp;available.<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;You&nbsp;cannot&nbsp;change&nbsp;key&nbsp;fields.<br />
+&nbsp;See&nbsp;also&nbsp;event&nbsp;6200,&nbsp;where&nbsp;you&nbsp;can&nbsp;transfer&nbsp;customer&nbsp;fields&nbsp;from&nbsp;XI.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_FKKEXC                         Table Type for FKKEXC_MODS<br />
+C_FKKEXC_CLPROP                  Payment Usages (Table)<br />
+INVALID_XI_MESSAGE               Invalidate XI Message, No Posting<br />
+IT_FKKEXC_CL                     External Payment Information - Clearing Proposals<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

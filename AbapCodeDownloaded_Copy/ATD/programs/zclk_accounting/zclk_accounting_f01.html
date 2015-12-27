@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCLK_ACCOUNTING_F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZCLK_ACCOUNTING_F01</h2>
+<h3> Description: Include ZCLK_ACCOUNTING_F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZCLK_ACCOUNTING_F01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FETCH_DATA<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM fetch_data_itab .<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;gsber&nbsp;vbund&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsis<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;TABLE&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;gsber&nbsp;vbund&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;TABLE&nbsp;&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+<br />
+<br />
+<br />
+ENDFORM.                    " FETCH_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data .<br />
+&nbsp;&nbsp;DATA&nbsp;wa_fcat&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;int_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:&nbsp;idx&nbsp;TYPE&nbsp;sy-tabix.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;i_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;IF&nbsp;p_gsber&nbsp;EQ&nbsp;'X'&nbsp;OR&nbsp;(&nbsp;p_gsber&nbsp;EQ&nbsp;'X'&nbsp;AND&nbsp;p_vbund&nbsp;EQ&nbsp;'X'&nbsp;)&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_program_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_internal_tabname&nbsp;=&nbsp;'ITAB2'&nbsp;"capital&nbsp;letters!<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_inclname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;int_fcat&nbsp;INTO&nbsp;wa_fcat&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idx&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_fcat-fieldname&nbsp;EQ&nbsp;'SHKZG'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;=&nbsp;'STATUS'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;int_fcat&nbsp;FROM&nbsp;wa_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;seltext_s.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_FIELDCATALOG_MERGE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab2<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_details<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_GRID_DISPLAY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_vbund&nbsp;EQ&nbsp;'X'&nbsp;OR&nbsp;(&nbsp;P_GSBER&nbsp;EQ&nbsp;&nbsp;''&nbsp;AND&nbsp;P_VBUND&nbsp;EQ&nbsp;''&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_repid&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_program_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_internal_tabname&nbsp;=&nbsp;'ITAB2_VBUND'&nbsp;"capital&nbsp;letters!<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_inclname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;wa_fcat&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;int_fcat.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;idx&nbsp;TYPE&nbsp;sy-tabix.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;int_fcat&nbsp;INTO&nbsp;wa_fcat&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idx&nbsp;=&nbsp;sy-tabix.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_fcat-fieldname&nbsp;EQ&nbsp;'SHKZG'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;=&nbsp;'STATUS'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;int_fcat&nbsp;FROM&nbsp;wa_fcat.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;idx&nbsp;TRANSPORTING&nbsp;seltext_s.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_FIELDCATALOG_MERGE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;i_repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;int_fcat<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab2_vbund<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab_details<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Returncode',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'from&nbsp;FUNCTION&nbsp;REUSE_ALV_GRID_DISPLAY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DISPLAY_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data_itab .<br />
+   </div>
+   <div class="codeComment">
+*process&nbsp;data&nbsp;for&nbsp;gsber<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;fetch_data_itab.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab&nbsp;INTO&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab-shkzg&nbsp;EQ&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbtr&nbsp;=&nbsp;-&nbsp;wa_itab-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-wrbtr&nbsp;=&nbsp;-&nbsp;wa_itab-wrbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbe2&nbsp;=&nbsp;-&nbsp;wa_itab-dmbe2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbe3&nbsp;=&nbsp;-&nbsp;wa_itab-dmbe3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab&nbsp;FROM&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;SORT&nbsp;itab&nbsp;ASCENDING&nbsp;BY&nbsp;hkont&nbsp;waers&nbsp;gsber.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab&nbsp;INTO&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;gsber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab&nbsp;TO&nbsp;itab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PROCESS_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA_VBUND<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM process_data_vbund .<br />
+   </div>
+   <div class="codeComment">
+*If&nbsp;vbund&nbsp;is&nbsp;selected&nbsp;process&nbsp;data&nbsp;for&nbsp;vbund<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;vbund&nbsp;&nbsp;gsber&nbsp;&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;FROM&nbsp;bsis<br />
+&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;TABLE&nbsp;itab_vbund<br />
+&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;&nbsp;vbund&nbsp;gsber&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;TABLE&nbsp;&nbsp;itab_vbund<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_vbund&nbsp;INTO&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab_vbund-shkzg&nbsp;EQ&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbtr&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-wrbtr&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-wrbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbe2&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbe2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbe3&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbe3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_vbund&nbsp;FROM&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;SORT&nbsp;itab_vbund&nbsp;ASCENDING&nbsp;BY&nbsp;hkont&nbsp;waers&nbsp;vbund.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_vbund&nbsp;INTO&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab_vbund&nbsp;TO&nbsp;itab2_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PROCESS_DATA_VBUND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA_WAERS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data_waers .<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;If&nbsp;waers&nbsp;is&nbsp;selected&nbsp;group&nbsp;by&nbsp;currency<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;vbund&nbsp;&nbsp;gsber&nbsp;&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;FROM&nbsp;bsis<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;TABLE&nbsp;itab_vbund<br />
+&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;&nbsp;vbund&nbsp;gsber&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;TABLE&nbsp;&nbsp;itab_vbund<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_vbund&nbsp;INTO&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab_vbund-shkzg&nbsp;EQ&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbtr&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-wrbtr&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-wrbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbe2&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbe2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_vbund-dmbe3&nbsp;=&nbsp;-&nbsp;wa_itab_vbund-dmbe3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab_vbund&nbsp;FROM&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;SORT&nbsp;itab_vbund&nbsp;ASCENDING&nbsp;BY&nbsp;hkont&nbsp;waers.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab_vbund&nbsp;INTO&nbsp;wa_itab_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;waers.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab_vbund&nbsp;TO&nbsp;itab2_vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PROCESS_DATA_WAERS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_BOTH<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_both .<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;If&nbsp;GSBER&nbsp;AND&nbsp;VBUND&nbsp;ARE&nbsp;CHECKED&nbsp;group&nbsp;by&nbsp;GSBER&nbsp;AND&nbsp;VBUND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;gsber&nbsp;vbund&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsis<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;TABLE&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+&nbsp;&nbsp;SELECT&nbsp;hkont&nbsp;waers&nbsp;gsber&nbsp;vbund&nbsp;dmbtr&nbsp;wrbtr&nbsp;dmbe2&nbsp;dmbe3&nbsp;shkzg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;bsas<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;TABLE&nbsp;&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;hkont&nbsp;IN&nbsp;s_hkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;IN&nbsp;s_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab&nbsp;INTO&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab-shkzg&nbsp;EQ&nbsp;'H'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbtr&nbsp;=&nbsp;-&nbsp;wa_itab-dmbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-wrbtr&nbsp;=&nbsp;-&nbsp;wa_itab-wrbtr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbe2&nbsp;=&nbsp;-&nbsp;wa_itab-dmbe2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-dmbe3&nbsp;=&nbsp;-&nbsp;wa_itab-dmbe3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;itab&nbsp;FROM&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;SORT&nbsp;itab&nbsp;ASCENDING&nbsp;BY&nbsp;hkont&nbsp;waers&nbsp;gsber&nbsp;vbund.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab&nbsp;INTO&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;vbund.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab&nbsp;TO&nbsp;itab2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PROCESS_BOTH<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

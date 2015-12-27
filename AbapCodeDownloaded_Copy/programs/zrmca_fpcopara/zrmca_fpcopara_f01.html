@@ -1,0 +1,2583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_FPCOPARA_F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_FPCOPARA_F01</h2>
+<h3> Description: Include ZRMCA_FPCOPARA_F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_FPCOPARA_F01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;EXIT_PROGRAM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM exit_program .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exit&nbsp;program&nbsp;...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gr_docking-&gt;free.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_cfw=&gt;flush.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_INFORM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titel&nbsp;=&nbsp;gv_cprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt2&nbsp;&nbsp;=&nbsp;sy-subrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt1&nbsp;&nbsp;=&nbsp;text-003.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+ENDFORM.                    " EXIT_PROGRAM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_INIT_VALUE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_init_value .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;program&nbsp;name...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gv_cprog&nbsp;=&nbsp;sy-cprog.<br />
+<br />
+&nbsp;&nbsp;button1&nbsp;=&nbsp;button2&nbsp;=&nbsp;button5&nbsp;=&nbsp;text-037.<br />
+&nbsp;&nbsp;button3&nbsp;=&nbsp;button4&nbsp;=&nbsp;text-038.<br />
+&nbsp;&nbsp;buttxt1&nbsp;=&nbsp;text-039.<br />
+&nbsp;&nbsp;buttxt2&nbsp;=&nbsp;text-040.<br />
+&nbsp;&nbsp;buttxt4&nbsp;=&nbsp;text-041.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;number&nbsp;of&nbsp;background&nbsp;session...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;get_max_available_bgd.<br />
+ENDFORM.                    " SET_INIT_VALUE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PREPARE_FIELD_CATALOG<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prepare_field_catalog USING    pv_mode     TYPE char1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;pt_fieldcat&nbsp;TYPE&nbsp;lvc_t_fcat&nbsp;.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;ls_fcat&nbsp;TYPE&nbsp;lvc_s_fcat.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;pv_mode.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'H'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;field&nbsp;catalog&nbsp;and&nbsp;change&nbsp;the&nbsp;control&nbsp;parameters&nbsp;for&nbsp;header...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LVC_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZRMCA_AIP_HEAD_STR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_fieldcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_fieldcat&nbsp;INTO&nbsp;ls_fcat&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_fcat-fieldname&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'LAUFD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-tech&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'GRPID'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-hotspot&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SCHED'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-icon&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-reptext&nbsp;=&nbsp;text-008.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'NOFPG'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-no_zero&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;pt_fieldcat&nbsp;FROM&nbsp;ls_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;field&nbsp;catalog&nbsp;and&nbsp;change&nbsp;the&nbsp;control&nbsp;parameters&nbsp;for&nbsp;cont.&nbsp;acc...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'LVC_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZRMCA_AIP_ITEM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pt_fieldcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;pt_fieldcat&nbsp;INTO&nbsp;ls_fcat&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_fcat-fieldname&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'LAUFD'&nbsp;OR&nbsp;'GRPID'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-tech&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'VKONT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fcat-hotspot&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;pt_fieldcat&nbsp;FROM&nbsp;ls_fcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " PREPARE_FIELD_CATALOG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PREPARE_LAYOUT<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prepare_layout USING    pv_mode   TYPE char1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ps_layout&nbsp;TYPE&nbsp;lvc_s_layo.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_count&nbsp;TYPE&nbsp;char5.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;layout&nbsp;structure...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ps_layout-no_keyfix&nbsp;&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ps_layout-cwidth_opt&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ps_layout-sel_mode&nbsp;&nbsp;&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;ps_layout-info_fname&nbsp;=&nbsp;'COLOR'.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;pv_mode.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'H'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_layout-stylefname&nbsp;=&nbsp;'STYLE_CELL'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Title&nbsp;for&nbsp;header...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;p_laufd&nbsp;TO&nbsp;ps_layout-grid_title.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;text-001&nbsp;ps_layout-grid_title&nbsp;INTO&nbsp;ps_layout-grid_title<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_layout-no_rowmark&nbsp;=&nbsp;abap_on.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Title&nbsp;for&nbsp;contract&nbsp;accounts...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_grp_cnt&nbsp;INTO&nbsp;gs_grp_cnt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;grpid&nbsp;=&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;gs_grp_cnt-counter&nbsp;TO&nbsp;lv_count&nbsp;RIGHT-JUSTIFIED.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gr_group-&gt;grpid&nbsp;text-004&nbsp;lv_count&nbsp;text-002<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ps_layout-grid_title&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " PREPARE_LAYOUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;EXCLUDE_STATUS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM exclude_status USING    pv_mode    TYPE char1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;pt_exclude&nbsp;TYPE&nbsp;ui_functions.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_exclude&nbsp;TYPE&nbsp;ui_func.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;pt_exclude.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exclude&nbsp;function&nbsp;codes...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_graph.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_info.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_mb_sum.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_detail.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_fc_find_more.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;pv_mode&nbsp;EQ&nbsp;'I'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exclude&nbsp;the&nbsp;variant&nbsp;button&nbsp;for&nbsp;contract&nbsp;accounts...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_exclude&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_mb_variant.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_exclude&nbsp;TO&nbsp;pt_exclude.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " EXCLUDE_STATUS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;REFRESH_TABLE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM refresh_table .<br />
+&nbsp;&nbsp;DATA&nbsp;ls_stable&nbsp;TYPE&nbsp;lvc_s_stbl.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Refresh&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_stable-row&nbsp;=&nbsp;ls_stable-col&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;gr_grp-&gt;refresh_table_display(&nbsp;EXPORTING&nbsp;is_stable&nbsp;=&nbsp;ls_stable&nbsp;).<br />
+&nbsp;&nbsp;gr_details-&gt;refresh_table_display(&nbsp;EXPORTING&nbsp;is_stable&nbsp;=&nbsp;ls_stable&nbsp;).<br />
+ENDFORM.                    " REFRESH_TABLE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_data .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Call&nbsp;screen&nbsp;for&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;100.<br />
+ENDFORM.                    " DISPLAY_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_CONTRACT_ACCS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_contract_accs .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_init_print_date&nbsp;TYPE&nbsp;printdat_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_init_reversal&nbsp;&nbsp;&nbsp;TYPE&nbsp;inv_reversaldoc_kk.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;gv_mode&nbsp;EQ&nbsp;gc_new.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Contract&nbsp;accounts&nbsp;with&nbsp;zero&nbsp;amount...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_invdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;inv_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;gc_invoice<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GE&nbsp;p_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;total_amt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;printdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_print_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;reversaldoc&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_reversal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;reverseddoc&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_reversal.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_vkont&nbsp;BY&nbsp;vkont.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;gt_vkont.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_vkont-&gt;city1&nbsp;=&nbsp;gc_zero_amnt.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;First&nbsp;query&nbsp;is&nbsp;based&nbsp;on&nbsp;invoice&nbsp;document&nbsp;header&nbsp;record&nbsp;(dfkkinvdoc_h),<br />
+*&nbsp;contract&nbsp;account&nbsp;master&nbsp;data&nbsp;record&nbsp;(FKKVKP)&nbsp;where&nbsp;is&nbsp;stored&nbsp;address<br />
+*&nbsp;number&nbsp;of&nbsp;contract&nbsp;account.&nbsp;If&nbsp;for&nbsp;any&nbsp;reason&nbsp;there&nbsp;is&nbsp;no&nbsp;address<br />
+*&nbsp;number&nbsp;in&nbsp;contract&nbsp;account&nbsp;master&nbsp;data&nbsp;record&nbsp;(FKKVKP)&nbsp;than&nbsp;it&nbsp;is<br />
+*&nbsp;used&nbsp;second&nbsp;query&nbsp;that&nbsp;is&nbsp;based&nbsp;on&nbsp;billing&nbsp;(or&nbsp;standard)&nbsp;address&nbsp;of<br />
+*&nbsp;corresponding&nbsp;business&nbsp;partner&nbsp;(BUT021_FS).<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;d~vkont&nbsp;&nbsp;b~type&nbsp;a~city1&nbsp;&nbsp;a~post_code1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;fkkvkp&nbsp;AS&nbsp;f&nbsp;ON&nbsp;d~vkont&nbsp;EQ&nbsp;f~vkont&nbsp;AND&nbsp;d~gpart&nbsp;EQ&nbsp;f~gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;but000&nbsp;AS&nbsp;b&nbsp;ON&nbsp;d~gpart&nbsp;EQ&nbsp;b~partner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;adrc&nbsp;&nbsp;&nbsp;AS&nbsp;a&nbsp;ON&nbsp;f~adrnb&nbsp;EQ&nbsp;a~addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;d~invdocno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_invdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~inv_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;gc_invoice<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GE&nbsp;p_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~total_amt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NE&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~printdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_print_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~reversaldoc&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_reversal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;f~adrnb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NE&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;b~type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;('1',&nbsp;'2')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;b~bpkind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;IN&nbsp;('G100',&nbsp;'G110',&nbsp;'G120').<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;address&nbsp;number...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;d~vkont&nbsp;&nbsp;b~type&nbsp;a~city1&nbsp;&nbsp;a~post_code1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;d<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;fkkvkp&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;f&nbsp;ON&nbsp;d~vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;f~vkont&nbsp;AND&nbsp;d~gpart&nbsp;EQ&nbsp;f~gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;but000&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;b&nbsp;ON&nbsp;d~gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;b~partner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;but021_fs&nbsp;AS&nbsp;z&nbsp;ON&nbsp;d~gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;z~partner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;adrc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;a&nbsp;ON&nbsp;z~addrnumber&nbsp;EQ&nbsp;a~addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;d~invdocno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_invdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~inv_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;gc_invoice<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GE&nbsp;p_datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~total_amt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NE&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~printdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_print_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;d~reversaldoc&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;lv_init_reversal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;f~adrnb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;z~valid_to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;gc_last_day<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;z~adr_kind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;('BILLING',&nbsp;'XXDEFAULT')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;b~type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;('1',&nbsp;'2')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;b~bpkind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;IN&nbsp;('G100',&nbsp;'G110',&nbsp;'G120').<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_vkont&nbsp;BY&nbsp;vkont.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;gt_vkont&nbsp;COMPARING&nbsp;vkont.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_cont[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;the&nbsp;contract&nbsp;accounts&nbsp;for&nbsp;print&nbsp;lock...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont&nbsp;WHERE&nbsp;city1&nbsp;NE&nbsp;gc_zero_amnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_cont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_cont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;vkont&nbsp;=&nbsp;gr_vkont-&gt;vkont&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gr_vkont-&gt;type,&nbsp;gr_vkont-&gt;post_code1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_vkont-&gt;city1&nbsp;=&nbsp;gc_print_lock.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_vkont&nbsp;BY&nbsp;grpid&nbsp;type&nbsp;city1&nbsp;post_code1&nbsp;tariff&nbsp;vkont.<br />
+ENDFORM.                    " GET_CONTRACT_ACCS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_CUSTOMIZING_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_customizing_data .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;customizing&nbsp;table&nbsp;for&nbsp;grouping&nbsp;contract&nbsp;accounts...<br />
+<br />
+*&nbsp;CITY1&nbsp;&nbsp;--&gt;&nbsp;The&nbsp;city&nbsp;will&nbsp;be&nbsp;split&nbsp;up...<br />
+*&nbsp;TYPE&nbsp;&nbsp;&nbsp;--&gt;&nbsp;Type&nbsp;of&nbsp;the&nbsp;cont.&nbsp;acc.&nbsp;will&nbsp;be&nbsp;split&nbsp;up&nbsp;for&nbsp;tariff<br />
+*&nbsp;TARIFF&nbsp;--&gt;&nbsp;The&nbsp;tariff&nbsp;in&nbsp;the&nbsp;city&nbsp;will&nbsp;be&nbsp;split&nbsp;up<br />
+*&nbsp;PCODE&nbsp;&nbsp;--&gt;&nbsp;The&nbsp;cities&nbsp;will&nbsp;be&nbsp;split&nbsp;up&nbsp;based&nbsp;on&nbsp;postal&nbsp;code<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;gv_mode&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;gv_mode&nbsp;=&nbsp;gc_new.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Customizing...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_aip_cust&nbsp;INTO&nbsp;TABLE&nbsp;gt_cust.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Print&nbsp;Lock...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_aip_cont&nbsp;INTO&nbsp;TABLE&nbsp;gt_cont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Special&nbsp;Group...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_aip_sgrp&nbsp;INTO&nbsp;TABLE&nbsp;gt_sgrp.<br />
+<br />
+&nbsp;&nbsp;SORT:&nbsp;gt_cont&nbsp;BY&nbsp;vkont,&nbsp;gt_sgrp&nbsp;BY&nbsp;vkont.<br />
+<br />
+ENDFORM.                    " GET_CUSTOMIZING_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_GROUP_ID<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_group_id.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_tariff&nbsp;&nbsp;&nbsp;TYPE&nbsp;atwrt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_pcode&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_pstcd1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_value&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;comt_value_md,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sgrp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char6,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_group&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_count(3)&nbsp;TYPE&nbsp;n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;syindex,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_cuval&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;comt_cuval_md_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_cuval&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;comt_cuval_md.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;GROUP&nbsp;ID&nbsp;&nbsp;&nbsp;--&gt;&nbsp;CITY_CATEGORY_POSTALCODE_SPECIALGROUP_TARIFF_NUMBER<br />
+<br />
+*&nbsp;CITY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;City<br />
+*&nbsp;CATEGORY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;[RES]idential,&nbsp;[BUS]iness<br />
+*&nbsp;POSTALCODE&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Postal&nbsp;Code&nbsp;&nbsp;&nbsp;(&nbsp;If&nbsp;exist&nbsp;in&nbsp;customizing&nbsp;table)<br />
+*&nbsp;SPECIALGROUP&nbsp;-&gt;&nbsp;Special&nbsp;Group&nbsp;(&nbsp;If&nbsp;exist&nbsp;in&nbsp;customizing&nbsp;table)<br />
+*&nbsp;TAR#FF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Tariff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;If&nbsp;exist&nbsp;in&nbsp;customizing&nbsp;table)<br />
+*&nbsp;NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Number&nbsp;if&nbsp;there&nbsp;are&nbsp;more&nbsp;than&nbsp;3000&nbsp;contract&nbsp;accounts.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;gv_mode&nbsp;EQ&nbsp;gc_new&nbsp;AND&nbsp;gt_vkont&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_destination.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_tariff,&nbsp;lv_pcode,&nbsp;lv_group,&nbsp;lv_sgrp,&nbsp;lv_value.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRANSLATE&nbsp;gr_vkont-&gt;city1&nbsp;TO&nbsp;UPPER&nbsp;CASE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;whether&nbsp;city&nbsp;will&nbsp;be&nbsp;split&nbsp;up&nbsp;based&nbsp;on&nbsp;tariff...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_cust&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_cust&nbsp;WHERE&nbsp;(&nbsp;city1&nbsp;EQ&nbsp;gr_vkont-&gt;city1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city1&nbsp;EQ&nbsp;gc_all_cities&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;EQ&nbsp;gr_vkont-&gt;type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tariff&nbsp;NE&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;lt_cuval.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;tariff&nbsp;from&nbsp;CRM...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;<a&nbsp;href&nbsp;="z_get_tariff/z_get_tariff.html">'Z_GET_TARIFF'</a>DESTINATION&nbsp;gv_dest<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gr_vkont-&gt;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_cuval&nbsp;&nbsp;=&nbsp;lt_cuval<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_cuval&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_cuval.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;the&nbsp;tariff...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_cust&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_cust&nbsp;WHERE&nbsp;(&nbsp;city1&nbsp;&nbsp;EQ&nbsp;gr_vkont-&gt;city1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city1&nbsp;&nbsp;EQ&nbsp;gc_all_cities&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;EQ&nbsp;gr_vkont-&gt;type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;(&nbsp;tariff&nbsp;EQ&nbsp;lr_cuval-&gt;value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tariff&nbsp;EQ&nbsp;gc_all_tariff&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_value&nbsp;=&nbsp;lr_cuval-&gt;value.&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;tariff&nbsp;into&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;One&nbsp;tariff...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gc_und&nbsp;lv_value&nbsp;INTO&nbsp;lv_tariff.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;"&nbsp;More&nbsp;than&nbsp;one&nbsp;tariff...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gc_und&nbsp;gc_multi_prod&nbsp;INTO&nbsp;lv_tariff.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;whether&nbsp;city&nbsp;will&nbsp;be&nbsp;split&nbsp;up&nbsp;based&nbsp;on&nbsp;postal&nbsp;code...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_cust&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_cust&nbsp;WITH&nbsp;KEY&nbsp;city1&nbsp;=&nbsp;gr_vkont-&gt;city1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;=&nbsp;gr_vkont-&gt;type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pcode&nbsp;=&nbsp;abap_on.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;postal&nbsp;code&nbsp;into&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gc_und&nbsp;gr_vkont-&gt;post_code1&nbsp;INTO&nbsp;lv_pcode.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;whether&nbsp;contract&nbsp;account&nbsp;belongs&nbsp;to&nbsp;special&nbsp;group...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_sgrp&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_sgrp&nbsp;WITH&nbsp;KEY&nbsp;vkont&nbsp;=&nbsp;gr_vkont-&gt;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;special&nbsp;group...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gc_und&nbsp;p_grp_id&nbsp;INTO&nbsp;lv_sgrp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;gr_vkont-&gt;type.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;business&nbsp;partner&nbsp;category&nbsp;into&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gr_vkont-&gt;city1&nbsp;gc_und&nbsp;'RES'&nbsp;lv_pcode&nbsp;lv_sgrp&nbsp;lv_tariff<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_group.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gr_vkont-&gt;city1&nbsp;gc_und&nbsp;'BUS'&nbsp;lv_pcode&nbsp;lv_sgrp&nbsp;lv_tariff<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_group.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_group&nbsp;=&nbsp;gr_vkont-&gt;city1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_vkont-&gt;grpid&nbsp;=&nbsp;lv_group.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Count&nbsp;contract&nbsp;accounts&nbsp;based&nbsp;on&nbsp;criteria...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;add_to_counter&nbsp;USING&nbsp;lv_group.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT:&nbsp;gt_grp_cnt&nbsp;BY&nbsp;grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_vkont&nbsp;&nbsp;&nbsp;BY&nbsp;grpid&nbsp;type&nbsp;city1&nbsp;post_code1&nbsp;tariff&nbsp;vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Split&nbsp;the&nbsp;location&nbsp;which&nbsp;contains&nbsp;more&nbsp;than&nbsp;3000&nbsp;contract&nbsp;account...<br />
+*&nbsp;In&nbsp;each&nbsp;group,&nbsp;there&nbsp;should&nbsp;be&nbsp;max&nbsp;3000&nbsp;contract&nbsp;account...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_grp_cnt&nbsp;INTO&nbsp;gs_grp_cnt&nbsp;WHERE&nbsp;counter&nbsp;GT&nbsp;gc_max_rec.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;lv_count&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;grpid&nbsp;=&nbsp;gs_grp_cnt-grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gr_vkont-&gt;grpid&nbsp;gc_und&nbsp;lv_count&nbsp;INTO&nbsp;gr_vkont-&gt;grpid.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Count&nbsp;contract&nbsp;accounts&nbsp;based&nbsp;on&nbsp;criteria...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;add_to_counter&nbsp;USING&nbsp;gr_vkont-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_index&nbsp;NE&nbsp;gc_max_rec.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_index.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_index&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_count.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT:&nbsp;gt_grp_cnt&nbsp;BY&nbsp;grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_vkont&nbsp;&nbsp;&nbsp;BY&nbsp;grpid&nbsp;type&nbsp;city1&nbsp;post_code1&nbsp;tariff&nbsp;vkont.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;gt_grp_cnt&nbsp;WHERE&nbsp;counter&nbsp;GT&nbsp;gc_max_rec.<br />
+ENDFORM.                    " SET_GROUP_ID<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FILL_HEADER_AND_ITEM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fill_header_and_item .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Based&nbsp;on&nbsp;internal&nbsp;tables,&nbsp;fill&nbsp;the&nbsp;headers&nbsp;and&nbsp;items&nbsp;for&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;gt_grp_cnt&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gv_mode&nbsp;EQ&nbsp;gc_new.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_grp_cnt&nbsp;INTO&nbsp;gs_grp_cnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;laufd&nbsp;=&nbsp;p_laufd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;grpid&nbsp;=&nbsp;gs_grp_cnt-grpid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;sched&nbsp;=&nbsp;icon_action_fault.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;nofca&nbsp;=&nbsp;gs_grp_cnt-counter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_vkont&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_items_all&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_items.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_vkont-&gt;*&nbsp;TO&nbsp;gr_items-&gt;*&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_items-&gt;laufd&nbsp;=&nbsp;p_laufd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;the&nbsp;items&nbsp;for&nbsp;first&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;fill_items&nbsp;USING&nbsp;1.<br />
+ENDFORM.                    " FILL_HEADER_AND_ITEM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_DESTINATION<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_destination .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;RFC&nbsp;destination&nbsp;to&nbsp;get&nbsp;the&nbsp;tariff&nbsp;from&nbsp;CRM...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;sy-sysid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RMP'&nbsp;OR&nbsp;'RMT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'CPRCLNT'&nbsp;sy-mandt&nbsp;INTO&nbsp;gv_dest.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'RMQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'CRPCLNT'&nbsp;sy-mandt&nbsp;INTO&nbsp;gv_dest.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'CRDCLNT'&nbsp;sy-mandt&nbsp;INTO&nbsp;gv_dest.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " SET_DESTINATION<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;ADD_TO_COUNTER<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM add_to_counter USING pv_grpid TYPE zrmca_grpid.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;To&nbsp;calculate&nbsp;number&nbsp;of&nbsp;the&nbsp;records&nbsp;for&nbsp;each&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_grp_cnt-grpid&nbsp;=&nbsp;pv_grpid.<br />
+&nbsp;&nbsp;gs_grp_cnt-counter&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;COLLECT&nbsp;gs_grp_cnt&nbsp;INTO&nbsp;gt_grp_cnt.<br />
+ENDFORM.                    " ADD_TO_COUNTER<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FILL_ITEMS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fill_items USING pv_index TYPE lvc_index.<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_item&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_item.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;corresponding&nbsp;items&nbsp;for&nbsp;related&nbsp;group&nbsp;id...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;gt_items.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group&nbsp;INDEX&nbsp;pv_index.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_items_all&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_items<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;grpid&nbsp;EQ&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_items&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_items-&gt;*&nbsp;TO&nbsp;lr_item-&gt;*.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " FILL_ITEMS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROGRAM_LOCK<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM program_lock .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Lock&nbsp;the&nbsp;program...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ENQUEUE_EZPROG_LOCK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode_zrmca_program_lock&nbsp;=&nbsp;'E'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;programm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-cprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_scope&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'3'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_wait&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_lock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_failure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " PROGRAM_LOCK<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CONFIRMATION<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM confirmation  USING    pv_text   TYPE char80<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_ques&nbsp;&nbsp;&nbsp;TYPE&nbsp;char80<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;pv_answer&nbsp;TYPE&nbsp;char1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Confirmation...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_text<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_ques<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-012&nbsp;"&nbsp;Yes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-013&nbsp;"&nbsp;No<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_cancel_button&nbsp;=&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_button&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'2'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_answer<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CONFIRMATION<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SAVE_TO_DB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM save_to_db.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_aip_item&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_aip_item,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_aip_item&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_item.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Collect&nbsp;all&nbsp;the&nbsp;record&nbsp;to&nbsp;the&nbsp;gt_head&nbsp;and&nbsp;lt_aip_item,<br />
+*&nbsp;Save&nbsp;to&nbsp;database...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;REFRESH&nbsp;gt_head.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_head&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_head.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_group-&gt;*&nbsp;TO&nbsp;gr_head-&gt;*.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;EQ&nbsp;abap_on.&nbsp;"&nbsp;Scheduled&nbsp;as&nbsp;background...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;cdate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;cname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;statu&nbsp;=&nbsp;gc_saved.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;cdate&nbsp;=&nbsp;gr_group-&gt;cdate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;cname&nbsp;=&nbsp;gr_group-&gt;cname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;statu&nbsp;=&nbsp;gr_group-&gt;statu&nbsp;=&nbsp;gc_saved.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_yellow.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;sched&nbsp;=&nbsp;icon_execute_object.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_button&nbsp;USING&nbsp;'SCHED'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH&nbsp;lt_aip_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_items_all&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_items&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;grpid&nbsp;EQ&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;lt_aip_item&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_aip_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_items-&gt;*&nbsp;TO&nbsp;lr_aip_item-&gt;*.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zrmca_aip_item&nbsp;FROM&nbsp;TABLE&nbsp;lt_aip_item.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zrmca_aip_head&nbsp;FROM&nbsp;TABLE&nbsp;gt_head.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+<br />
+&nbsp;&nbsp;gv_mode&nbsp;=&nbsp;gc_from_db.<br />
+<br />
+&nbsp;&nbsp;MESSAGE&nbsp;text-007&nbsp;TYPE&nbsp;'S'.<br />
+ENDFORM.                    " SAVE_TO_DB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CHECK_DB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_db .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Restore&nbsp;data&nbsp;from&nbsp;DB...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;&nbsp;&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zrmca_aip_item&nbsp;INTO&nbsp;TABLE&nbsp;gt_items_all<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;grpid&nbsp;EQ&nbsp;gt_group-grpid.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;gr_group-&gt;statu.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_saved.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Saved<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_saved.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_scheduled.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Scheduled<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_scheduled.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_button&nbsp;USING&nbsp;'JNAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Downloaded<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_downloaded.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_button&nbsp;USING&nbsp;'SCHED'.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_items_all&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_items.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Count&nbsp;contract&nbsp;accounts&nbsp;based&nbsp;on&nbsp;criteria...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;add_to_counter&nbsp;USING&nbsp;gr_items-&gt;grpid.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;gv_mode&nbsp;=&nbsp;gc_from_db.<br />
+ENDFORM.                    " CHECK_DB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_BILLING<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_billing USING pv_vkont TYPE vkont_kk.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_vkont_ranges&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_rt_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_vkont_range&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkr_vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_header_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkinvbill_h_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_header&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkinvbill_h,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_billdocno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkinv_billdocno_htab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Link&nbsp;to&nbsp;billing&nbsp;documents...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_vkont_range-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;ls_vkont_range-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;ls_vkont_range-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_vkont.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_vkont_range&nbsp;TO&nbsp;lt_vkont_ranges.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_fkkinv_bill_doc=&gt;select<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_vkont_range_tab&nbsp;=&nbsp;lt_vkont_ranges<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y_header_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_header_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;lt_header_tab[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_header_tab&nbsp;INTO&nbsp;ls_header.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;ls_header-billdocno&nbsp;INTO&nbsp;TABLE&nbsp;lt_billdocno.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_INV_BILLDOC_DISP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_billdocno_tab&nbsp;=&nbsp;lt_billdocno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DISPLAY_BILLING<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CHECK_AUTHORITY<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_authority .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Authority&nbsp;check...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_AKTIV2_AUTHORITY_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_actvt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_authorized&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CHECK_AUTHORITY<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SCHDULE_PROGRAM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM schdule_program .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_count&nbsp;&nbsp;&nbsp;TYPE&nbsp;afwch_line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_laufi&nbsp;&nbsp;&nbsp;TYPE&nbsp;laufi_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_basics&nbsp;&nbsp;TYPE&nbsp;fkk_mad_basics,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_jobname&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_subrc&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysubrc.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;gt_head.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;next&nbsp;number&nbsp;for&nbsp;ID...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;set_counter&nbsp;CHANGING&nbsp;lv_count.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;all&nbsp;the&nbsp;FPCOPARA&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;set_lt_basic&nbsp;USING&nbsp;lv_count&nbsp;lv_laufi&nbsp;lv_basics.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Add&nbsp;the&nbsp;related&nbsp;contract&nbsp;accounts&nbsp;to&nbsp;the&nbsp;FPCOPARA&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;set_items&nbsp;USING&nbsp;lv_basics.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;additional&nbsp;parameters&nbsp;to&nbsp;memory...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;import_the_param.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Save&nbsp;the&nbsp;FPCOPARA&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_AKTIV2_PARA_BASICS_TO_DB'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_basics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_basics<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unexpected_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Schdule&nbsp;job...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;call_schdule_job&nbsp;USING&nbsp;lv_laufi&nbsp;CHANGING&nbsp;lv_jobname&nbsp;lv_subrc.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Modify&nbsp;internal&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_table_scheduled&nbsp;USING&nbsp;lv_laufi&nbsp;lv_jobname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-010.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;initialize&nbsp;memory...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;MEMORY&nbsp;ID&nbsp;'FKKMADADDONS'.<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;MEMORY&nbsp;ID&nbsp;'FKKMADBASICS'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Modify&nbsp;DB...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;gt_head&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;MODIFY&nbsp;zrmca_aip_head&nbsp;FROM&nbsp;TABLE&nbsp;gt_head.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+ENDFORM.                    " SCHDULE_PROGRAM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_LT_BASIC<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_lt_basic USING pv_count  TYPE afwch_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_laufi&nbsp;&nbsp;TYPE&nbsp;laufi_kk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_basics&nbsp;TYPE&nbsp;fkk_mad_basics.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;p_laufi&nbsp;gv_serial&nbsp;pv_count&nbsp;INTO&nbsp;pv_laufi.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Key&nbsp;for&nbsp;Mass&nbsp;Activity&nbsp;Structures...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-runkey-aktyp&nbsp;=&nbsp;gc_aktyp.<br />
+&nbsp;&nbsp;pv_basics-runkey-laufd&nbsp;=&nbsp;p_laufd.<br />
+&nbsp;&nbsp;pv_basics-runkey-laufi&nbsp;=&nbsp;pv_laufi.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mass&nbsp;Activity&nbsp;Data:&nbsp;Issue&nbsp;Date...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-dates-ausdt&nbsp;=&nbsp;p_laufd.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mass&nbsp;Activity&nbsp;Data:&nbsp;Posting&nbsp;Parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-post-budat&nbsp;=&nbsp;p_laufd.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mass&nbsp;Activity&nbsp;Data:&nbsp;Technical&nbsp;Parameters...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-tech-use_load_bala&nbsp;&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;pv_basics-tech-jobs_load_bala&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;pv_basics-tech-object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'VKONT'.<br />
+&nbsp;&nbsp;pv_basics-tech-limit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_max_rec.<br />
+&nbsp;&nbsp;pv_basics-tech-xi_limit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_max_rec.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mass&nbsp;Activity&nbsp;Data:&nbsp;Control&nbsp;Application&nbsp;Log...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-appllog-probclass&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;pv_basics-appllog-aldate_del&nbsp;=&nbsp;p_laufd.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Mass&nbsp;Activities&nbsp;-&nbsp;Values&nbsp;for&nbsp;Free&nbsp;Selection...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;pv_basics-freesel-sel_table&nbsp;=&nbsp;'DFKKCOH'.<br />
+ENDFORM.                    " SET_LT_BASIC<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_SCREEN<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_screen .<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_param&nbsp;TYPE&nbsp;ustyp_t_parameters,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_param&nbsp;TYPE&nbsp;ustyp_parameters,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_laufd&nbsp;TYPE&nbsp;laufd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vkont&nbsp;TYPE&nbsp;vkont_kk.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;user&nbsp;parameters&nbsp;to&nbsp;change&nbsp;the&nbsp;screen...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SUSR_USER_PARAMETERS_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_parameters&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_param<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_name_not_exist&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_param&nbsp;INTO&nbsp;ls_param&nbsp;WITH&nbsp;KEY&nbsp;parid&nbsp;=&nbsp;gc_paramid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BINARY&nbsp;SEARCH.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;S_VKONT&nbsp;is&nbsp;created&nbsp;to&nbsp;test&nbsp;the&nbsp;program...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ls_param-parva&nbsp;NE&nbsp;abap_on.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-name&nbsp;CS&nbsp;'S_VKONT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;laufd&nbsp;INTO&nbsp;lv_laufd&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;EQ&nbsp;'SAV'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Hide&nbsp;group&nbsp;id&nbsp;based&nbsp;on&nbsp;special&nbsp;group&nbsp;table&nbsp;result...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vkont&nbsp;INTO&nbsp;lv_vkont&nbsp;FROM&nbsp;zrmca_aip_sgrp.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;EQ&nbsp;'GRP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SET_SCREEN<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;IMPORT_THE_PARAM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM import_the_param.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_mass&nbsp;TYPE&nbsp;fkk_mad_copr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rs_cotyp&nbsp;TYPE&nbsp;fkkr_cotyp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;ADDONS...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;rs_cotyp-sign&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;rs_cotyp-option&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;rs_cotyp-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_cotyp.&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Correspondence&nbsp;Type...<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;rs_cotyp&nbsp;TO&nbsp;ls_mass-r_cotyp.<br />
+<br />
+&nbsp;&nbsp;ls_mass-realprint&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ls_mass-tddest&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_tddest.&nbsp;&nbsp;"&nbsp;Printer...<br />
+&nbsp;&nbsp;ls_mass-tdarmod&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;ls_mass-xsf&nbsp;=&nbsp;'-'.<br />
+&nbsp;&nbsp;ls_mass-xfp&nbsp;=&nbsp;'-'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Export&nbsp;to&nbsp;memory<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;EXPORT&nbsp;addons&nbsp;FROM&nbsp;ls_mass&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'FKKMADADDONS'.<br />
+ENDFORM.                    " IMPORT_THE_PARAM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GENERATE_NEW_OK_CODE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM generate_new_ok_code .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Force&nbsp;PAI&nbsp;followed&nbsp;by&nbsp;refresh&nbsp;of&nbsp;table&nbsp;display&nbsp;in&nbsp;PBO<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_cfw=&gt;set_new_ok_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_code&nbsp;=&nbsp;'DUMMY'.<br />
+ENDFORM.                    " GENERATE_NEW_OK_CODE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SAVE_AS_PDF<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM save_as_pdf .<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_job_param&nbsp;TYPE&nbsp;btcselectp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_joblist&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tbtcjob_bk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_joblist&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;tbtcjob_bk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_spool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapixmspoolid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_spool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;bapixmspoolid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_filename&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_pdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tline,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_period&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char6,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_numbytes&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;gt_head.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;After&nbsp;schedule&nbsp;the&nbsp;job,&nbsp;find&nbsp;the&nbsp;spool&nbsp;id&nbsp;and&nbsp;save&nbsp;the&nbsp;invoices&nbsp;as&nbsp;PDF...<br />
+<br />
+*&nbsp;Set&nbsp;the&nbsp;previous&nbsp;period&nbsp;for&nbsp;folder&nbsp;name...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lv_period&nbsp;=&nbsp;p_datum(6).<br />
+&nbsp;&nbsp;SUBTRACT&nbsp;1&nbsp;FROM&nbsp;lv_period.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_period+4(2)&nbsp;EQ&nbsp;'00'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SUBTRACT&nbsp;1&nbsp;FROM&nbsp;lv_period(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_period(4)&nbsp;'12'&nbsp;INTO&nbsp;lv_period.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Download&nbsp;selected&nbsp;rows...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_rows&nbsp;INTO&nbsp;gs_rows.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group&nbsp;INDEX&nbsp;gs_rows-index.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;lt_joblist,&nbsp;lt_spool,&nbsp;lt_pdf.&nbsp;&nbsp;CLEAR:&nbsp;ls_job_param,&nbsp;lv_filename.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_numbytes&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;gr_group-&gt;jname&nbsp;gc_ast&nbsp;INTO&nbsp;ls_job_param-jobname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Find&nbsp;job&nbsp;ID...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_SELECT_SM37C'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobselect_dialog&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'N'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobsel_param_in_p&nbsp;&nbsp;&nbsp;=&nbsp;ls_job_param<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobselect_joblist_b&nbsp;=&nbsp;lt_joblist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_dialog_type&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_jobs_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_canceled&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username_missing&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-018.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_joblist&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_joblist&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Find&nbsp;the&nbsp;spool&nbsp;ID...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_read_jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_joblist-&gt;jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_read_jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_joblist-&gt;jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_read_opcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_jobdata<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spool_attributes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_spool<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_opcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_doesnt_exist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_doesnt_have_steps&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0&nbsp;OR&nbsp;lt_spool&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-019.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;lines(&nbsp;lt_spool&nbsp;)&nbsp;NE&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-029.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Convert&nbsp;the&nbsp;spool&nbsp;data&nbsp;to&nbsp;PDF...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_spool&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_spool&nbsp;INDEX&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERT_OTFSPOOLJOB_2_PDF'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src_spoolid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_spool-&gt;spoolid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_dialog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pdf_bytecount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_numbytes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_pdf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_no_otf_spooljob&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_no_spooljob&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_no_permission&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_conv_not_possible&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_bad_dstdevice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_cancelled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_spoolerror&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_temseerror&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_btcjob_open_failed&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_btcjob_submit_failed&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;err_btcjob_close_failed&nbsp;&nbsp;=&nbsp;11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;12.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-020.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;p_folder&nbsp;gc_back&nbsp;lv_period&nbsp;gc_back&nbsp;gr_group-&gt;grpid&nbsp;gc_format<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_filename.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Download&nbsp;the&nbsp;PDF&nbsp;to&nbsp;local...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GUI_DOWNLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bin_filesize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_numbytes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filetype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_filetype<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_pdf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_write_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gui_refuse_filetransfer&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_authority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_not_allowed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;separator_not_allowed&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filesize_not_allowed&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header_too_long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_create&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_send&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_error_write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_dp_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_denied&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_out_of_memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disk_full&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;17<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp_timeout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;18<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;19<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataprovider_exception&nbsp;&nbsp;=&nbsp;20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_flush_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;22.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-021.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_red.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Modify&nbsp;internal&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_head&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_head.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_group-&gt;*&nbsp;TO&nbsp;gr_head-&gt;*.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;ddate&nbsp;=&nbsp;gr_group-&gt;ddate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;dname&nbsp;=&nbsp;gr_group-&gt;dname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;statu&nbsp;=&nbsp;gr_group-&gt;statu&nbsp;=&nbsp;gc_downloaded.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;nofpg&nbsp;=&nbsp;gr_group-&gt;nofpg&nbsp;=&nbsp;lr_spool-&gt;spopages.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gr_group-&gt;style_cell&nbsp;WHERE&nbsp;fieldname&nbsp;EQ&nbsp;'JNAME'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_downloaded.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;gt_head&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;zrmca_aip_head&nbsp;FROM&nbsp;TABLE&nbsp;gt_head.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+ENDFORM.                    " SAVE_AS_PDF<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_AS_DOWNLOADED<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_as_downloaded .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;related&nbsp;color&nbsp;and&nbsp;icon...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_orange.<br />
+&nbsp;&nbsp;gr_group-&gt;sched&nbsp;=&nbsp;icon_pdf.<br />
+ENDFORM.                    " SET_AS_DOWNLOADED<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_AS_SAVED<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_as_saved .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;related&nbsp;color&nbsp;and&nbsp;icon...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_yellow.<br />
+&nbsp;&nbsp;gr_group-&gt;sched&nbsp;=&nbsp;icon_execute_object.<br />
+ENDFORM.                    " SET_AS_SAVED<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_AS_SCHEDULED<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_as_scheduled .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;related&nbsp;color&nbsp;and&nbsp;icon...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gr_group-&gt;color&nbsp;=&nbsp;gc_green.<br />
+&nbsp;&nbsp;gr_group-&gt;sched&nbsp;=&nbsp;icon_pdf.<br />
+ENDFORM.                    " SET_AS_SCHEDULED<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DELETE_FROM_DB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_from_db .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Delete&nbsp;related&nbsp;data&nbsp;from&nbsp;DB&nbsp;which&nbsp;should&nbsp;not&nbsp;schedule&nbsp;yet...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;zrmca_aip_head&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;zrmca_aip_item&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+<br />
+&nbsp;&nbsp;MESSAGE&nbsp;text-026&nbsp;TYPE&nbsp;'S'.<br />
+ENDFORM.                    " DELETE_FROM_DB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MAINTAIN_TABLE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM maintain_table .<br />
+&nbsp;&nbsp;DATA&nbsp;lv_laufd&nbsp;TYPE&nbsp;laufd_kk.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields&nbsp;EQ&nbsp;'TM'&nbsp;OR&nbsp;sscrfields&nbsp;EQ&nbsp;'CA'&nbsp;OR&nbsp;sscrfields&nbsp;EQ&nbsp;'SM'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Maintain&nbsp;tables&nbsp;(Check&nbsp;authority)...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'AUTHORITY_CHECK_TCODE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;gc_sm30<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_ok&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e059(eu)&nbsp;WITH&nbsp;gc_sm30.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;sscrfields.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'TM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tabname&nbsp;=&nbsp;gc_cust_tab.&nbsp;"&nbsp;Automate&nbsp;the&nbsp;Invoicing&nbsp;Process&nbsp;-&nbsp;Customizing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tabname&nbsp;=&nbsp;gc_cont_tab.&nbsp;"&nbsp;Automate&nbsp;the&nbsp;Invoicing&nbsp;Process&nbsp;-&nbsp;Print&nbsp;Lock<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tabname&nbsp;=&nbsp;gc_sgrp_tab.&nbsp;"&nbsp;Automate&nbsp;the&nbsp;Invoicing&nbsp;Process&nbsp;-&nbsp;Special&nbsp;Group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sscrfields&nbsp;EQ&nbsp;'TM'&nbsp;OR&nbsp;sscrfields&nbsp;EQ&nbsp;'CA'&nbsp;OR&nbsp;sscrfields&nbsp;EQ&nbsp;'SM'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Maintain&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_tabname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client_reference&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_lock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_clientindependent_auth&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_database_function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_editor_function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_show_auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_tvdir_entry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_upd_auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only_show_allowed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_failure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_field_in_dba_sellist&nbsp;=&nbsp;12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maintenance_prohibited&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sscrfields.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'MC'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Call&nbsp;print&nbsp;lock&nbsp;for&nbsp;mass&nbsp;change...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZRMCA_PL_MASS_CH'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SG'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Call&nbsp;special&nbsp;group&nbsp;for&nbsp;mass&nbsp;change...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZRMCA_SG_MASS_CH'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'ONLI'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;all&nbsp;required&nbsp;entry&nbsp;fields...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_tddest&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;p_folder&nbsp;IS&nbsp;INITIAL&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;p_laufd&nbsp;&nbsp;IS&nbsp;INITIAL&nbsp;OR&nbsp;p_datum&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-031&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;laufd&nbsp;INTO&nbsp;lv_laufd&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;EQ&nbsp;abap_on&nbsp;AND&nbsp;sy-subrc&nbsp;EQ&nbsp;0&nbsp;AND&nbsp;p_nofs&nbsp;GT&nbsp;gv_max_bgd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e176(&gt;6)&nbsp;WITH&nbsp;p_nofs&nbsp;gv_max_bgd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-batch&nbsp;EQ&nbsp;abap_on&nbsp;AND&nbsp;sy-subrc&nbsp;EQ&nbsp;0&nbsp;AND&nbsp;p_nofs&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e181(&gt;6).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-subrc&nbsp;NE&nbsp;0&nbsp;AND&nbsp;p_datum&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-031&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " MAINTAIN_TABLE<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_BUTTON<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_button USING pv_fname TYPE lvc_fname.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_style&nbsp;TYPE&nbsp;lvc_s_styl.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;field&nbsp;as&nbsp;button...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_style-fieldname&nbsp;=&nbsp;pv_fname.<br />
+&nbsp;&nbsp;ls_style-style&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cl_gui_alv_grid=&gt;mc_style_button.<br />
+<br />
+&nbsp;&nbsp;INSERT&nbsp;ls_style&nbsp;INTO&nbsp;TABLE&nbsp;gr_group-&gt;style_cell.<br />
+ENDFORM.                    " SET_BUTTON<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CHECK_JOB_STATU<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_job_statu .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_job_param&nbsp;&nbsp;TYPE&nbsp;btcselectp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_joblist&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tbtcjob_bk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_joblist&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;tbtcjob_bk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;gr_group-&gt;jname&nbsp;gc_ast&nbsp;INTO&nbsp;ls_job_param-jobname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Find&nbsp;job&nbsp;ID...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_SELECT_SM37C'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobselect_dialog&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'N'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobsel_param_in_p&nbsp;&nbsp;&nbsp;=&nbsp;ls_job_param<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobselect_joblist_b&nbsp;=&nbsp;lt_joblist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_dialog_type&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_jobs_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selection_canceled&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username_missing&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-018.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_joblist&nbsp;REFERENCE&nbsp;INTO&nbsp;lr_joblist&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Read&nbsp;job&nbsp;status...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_STATUS_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_joblist-&gt;jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lr_joblist-&gt;jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read_only_status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_status<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_doesnt_exist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknown_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent_child_inconsistency&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;message&nbsp;=&nbsp;text-018.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;the&nbsp;job&nbsp;status...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lv_status.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_schedul.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-027&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_released.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-032&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_active.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-033&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_finished.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-034&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;gc_canceled.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;reset_the_job.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;The&nbsp;selected&nbsp;job&nbsp;is&nbsp;scheduled&nbsp;not&nbsp;found!...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-043&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CHECK_JOB_STATU<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;RESET_THE_JOB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM reset_the_job .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_answer&nbsp;TYPE&nbsp;char1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Reset&nbsp;the&nbsp;scheduled&nbsp;job&nbsp;for&nbsp;cancellation...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;confirmation&nbsp;USING&nbsp;text-035&nbsp;text-036&nbsp;CHANGING&nbsp;lv_answer.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_answer&nbsp;EQ&nbsp;'1'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;zrmca_aip_head&nbsp;SET&nbsp;&nbsp;&nbsp;statu&nbsp;=&nbsp;gc_saved&nbsp;jname&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdate&nbsp;=&nbsp;'&nbsp;'&nbsp;sname&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;=&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;grpid&nbsp;=&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gr_group-&gt;laufi,&nbsp;gr_group-&gt;jname,&nbsp;gr_group-&gt;sdate,&nbsp;gr_group-&gt;sname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_group-&gt;statu&nbsp;=&nbsp;gc_saved&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_saved.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gr_group-&gt;style_cell&nbsp;WHERE&nbsp;fieldname&nbsp;EQ&nbsp;'JNAME'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;refresh_table.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-014&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " RESET_THE_JOB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data .<br />
+&nbsp;&nbsp;DATA&nbsp;lv_laufd&nbsp;TYPE&nbsp;laufd_kk.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Process&nbsp;data&nbsp;based&nbsp;on&nbsp;execute&nbsp;type...<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CASE&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;sy-batch.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Background...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;laufd&nbsp;INTO&nbsp;lv_laufd&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Save&nbsp;the&nbsp;data&nbsp;[BACKGROUND]...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;save_to_db.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;laufd&nbsp;INTO&nbsp;lv_laufd&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;statu&nbsp;EQ&nbsp;gc_saved.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Create&nbsp;invoice&nbsp;[BACKGROUND]...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;create_invoice_background.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Download&nbsp;PDF&nbsp;to&nbsp;server&nbsp;[BACKGROUND]...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;download_pdf_background.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Forground...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_data.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " PROCESS_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_INV_DOC_NUM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_inv_doc_num .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;invoicing&nbsp;document&nbsp;range...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;s_invdoc-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;s_invdoc-option&nbsp;=&nbsp;'BT'.<br />
+&nbsp;&nbsp;s_invdoc-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'400000000000'.<br />
+&nbsp;&nbsp;s_invdoc-high&nbsp;&nbsp;&nbsp;=&nbsp;'499999999999'.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;s_invdoc.<br />
+ENDFORM.                    " SET_INV_DOC_NUM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CREATE_INVOICE_BACKGROUND<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM create_invoice_background .<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_ok&nbsp;TYPE&nbsp;char1.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group&nbsp;WHERE&nbsp;statu&nbsp;EQ&nbsp;gc_saved.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_ok.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHILE&nbsp;lv_ok&nbsp;EQ&nbsp;abap_off.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;check_available_bgd&nbsp;CHANGING&nbsp;lv_ok.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_ok&nbsp;EQ&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;schdule_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDWHILE.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " CREATE_INVOICE_BACKGROUND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_COUNTER<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_counter CHANGING pv_count TYPE afwch_line.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_laufi&nbsp;&nbsp;TYPE&nbsp;laufi_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_number&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;MAX(&nbsp;laufi&nbsp;)&nbsp;INTO&nbsp;lv_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zrmca_aip_head&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_laufi&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_serial&nbsp;=&nbsp;gc_initial.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pv_count&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_serial&nbsp;=&nbsp;lv_laufi+2(1).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_laufi+3(3)&nbsp;EQ&nbsp;gc_max.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;sy-abcde&nbsp;FOR&nbsp;gv_serial.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_number&nbsp;=&nbsp;sy-fdpos&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_serial&nbsp;=&nbsp;sy-abcde+lv_number(1).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_count&nbsp;&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_count&nbsp;=&nbsp;lv_laufi+3(3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;pv_count.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SET_COUNTER<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_TABLE_SCHEDULED<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_table_scheduled USING pv_laufi   TYPE laufi_kk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_jobname&nbsp;TYPE&nbsp;btcjob.<br />
+<br />
+&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_head&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_head.<br />
+<br />
+&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gr_group-&gt;*&nbsp;TO&nbsp;gr_head-&gt;*.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;EQ&nbsp;abap_on.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;laufi&nbsp;=&nbsp;pv_laufi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;jname&nbsp;=&nbsp;pv_jobname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;sdate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;sname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;statu&nbsp;=&nbsp;gc_scheduled.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;laufi&nbsp;=&nbsp;gr_group-&gt;laufi&nbsp;=&nbsp;pv_laufi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;jname&nbsp;=&nbsp;gr_group-&gt;jname&nbsp;=&nbsp;pv_jobname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;sdate&nbsp;=&nbsp;gr_group-&gt;sdate&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;sname&nbsp;=&nbsp;gr_group-&gt;sname&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_head-&gt;statu&nbsp;=&nbsp;gr_group-&gt;statu&nbsp;=&nbsp;gc_scheduled.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_as_scheduled.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_button&nbsp;USING&nbsp;'JNAME'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " SET_TABLE_SCHEDULED<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_ITEMS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_items USING pv_basics TYPE fkk_mad_basics.<br />
+&nbsp;&nbsp;DATA&nbsp;ls_ranges&nbsp;TYPE&nbsp;fkkr_vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;contract&nbsp;accounts...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_ranges-sign&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;ls_ranges-option&nbsp;=&nbsp;gc_opt_eq.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_items_all&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_items&nbsp;WHERE&nbsp;grpid&nbsp;EQ&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_ranges-low&nbsp;=&nbsp;gr_items-&gt;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_ranges&nbsp;TO&nbsp;pv_basics-ranges-r_vkont.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " SET_ITEMS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CALL_SCHDULE_JOB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM call_schdule_job USING    pv_laufi   TYPE laufi_kk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;pv_jobname&nbsp;TYPE&nbsp;btcjob<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv_subrc&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysubrc.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_runkey&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkk_mad_runkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_jobid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tfkdo_typ-jtype,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_start_immediate&nbsp;LIKE&nbsp;boole-boole.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;determine&nbsp;runid<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_AKTIV2_RUN_KEY_CONSTRUCT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufd&nbsp;&nbsp;=&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufi&nbsp;&nbsp;=&nbsp;pv_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_runkey&nbsp;=&nbsp;lv_runkey.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;determine&nbsp;job&nbsp;Id.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_AKTIV_GET_JTYPE_FOR_AKTYP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_jtype&nbsp;=&nbsp;lv_jobid.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;determine&nbsp;start&nbsp;allow&nbsp;mode.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_AKTIV_GET_START_FOR_AKTYP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_immediate&nbsp;=&nbsp;lv_start_immediate.<br />
+<br />
+&nbsp;&nbsp;pv_jobname&nbsp;=&nbsp;lv_runkey.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Schedule&nbsp;the&nbsp;job&nbsp;immediately...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKJO_JC_PLAN_JOB_FKK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aktyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_jtype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_laufi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;pv_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_immediate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_termin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_datum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_zeit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_container&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_popup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_choose_server&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_silent_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_allow_immediate&nbsp;&nbsp;=&nbsp;lv_start_immediate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_allow_termin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_allow_container&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_allow_online&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_off<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cancelled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_container_avail&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_success&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_fuba_avail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+<br />
+&nbsp;&nbsp;pv_subrc&nbsp;=&nbsp;sy-subrc.<br />
+ENDFORM.                    " CALL_SCHDULE_JOB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CHECK_AVAILABLE_BGD<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_available_bgd CHANGING pv_ok TYPE char1.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_jobname&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_active_job&nbsp;TYPE&nbsp;jobs_load_bala_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_copr_job&nbsp;&nbsp;&nbsp;TYPE&nbsp;jobs_load_bala_kk.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;gc_aktyp&nbsp;p_laufd&nbsp;p_laufi&nbsp;gc_ast&nbsp;INTO&nbsp;lv_jobname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;number&nbsp;of&nbsp;background&nbsp;active&nbsp;jobs...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;jobname&nbsp;jobcount&nbsp;INTO&nbsp;TABLE&nbsp;gt_tbtco<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tbtco&nbsp;WHERE&nbsp;status&nbsp;EQ&nbsp;gc_active.<br />
+<br />
+&nbsp;&nbsp;lv_active_job&nbsp;=&nbsp;lines(&nbsp;gt_tbtco&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;number&nbsp;of&nbsp;background&nbsp;active&nbsp;jobs&nbsp;which&nbsp;was&nbsp;created&nbsp;by&nbsp;ZRMCA_FPCOPARA...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;jobname&nbsp;jobcount&nbsp;INTO&nbsp;TABLE&nbsp;gt_tbtco<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tbtco&nbsp;WHERE&nbsp;status&nbsp;&nbsp;EQ&nbsp;gc_active<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;jobname&nbsp;LIKE&nbsp;lv_jobname.<br />
+<br />
+&nbsp;&nbsp;lv_copr_job&nbsp;=&nbsp;lines(&nbsp;gt_tbtco&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;available&nbsp;background&nbsp;session...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;lv_copr_job&nbsp;LT&nbsp;p_nofs&nbsp;AND&nbsp;lv_active_job&nbsp;LT&nbsp;gv_max_bgd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pv_ok&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CHECK_AVAILABLE_BGD<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_MAX_AVAILABLE_BGD<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_max_available_bgd .<br />
+&nbsp;&nbsp;DATA&nbsp;gt_wplist&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;wpinfo.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;the&nbsp;number&nbsp;of&nbsp;background&nbsp;session...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'TH_WPINFO'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wplist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_wplist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_error&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;gt_wplist&nbsp;WHERE&nbsp;wp_typ&nbsp;NE&nbsp;gc_background.<br />
+<br />
+&nbsp;&nbsp;gv_max_bgd&nbsp;=&nbsp;lines(&nbsp;gt_wplist&nbsp;).<br />
+ENDFORM.                    " GET_MAX_AVAILABLE_BGD<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DOWNLOAD_PDF_BACKGROUND<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM download_pdf_background .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_total_vkont&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_nofca,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lobname_count&nbsp;TYPE&nbsp;char2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;betrw_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_package&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_nofca,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_counter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_nofca,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_0_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_grpid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_print_lock&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_grpid.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;check_available_space.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Divide&nbsp;total&nbsp;contract&nbsp;account&nbsp;into&nbsp;number&nbsp;of&nbsp;process&nbsp;to&nbsp;find&nbsp;the<br />
+*&nbsp;number&nbsp;of&nbsp;contract&nbsp;accounts&nbsp;for&nbsp;each&nbsp;package...<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CONCATENATE&nbsp;gc_zero_amnt&nbsp;gc_like&nbsp;&nbsp;INTO&nbsp;lv_0_amount.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;gc_print_lock&nbsp;gc_like&nbsp;INTO&nbsp;lv_print_lock.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Find&nbsp;total&nbsp;number&nbsp;of&nbsp;contract&nbsp;accounts...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;SUM(&nbsp;nofca&nbsp;)&nbsp;INTO&nbsp;lv_total_vkont&nbsp;FROM&nbsp;zrmca_aip_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;grpid&nbsp;NOT&nbsp;LIKE&nbsp;lv_0_amount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;grpid&nbsp;NOT&nbsp;LIKE&nbsp;lv_print_lock.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;number&nbsp;of&nbsp;vkont&nbsp;for&nbsp;each&nbsp;background&nbsp;job...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;lv_temp&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_total_vkont&nbsp;/&nbsp;p_nofs.<br />
+&nbsp;&nbsp;lv_package&nbsp;=&nbsp;ceil(&nbsp;lv_temp&nbsp;).<br />
+<br />
+&nbsp;&nbsp;lv_lobname_count&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_group&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_group.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;gr_group-&gt;grpid(8)&nbsp;NE&nbsp;gc_zero_amnt&nbsp;AND&nbsp;gr_group-&gt;grpid(10)&nbsp;NE&nbsp;gc_print_lock.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;gr_group-&gt;nofca&nbsp;TO&nbsp;lv_counter.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_submit_grpid&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_submit_grpid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr_submit_grpid-&gt;grpid&nbsp;=&nbsp;gr_group-&gt;grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_counter&nbsp;GE&nbsp;lv_package.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;If&nbsp;there&nbsp;are&nbsp;enough&nbsp;contract&nbsp;accounts,&nbsp;create&nbsp;job&nbsp;and&nbsp;submit<br />
+*&nbsp;the&nbsp;program&nbsp;for&nbsp;download...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;submit_program&nbsp;USING&nbsp;lv_lobname_count.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_lobname_count.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gt_submit_grpid,&nbsp;lv_counter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;the&nbsp;last&nbsp;package.&nbsp;If&nbsp;it&nbsp;is&nbsp;not&nbsp;created,&nbsp;release&nbsp;the&nbsp;last&nbsp;one...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;gt_submit_grpid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;submit_program&nbsp;USING&nbsp;lv_lobname_count.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DOWNLOAD_PDF_BACKGROUND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SUBMIT_PROGRAM<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM  submit_program USING pv_counter TYPE char2.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_jobname&nbsp;&nbsp;TYPE&nbsp;tbtcjob-jobname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_jobcount&nbsp;TYPE&nbsp;tbtcjob-jobcount,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_rsparams&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;rsparams,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams&nbsp;TYPE&nbsp;rsparams,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1.<br />
+<br />
+&nbsp;&nbsp;WHILE&nbsp;lv_ok&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Get&nbsp;number&nbsp;of&nbsp;background&nbsp;active&nbsp;jobs...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;jobname&nbsp;jobcount&nbsp;INTO&nbsp;TABLE&nbsp;gt_tbtco<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tbtco&nbsp;WHERE&nbsp;status&nbsp;EQ&nbsp;gc_active.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;available&nbsp;background&nbsp;session...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lines(&nbsp;gt_tbtco&nbsp;)&nbsp;LT&nbsp;gv_max_bgd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ok&nbsp;=&nbsp;abap_on.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHECK&nbsp;lv_ok&nbsp;EQ&nbsp;abap_on.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;A&nbsp;background&nbsp;job&nbsp;should&nbsp;be&nbsp;created&nbsp;for&nbsp;certain&nbsp;contract&nbsp;accounts...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;sy-cprog&nbsp;'_DOWNLOAD_'&nbsp;pv_counter&nbsp;INTO&nbsp;lv_jobname.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Job&nbsp;open...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_OPEN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_create_job&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_job_data&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BP_JOB_DELETE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forcedmode&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i047(&gt;u).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_DATUM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'P_LAUFD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_laufd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_submit_grpid&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_submit_grpid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-selname&nbsp;=&nbsp;'S_GRPID'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-kind&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_sign_in.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-option&nbsp;&nbsp;=&nbsp;gc_opt_eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rsparams-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gr_submit_grpid-&gt;grpid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rsparams&nbsp;TO&nbsp;lt_rsparams.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Submit&nbsp;program&nbsp;to&nbsp;download&nbsp;PDFs&nbsp;to&nbsp;application&nbsp;server...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;zrmca_fpcopara_download_bgd&nbsp;AND&nbsp;RETURN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SELECTION-TABLE&nbsp;lt_rsparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USER&nbsp;sy-uname&nbsp;VIA&nbsp;JOB&nbsp;lv_jobname&nbsp;NUMBER&nbsp;lv_jobcount.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Job&nbsp;close...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_CLOSE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strtimmed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_start_immediate&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_startdate&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_close_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_nosteps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_notex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lock_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_target&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i050(&gt;u).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDWHILE.<br />
+ENDFORM.                    " SUBMIT_PROGRAM<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_LAUFI<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_laufi.<br />
+&nbsp;&nbsp;TYPES:&nbsp;BEGIN&nbsp;OF&nbsp;runkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;&nbsp;&nbsp;TYPE&nbsp;laufd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;&nbsp;&nbsp;TYPE&nbsp;laufi_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aktyp&nbsp;&nbsp;&nbsp;TYPE&nbsp;aktyp_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;runkey.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_result&nbsp;TYPE&nbsp;runkey.<br />
+<br />
+&nbsp;&nbsp;IMPORT&nbsp;aktyp&nbsp;TO&nbsp;ls_result-aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;TO&nbsp;ls_result-laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;TO&nbsp;ls_result-laufi<br />
+&nbsp;&nbsp;FROM&nbsp;MEMORY&nbsp;&nbsp;ID&nbsp;'FKKMADRUNKEY'.<br />
+<br />
+&nbsp;&nbsp;FREE&nbsp;MEMORY&nbsp;ID&nbsp;'FKKMADRUNKEY'.<br />
+ENDFORM.                    " SET_LAUFI<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CHECK_AVAILABLE_SPACE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM check_available_space .<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;lv_ok&nbsp;TYPE&nbsp;flag.<br />
+<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;<a&nbsp;href&nbsp;="z_rmca_aip_disk_avail/z_rmca_aip_disk_avail.html">'Z_RMCA_AIP_DISK_AVAIL'</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ident&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gc_ident<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_ok<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directory_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ident_not_found&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sy-subrc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_ok&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-046&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-044&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-045&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-047&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.                    " CHECK_AVAILABLE_SPACE<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

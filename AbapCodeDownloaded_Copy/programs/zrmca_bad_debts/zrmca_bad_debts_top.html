@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_BAD_DEBTS_TOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_BAD_DEBTS_TOP</h2>
+<h3> Description: Include ZRMCA_BAD_DEBTS_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZRMCA_BAD_DEBTS_TOP<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+TABLES: sscrfields, zrmca_baddept.<br />
+<br />
+TYPE-POOLS icon.<br />
+&nbsp;&nbsp;DATA&nbsp;alv&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_table.<br />
+CONSTANTS: gc_paramid           TYPE memoryid  VALUE 'Z_SET_SCREEN',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sm30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tcode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'SM30',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Tcode&nbsp;SM30.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_exc_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname&nbsp;&nbsp;&nbsp;VALUE&nbsp;'ZRMCA_BD_EXC',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_cn_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tabname&nbsp;&nbsp;&nbsp;VALUE&nbsp;'ZRMCA_BD_CN',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'U',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_db_con&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;dbcon_name&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BIORADB',"database&nbsp;connection<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_new&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'N',&nbsp;&nbsp;&nbsp;"&nbsp;New&nbsp;Period<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_smtpadr&nbsp;&nbsp;&nbsp;VALUE&nbsp;'no-reply@albtelecom.al',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_obj_ty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;so_obj_tp&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'HTM',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sms_sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'SMS_SENT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact_not_found&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'CONTACT_NOT_FOUND',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email_sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EMAIL_SENT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'EMAIL_NOT_FOUND',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first_letter_sent&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'FIRST_LETTER_SENT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second_letter_sent&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'SECOND_LETTER_SENT',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first_letter_failed&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'FIRST_LETTER_FAILED',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second_letter_failed&nbsp;&nbsp;&nbsp;TYPE&nbsp;char20&nbsp;VALUE&nbsp;'SECOND_LETTER_FAILED',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;btcstatus&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'R',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_opt_eq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'EQ',&nbsp;&nbsp;"&nbsp;Equal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_sign_in&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;s_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'I',&nbsp;&nbsp;&nbsp;"&nbsp;Include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_background&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;wptyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE&nbsp;'BGD',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter1form&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcst_pdf-formname&nbsp;VALUE&nbsp;'ZRMCA_BADDEPT_LETTER1',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter2form&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcst_pdf-formname&nbsp;VALUE&nbsp;'ZRMCA_BADDEPT_LETTER2'.<br />
+<br />
+DATA frmname TYPE tdsfname.<br />
+<br />
+<br />
+CLASS lcl_event_receiver DEFINITION DEFERRED.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+DATA: gr_splitter  TYPE REF TO cl_gui_splitter_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_docking&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_docking_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_debtors&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;Definition&nbsp;of&nbsp;ALV...<br />
+   </div>
+   <div class="code">
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_details&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_detail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container.<br />
+<br />
+TYPES: BEGIN OF ty_tbtco,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;TYPE&nbsp;btcjobcnt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_tbtco.<br />
+<br />
+DATA:  gt_tbtco TYPE STANDARD TABLE OF ty_tbtco.<br />
+<br />
+DATA : gt_fieldcat TYPE lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_layo,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_layout_alv,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_exclude&nbsp;&nbsp;TYPE&nbsp;ui_functions.<br />
+<br />
+<br />
+DATA: gt_debts TYPE STANDARD TABLE OF zrmca_baddept,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_debts&nbsp;TYPE&nbsp;zrmca_baddept.<br />
+<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Definition&nbsp;of&nbsp;ALV&nbsp;internal&nbsp;tables...<br />
+*DATA:&nbsp;gt_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_aip_head_str,&nbsp;"Header<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_aip_head_str.<br />
+   </div>
+   <div class="code">
+DATA: gt_group     TYPE STANDARD TABLE OF zrmca_baddept_head_str, "Header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zrmca_baddept_head_str,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_baddept_head_str,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_group_old&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_baddept_head_str.&nbsp;"Header&nbsp;Old<br />
+<br />
+TYPES: BEGIN OF ty_exc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vkont_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;gpart_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_first&nbsp;&nbsp;TYPE&nbsp;ad_namefir,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_last&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_namelas,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;betrh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_debt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;waers,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_phone,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reason&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_reas,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_exc.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Exclude&nbsp;table&nbsp;definitions<br />
+   </div>
+   <div class="code">
+DATA gt_exc TYPE STANDARD TABLE OF ty_exc.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Parameters...<br />
+   </div>
+   <div class="code">
+DATA: gv_ok_code   TYPE syucomm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_cprog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sycprog,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_locked&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_max_bgd&nbsp;&nbsp;&nbsp;TYPE&nbsp;jobs_load_bala_kk.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;BI&nbsp;connection&nbsp;parameters...<br />
+   </div>
+   <div class="code">
+DATA: gr_oref          TYPE REF TO cx_root,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_error_message&nbsp;TYPE&nbsp;string.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Mail&nbsp;parameters...<br />
+*DATA:&nbsp;gt_mail&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zcrm_mail_user,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_mail&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zcrm_mail_user.<br />
+<br />
+   </div>
+   <div class="code">
+DATA: document     TYPE REF TO cl_document_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_request&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_sender_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recipient&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_recipient_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;so_obj_des,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bcsy_text,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;soli,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_smtp_addr&nbsp;TYPE&nbsp;ad_smtpadr.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**SMS&nbsp;parameteres....<br />
+   </div>
+   <div class="code">
+DATA: lr_sms TYPE REF TO CL_BCS,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_text&nbsp;TYPE&nbsp;soli_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_text&nbsp;TYPE&nbsp;soli,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_document&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_document_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_sms_num&nbsp;TYPE&nbsp;ad_pagnmbr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_rec&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_cam_address_bcs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_bool&nbsp;TYPE&nbsp;os_boolean,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process_status&nbsp;TYPE&nbsp;zrmca_baddept-smsprocess.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*global&nbsp;data&nbsp;for&nbsp;implement&nbsp;sms&nbsp;and&nbsp;email&nbsp;and&nbsp;send&nbsp;letter<br />
+   </div>
+   <div class="code">
+DATA: lv_balance TYPE string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ca&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_name&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lastname&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_duedate&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_phonenumber&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_number&nbsp;TYPE&nbsp;string,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_callnumber&nbsp;TYPE&nbsp;string,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit_count&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_limcount&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max_nr&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;3000,"maximum&nbsp;number&nbsp;sms&nbsp;to&nbsp;be&nbsp;sent<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance_limit&nbsp;TYPE&nbsp;p&nbsp;VALUE&nbsp;1000,"define&nbsp;minimum&nbsp;balance&nbsp;for&nbsp;sms<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mail_max_nr&nbsp;&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;3000,"maximum&nbsp;number&nbsp;email&nbsp;to&nbsp;be&nbsp;sent<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proccess_type&nbsp;TYPE&nbsp;char10,"sms&nbsp;email&nbsp;letter1,letter2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter1_max_nr&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;3000,"maximum&nbsp;nr&nbsp;letter1&nbsp;to&nbsp;be&nbsp;sent<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter1_min_bal&nbsp;TYPE&nbsp;p&nbsp;VALUE&nbsp;1000,"define&nbsp;min&nbsp;balance&nbsp;for&nbsp;letter&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter2_max_nr&nbsp;TYPE&nbsp;i&nbsp;VALUE&nbsp;3000,"maximum&nbsp;nr&nbsp;letter2&nbsp;to&nbsp;be&nbsp;sent<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter2_min_bal&nbsp;TYPE&nbsp;p&nbsp;VALUE&nbsp;1000."define&nbsp;min&nbsp;balance&nbsp;for&nbsp;letter&nbsp;2<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nrtype&nbsp;TYPE&nbsp;string."define&nbsp;number&nbsp;type&nbsp;mobile&nbsp;or&nbsp;fix<br />
+**&nbsp;BI&nbsp;bad&nbsp;dept&nbsp;type...<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF ty_bi_debts,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;gpart_kk&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;vkont_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;betrh_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first_unpaid_inv&nbsp;&nbsp;TYPE&nbsp;bldat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_producet_inv&nbsp;TYPE&nbsp;faedn_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone_number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ap_phone_number,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adsl_number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ap_phone_number,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;z_baddept_status,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lock_level&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;account_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;accnttype,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bpkind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bu_bpkind,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bpkind_text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bu_fldstls,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mc_name2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_namefir,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mc_name1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_namelas,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mc_city1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_mc_city,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smtp_addr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_smtpadr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str_suppl2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_strspp2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mc_street&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_mc_strt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str_suppl1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_strspp1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str_suppl3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_strspp3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;region&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char50,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;location&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_lctn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;building&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_bldng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;floor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_floor,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact_number&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ad_mbnmbr1,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;z_baddept_addr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_date&nbsp;TYPE&nbsp;zcc_start_date,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end_date&nbsp;TYPE&nbsp;zcc_end_date,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_bi_debts.<br />
+<br />
+DATA: gt_bi_debts TYPE STANDARD TABLE OF ty_bi_debts,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr_bi_debts&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;ty_bi_debts,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_bi_debts&nbsp;TYPE&nbsp;ty_bi_debts.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Log&nbsp;user&nbsp;activities&nbsp;definitions<br />
+   </div>
+   <div class="code">
+DATA: lgmessage TYPE bics_prov_message_text,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username&nbsp;TYPE&nbsp;dduser,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createdate&nbsp;TYPE&nbsp;timestamp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createtime&nbsp;TYPE&nbsp;timestamp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_zrmca_bduseract&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_bduseract,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_zrmca_bduseract&nbsp;TYPE&nbsp;zrmca_bduseract,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgty&nbsp;TYPE&nbsp;msgty&nbsp;VALUE&nbsp;'I',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_ref&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cx_root.<br />
+<br />
+&nbsp;data:&nbsp;&nbsp;g_container_1&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_container.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Declarations&nbsp;for&nbsp;alv&nbsp;selected&nbsp;rows<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:et_index_rows&nbsp;TYPE&nbsp;lvc_t_row,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_row_no&nbsp;TYPE&nbsp;lvc_t_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_et_row_no&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;et_row_no,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrmca_baddept_head_str,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_group&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;zrmca_baddept_head_str.<br />
+<br />
+<br />
+DEFINE ap.<br />
+&nbsp;&nbsp;append&nbsp;gs_text&nbsp;to&nbsp;gt_text.<br />
+END-OF-DEFINITION.<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK win2 WITH FRAME TITLE text-023.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win1 WITH FRAME.<br />
+SELECT-OPTIONS: s_gpart   FOR zrmca_baddept-gpart.<br />
+SELECT-OPTIONS: s_vkont   FOR zrmca_baddept-vkont.<br />
+SELECT-OPTIONS: p_datum   FOR zrmca_baddept-first_unpaid_inv.<br />
+SELECT-OPTIONS: p_bal     FOR zrmca_baddept-balance NO-EXTENSION NO INTERVALS..<br />
+SELECT-OPTIONS: p_duedt   FOR zrmca_baddept-last_producet_inv.<br />
+SELECT-OPTIONS: p_phnr    FOR zrmca_baddept-phone_number.<br />
+SELECT-OPTIONS: p_adslnr  FOR zrmca_baddept-adsl_number.<br />
+SELECT-OPTIONS: p_acctyp  FOR zrmca_baddept-account_type.<br />
+SELECT-OPTIONS: p_status  FOR zrmca_baddept-status.<br />
+SELECT-OPTIONS: p_bpk     FOR zrmca_baddept-bpkind.<br />
+SELECT-OPTIONS: p_bpktxt  FOR zrmca_baddept-bpkind_text.<br />
+SELECT-OPTIONS: p_name2   FOR zrmca_baddept-mc_name2.<br />
+SELECT-OPTIONS: p_name1   FOR zrmca_baddept-mc_name1.<br />
+SELECT-OPTIONS: p_city    FOR zrmca_baddept-mc_city1.<br />
+SELECT-OPTIONS: p_contnr  FOR zrmca_baddept-contact_number.<br />
+SELECT-OPTIONS: p_email   FOR zrmca_baddept-smtp_addr.<br />
+SELECT-OPTIONS: p_call    FOR zrmca_baddept-makecall.<br />
+SELECT-OPTIONS: p_sms     FOR zrmca_baddept-smsprocess.<br />
+SELECT-OPTIONS: p_mail    FOR zrmca_baddept-emailprocess.<br />
+SELECT-OPTIONS: p_let1    FOR zrmca_baddept-letter1process.<br />
+SELECT-OPTIONS: p_let2    FOR zrmca_baddept-letter2process.<br />
+<br />
+SELECT-OPTIONS: p_last    FOR zrmca_baddept-LASTCHANGEDBY.<br />
+SELECT-OPTIONS: p_ldt     FOR zrmca_baddept-LASTCHANGEDDATE.<br />
+SELECT-OPTIONS: p_uzeit    FOR zrmca_baddept-LASTCHANGEDTIME.<br />
+<br />
+PARAMETERS p_max   TYPE RSEUMOD-TBMAXSEL DEFAULT '200'.<br />
+   </div>
+   <div class="codeComment">
+**SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;b2&nbsp;WITH&nbsp;FRAME.<br />
+**PARAMETERS&nbsp;r_list&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1.<br />
+**PARAMETERS&nbsp;r_grid&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1.<br />
+**SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;b2.<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN END OF BLOCK win1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win13 WITH FRAME.<br />
+PARAMETERS: p_dd TYPE laufd_kk.<br />
+PARAMETERS: p_prot TYPE i.<br />
+SELECTION-SCREEN END OF BLOCK win13.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK win4 WITH FRAME TITLE text-004.<br />
+SELECTION-SCREEN SKIP.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt1.<br />
+SELECTION-SCREEN PUSHBUTTON 33(47) button1 USER-COMMAND ex.<br />
+SELECTION-SCREEN END OF LINE.<br />
+<br />
+SELECTION-SCREEN SKIP.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt2.<br />
+SELECTION-SCREEN PUSHBUTTON 33(47) button2 USER-COMMAND cn.<br />
+SELECTION-SCREEN END OF LINE.<br />
+<br />
+SELECTION-SCREEN SKIP.<br />
+SELECTION-SCREEN BEGIN OF LINE.<br />
+SELECTION-SCREEN COMMENT  1(30) buttxt3.<br />
+SELECTION-SCREEN PUSHBUTTON 33(47) button3 USER-COMMAND mt.<br />
+SELECTION-SCREEN END OF LINE.<br />
+SELECTION-SCREEN END OF BLOCK win4.<br />
+<br />
+SELECTION-SCREEN END OF BLOCK win2.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

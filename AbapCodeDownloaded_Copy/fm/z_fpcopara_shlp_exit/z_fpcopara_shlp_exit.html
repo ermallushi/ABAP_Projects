@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_FPCOPARA_SHLP_EXIT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_FPCOPARA_SHLP_EXIT</h2>
+<h3> Description: FPCOPARA Search Help Exit</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_fpcopara_shlp_exit.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  TABLES<br />
+*"      SHLP_TAB TYPE  SHLP_DESCR_TAB_T<br />
+*"      RECORD_TAB STRUCTURE  SEAHLPRES<br />
+*"  CHANGING<br />
+*"     VALUE(SHLP) TYPE  SHLP_DESCR_T<br />
+*"     VALUE(CALLCONTROL) LIKE  DDSHF4CTRL STRUCTURE  DDSHF4CTRL<br />
+*"----------------------------------------------------------------------<br />
+<br />
+* Set maximum<br />
+
+<div class="codeComment">*       <a href ="global-z_fpcopara_shlp_exit.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-maxrecords&nbsp;=&nbsp;500.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-maxrecords&nbsp;=&nbsp;gc_shlp_maxrecords.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* EXIT immediately, if you do not want to handle this step<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'SELONE'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'SELECT'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'PRESEL'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'RETURN'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'PRESEL1'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol-step&nbsp;&lt;&gt;&nbsp;'DISP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'PRESEL1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* STEP SELONE  (Select one of the elementary searchhelps)<br />
+* This step is only called for collective searchhelps. It may be used<br />
+* to reduce the amount of elementary searchhelps given in SHLP_TAB.<br />
+* The compound searchhelp is given in SHLP.<br />
+* If you do not change CALLCONTROL-STEP, the next step is the<br />
+* dialog, to select one of the elementary searchhelps.<br />
+* If you want to skip this dialog, you have to return the selected<br />
+* elementary searchhelp in SHLP and to change CALLCONTROL-STEP to<br />
+* either to 'PRESEL' or to 'SELECT'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'SELONE'.<br />
+   </div>
+   <div class="codeComment">
+*   PERFORM SELONE .........<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* STEP PRESEL  (Enter selection conditions)<br />
+* This step allows you, to influence the selection conditions either<br />
+* before they are displayed or in order to skip the dialog completely.<br />
+* If you want to skip the dialog, you should change CALLCONTROL-STEP<br />
+* to 'SELECT'.<br />
+* Normaly only SHLP-SELOPT should be changed in this step.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'PRESEL'.<br />
+   </div>
+   <div class="codeComment">
+*    callcontrol-step = 'SELECT'.          "1707391, since n.1122209 should filtering work well<br />
+*   PERFORM PRESEL ..........<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+* STEP SELECT    (Select values)<br />
+* This step may be used to overtake the data selection completely.<br />
+* To skip the standard seletion, you should return 'DISP' as following<br />
+* step in CALLCONTROL-STEP.<br />
+* Normally RECORD_TAB should be filled after this step<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'SELECT'.<br />
+   </div>
+   <div class="codeComment">
+*   PERFORM STEP_SELECT TABLES RECORD_TAB USING SHLP CHANGING RC.<br />
+*   IF RC = 0.<br />
+*     CALLCONTROL-STEP = 'DISP'.<br />
+*   ELSE.<br />
+*     CALLCONTROL-STEP = 'EXIT'.<br />
+*   ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.&nbsp;"Don't&nbsp;process&nbsp;STEP&nbsp;DISP&nbsp;additionally&nbsp;in&nbsp;this&nbsp;call.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+* STEP DISP     (Display values)<br />
+* This step is called, before the selected data is displayed.<br />
+* You can e.g. modify or reduce the data in RECORD_TAB<br />
+* according to the users authority.<br />
+* If you want to get the standard display dialog afterwards, you<br />
+* should not change CALLCONTROL-STEP.<br />
+* If you want to overtake the dialog on you own, you must return<br />
+* the following values in CALLCONTROL-STEP:<br />
+* - "RETURN" if one line was selected. The selected line must be<br />
+*   the only record left in RECORD_TAB. The corresponding fields of<br />
+*   this line are entered into the screen.<br />
+* - "EXIT" if the values request should be aborted<br />
+* - "PRESEL" if you want to return to the selection dialog<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'DISP'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;record_tab&nbsp;COMPARING&nbsp;string(12).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* STEP RETURN<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;callcontrol-step&nbsp;=&nbsp;'RETURN'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TYPES:&nbsp;BEGIN&nbsp;OF&nbsp;runkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;&nbsp;&nbsp;TYPE&nbsp;laufd_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;&nbsp;&nbsp;TYPE&nbsp;laufi_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aktyp&nbsp;&nbsp;&nbsp;TYPE&nbsp;aktyp_kk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;runkey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lt_result&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;runkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_result&nbsp;TYPE&nbsp;runkey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4UT_PARAMETER_VALUE_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter&nbsp;&nbsp;&nbsp;=&nbsp;'LAUFD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'LAUFD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shlp_tab&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;shlp_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;record_tab&nbsp;&nbsp;=&nbsp;record_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results_tab&nbsp;=&nbsp;lt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shlp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;shlp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol&nbsp;=&nbsp;callcontrol.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4UT_PARAMETER_VALUE_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter&nbsp;&nbsp;&nbsp;=&nbsp;'LAUFI'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'LAUFI'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shlp_tab&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;shlp_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;record_tab&nbsp;&nbsp;=&nbsp;record_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results_tab&nbsp;=&nbsp;lt_result<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shlp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;shlp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callcontrol&nbsp;=&nbsp;callcontrol.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_result&nbsp;INTO&nbsp;ls_result&nbsp;INDEX&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;aktyp&nbsp;FROM&nbsp;ls_result-aktyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;FROM&nbsp;ls_result-laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;FROM&nbsp;ls_result-laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'FKKMADRUNKEY'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

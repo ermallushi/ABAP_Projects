@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_COM_BPUS_BUPA_FOR_USER_GET</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_COM_BPUS_BUPA_FOR_USER_GET</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Determine&nbsp;User&nbsp;for&nbsp;Business&nbsp;Partner<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;You&nbsp;can&nbsp;use&nbsp;this&nbsp;function&nbsp;module&nbsp;to&nbsp;determine&nbsp;the&nbsp;business&nbsp;partner&nbsp;who<br />
+&nbsp;is&nbsp;assigned&nbsp;to&nbsp;the&nbsp;user&nbsp;transferred&nbsp;via&nbsp;the&nbsp;central&nbsp;person.<br />
+&nbsp;You&nbsp;can&nbsp;use&nbsp;the&nbsp;optional&nbsp;input&nbsp;parameters&nbsp;&nbsp;IS_ALIAS&nbsp;and/or&nbsp;IS_USERNAME<br />
+&nbsp;to&nbsp;assign&nbsp;the&nbsp;user.&nbsp;An&nbsp;existence&nbsp;check&nbsp;is&nbsp;performed&nbsp;for&nbsp;the&nbsp;user&nbsp;defined<br />
+&nbsp;using&nbsp;the&nbsp;input&nbsp;parameter.&nbsp;If&nbsp;IS_ALIAS&nbsp;and&nbsp;IS_USERNAME&nbsp;are&nbsp;transferred,<br />
+&nbsp;an&nbsp;additional&nbsp;check&nbsp;is&nbsp;performed&nbsp;to&nbsp;see&nbsp;whether&nbsp;the&nbsp;alias&nbsp;transferred&nbsp;is<br />
+&nbsp;assigned&nbsp;to&nbsp;the&nbsp;user&nbsp;name&nbsp;transferred.<br />
+&nbsp;If&nbsp;no&nbsp;user&nbsp;is&nbsp;assigned,&nbsp;the&nbsp;value&nbsp;available&nbsp;in&nbsp;the&nbsp;system&nbsp;variable<br />
+&nbsp;SY-UNAME&nbsp;is&nbsp;read&nbsp;as&nbsp;user.<br />
+&nbsp;If&nbsp;an&nbsp;error&nbsp;occurs,&nbsp;corresponding&nbsp;exceptions&nbsp;are&nbsp;triggered.<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;<br />
+FURTHER_SOURCES_OF_INF <br />
+&nbsp;<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+ALIAS_AND_USER_DIFFER            Alias is not Assigned to the User<br />
+ET_RETURN                        Return Parameter<br />
+EV_BUSINESSPARTNER               Business Partner Number<br />
+INTERNAL_ERROR                   Internal Error<br />
+IS_ALIAS                         User name alias<br />
+IS_USERNAME                      User Name<br />
+NO_ALIAS                         Alias does not Exist<br />
+NO_BUSINESS_PARTNER              A Business Partner has not been Assigned<br />
+NO_CENTRAL_PERSON                A Central Person ahs not been Assigned<br />
+NO_ID                            At least one ID must be Filled<br />
+NO_USER                          User Does Not Exist<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

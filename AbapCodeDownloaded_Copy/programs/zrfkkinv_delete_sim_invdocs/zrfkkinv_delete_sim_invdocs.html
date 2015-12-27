@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRFKKINV_DELETE_SIM_INVDOCS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRFKKINV_DELETE_SIM_INVDOCS</h2>
+<h3> Description: Delete Simulated Invoicing Documents</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;RFKKINV_ARCH_BILLDOC_DEL_SIM<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  zrfkkinv_arch_delete_sim_docs.<br />
+<br />
+<br />
+INCLUDE: rfkkinv_arch_top.<br />
+<br />
+DATA: vd_invdoc TYPE d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vd_invdoc2&nbsp;TYPE&nbsp;d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vd_budat&nbsp;type&nbsp;d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_eof&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;boolean.<br />
+<br />
+DATA: lv_cnt_doc_tot TYPE i.<br />
+<br />
+DATA: it_dfkkinvdoc_h   TYPE TABLE OF dfkkinvdoc_h.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK sel_scr WITH FRAME TITLE text-002.<br />
+SELECTION-SCREEN BEGIN OF BLOCK ret_per WITH FRAME TITLE text-003.<br />
+PARAMETERS: p_budat     type zrsdelfromdate,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_deldat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdeltodate,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pdeldat2&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zrsdelfromdate.&nbsp;"deldate.<br />
+SELECTION-SCREEN END OF BLOCK ret_per.<br />
+SELECTION-SCREEN BEGIN OF BLOCK invdoc WITH FRAME TITLE text-005.<br />
+SELECT-OPTIONS: s_bill  FOR dfkkinvdoc_h-invdocno.<br />
+SELECT-OPTIONS: s_gpart FOR dfkkinvdoc_h-gpart.<br />
+SELECT-OPTIONS: s_vkont FOR dfkkinvdoc_h-vkont.<br />
+SELECT-OPTIONS: s_crname FOR dfkkinvdoc_h-crname.<br />
+SELECT-OPTIONS: s_invprc  FOR dfkkinvdoc_h-inv_process.<br />
+PARAMETERS:     p_mdcat TYPE mdcat_ci_kk                      MODIF ID md.<br />
+SELECT-OPTIONS: s_docty FOR dfkkinvdoc_h-doctype.<br />
+SELECTION-SCREEN END OF BLOCK invdoc.<br />
+SELECTION-SCREEN END OF BLOCK sel_scr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;tech_ctrl&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;text-006.<br />
+   </div>
+   <div class="code">
+INCLUDE arch_delete_prg_standard2.<br />
+   </div>
+   <div class="codeComment">
+*SELECTION-SCREEN&nbsp;END&nbsp;OF&nbsp;BLOCK&nbsp;tech_ctrl.<br />
+<br />
+<br />
+*INITIALIZATION.<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;standard_opt_deleteprg_init.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;AT&nbsp;SELECTION&nbsp;SCREEN&nbsp;OUTPUT<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN OUTPUT.            " entspricht PBO<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;enable/disable&nbsp;master&nbsp;data&nbsp;category<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;lv_only_fica&nbsp;TYPE&nbsp;abap_bool.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'MD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_INV_MDCAT_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ev_only_fica_active&nbsp;=&nbsp;lv_only_fica.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_only_fica&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-output&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-output&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;p_budat&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e625(fkkinv).<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;init&nbsp;protocoll<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_INIT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_detailprotocol&nbsp;=&nbsp;p_prot.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;for&nbsp;test&nbsp;mode<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_deltst&nbsp;=&nbsp;co_true.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'511'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i511(fkkinv).&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vd_invdoc&nbsp;=&nbsp;p_deldat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vd_invdoc2&nbsp;=&nbsp;pdeldat2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vd_budat&nbsp;=&nbsp;p_budat.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;open&nbsp;cursor&nbsp;for&nbsp;DFKKINVDOC_H<br />
+   </div>
+   <div class="code">
+if vd_invdoc2 NE '00000000' and vd_invdoc EQ '00000000'.<br />
+&nbsp;&nbsp;OPEN&nbsp;CURSOR&nbsp;WITH&nbsp;HOLD&nbsp;v_invdoc_cursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;inv_process&nbsp;in&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vd_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;=&nbsp;vd_invdoc2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;elseif&nbsp;vd_invdoc2&nbsp;EQ&nbsp;'00000000'&nbsp;and&nbsp;vd_invdoc&nbsp;NE&nbsp;'00000000'.<br />
+&nbsp;&nbsp;OPEN&nbsp;CURSOR&nbsp;WITH&nbsp;HOLD&nbsp;v_invdoc_cursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;inv_process&nbsp;in&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vd_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;=&nbsp;vd_invdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;elseif&nbsp;vd_invdoc2&nbsp;NE&nbsp;'00000000'&nbsp;and&nbsp;vd_invdoc&nbsp;NE&nbsp;'00000000'.<br />
+&nbsp;&nbsp;OPEN&nbsp;CURSOR&nbsp;WITH&nbsp;HOLD&nbsp;v_invdoc_cursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;inv_process&nbsp;in&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vd_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;=&nbsp;vd_invdoc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;=&nbsp;vd_invdoc2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;=&nbsp;co_true.<br />
+else.<br />
+&nbsp;&nbsp;OPEN&nbsp;CURSOR&nbsp;WITH&nbsp;HOLD&nbsp;v_invdoc_cursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkinvdoc_h&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;&nbsp;IN&nbsp;s_bill<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;crname&nbsp;&nbsp;&nbsp;&nbsp;IN&nbsp;s_crname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;inv_process&nbsp;in&nbsp;s_invprc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;mdcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_mdcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;doctype&nbsp;&nbsp;&nbsp;IN&nbsp;s_docty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;budat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vd_budat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;simulated&nbsp;=&nbsp;co_true.<br />
+endif.<br />
+<br />
+&nbsp;&nbsp;WHILE&nbsp;lv_eof&nbsp;EQ&nbsp;co_false.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;select&nbsp;records&nbsp;from&nbsp;database<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;FETCH&nbsp;NEXT&nbsp;CURSOR&nbsp;v_invdoc_cursor&nbsp;INTO&nbsp;TABLE&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PACKAGE&nbsp;SIZE&nbsp;co_max_read.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there&nbsp;are&nbsp;no&nbsp;more&nbsp;entries&nbsp;in&nbsp;the&nbsp;database;&nbsp;end&nbsp;processing<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_eof&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;creation&nbsp;date&nbsp;must&nbsp;be&nbsp;older&nbsp;than&nbsp;the&nbsp;retention&nbsp;period&nbsp;for&nbsp;archiving<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;no&nbsp;simulated&nbsp;invoicing&nbsp;documents&nbsp;should&nbsp;be&nbsp;archived<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_dfkkinvdoc_h&nbsp;WHERE&nbsp;crdate&nbsp;&gt;=&nbsp;vd_invdoc.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;analyse&nbsp;the&nbsp;header&nbsp;of&nbsp;the&nbsp;invoicing&nbsp;document<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;analyse_sim_invdocs&nbsp;CHANGING&nbsp;it_dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_rest_sim_invdocs&nbsp;USING&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;delete_sim_invdocs&nbsp;USING&nbsp;it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cnt_doc_tot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_dfkkinvdoc_h&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_deltst&nbsp;=&nbsp;co_true.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;NOTHING<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DB_COMMIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDWHILE.<br />
+<br />
+&nbsp;&nbsp;CLOSE&nbsp;CURSOR&nbsp;v_invdoc_cursor.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'532'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv1&nbsp;&nbsp;&nbsp;=&nbsp;lv_cnt_doc_tot.<br />
+&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i532(fkkinv).&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Call&nbsp;detailed&nbsp;protocol<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_WRITE'.<br />
+<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+AT LINE-SELECTION.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_LINE_DETAIL'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;analyse_sim_invdocs<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM analyse_sim_invdocs CHANGING ct_dfkkinvdoc_h TYPE dfkkinvdoc_h_tab.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ref_dfkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ct_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;ref_dfkkinvdoc_h&gt;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinv_cfc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_dfkkinvdoc_h&gt;-invdocno.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_NOFIELD<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-dbcnt&nbsp;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;ct_dfkkinvdoc_h.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "analyse_sim_invdocs<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;delete_sim_invdocs<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_sim_invdocs USING it_dfkkinvdoc_h   TYPE dfkkinvdoc_h_tab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cnt_doc_tot&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_delprd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;ref_fkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;anz_fkkinvdoc_i(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch(4)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o(4)&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_others(40)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c.&nbsp;"&nbsp;C:_####_/_CH:_####<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;ref_fkkinvdoc_h&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ADD&nbsp;1&nbsp;TO&nbsp;lv_cnt_doc_tot.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;p_delprd&nbsp;=&nbsp;co_true.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_I<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_i&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_P<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_S<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_C<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_CH<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_R<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_r<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_O<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o&nbsp;=&nbsp;sy-dbcnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKINVDOC_H<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DB_COMMIT'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+*...simulation&nbsp;mode<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_i&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_p&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_s&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_c&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_ch&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_r<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_r&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;COUNT(*)&nbsp;FROM&nbsp;dfkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;invdocno&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anz_fkkinvdoc_o&nbsp;=&nbsp;sy-dbcnt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'C:&nbsp;'&nbsp;anz_fkkinvdoc_c&nbsp;'&nbsp;/&nbsp;CH:&nbsp;'&nbsp;anz_fkkinvdoc_ch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'R:&nbsp;'&nbsp;anz_fkkinvdoc_r&nbsp;'&nbsp;/&nbsp;O:&nbsp;'&nbsp;anz_fkkinvdoc_o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;anz_others.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'ARCHIVE_PROTOCOL_COLLECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_object&nbsp;&nbsp;=&nbsp;&lt;ref_fkkinvdoc_h&gt;-invdocno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgtype&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgid&nbsp;&nbsp;&nbsp;=&nbsp;'FKKINV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgno&nbsp;&nbsp;&nbsp;=&nbsp;'525'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv1&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv2&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv3&nbsp;&nbsp;&nbsp;=&nbsp;anz_fkkinvdoc_p<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_msgv4&nbsp;&nbsp;&nbsp;=&nbsp;anz_others.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;1&nbsp;=&nbsp;2.&nbsp;MESSAGE&nbsp;i525(fkkinv).&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "delete_sim_invdocs<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DELETE_REST_SIM_INVDOCS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_IT_DFKKINVDOC_H&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_P_DELPRD&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM delete_rest_sim_invdocs  USING    p_it_dfkkinvdoc_h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_p_delprd.<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;r_fkkinvdoc_h&gt;&nbsp;TYPE&nbsp;dfkkinvdoc_h.<br />
+&nbsp;&nbsp;data:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sim_coresp&nbsp;type&nbsp;dfkkcoh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_invdocno&nbsp;type&nbsp;srcdocno_kk.<br />
+&nbsp;&nbsp;IF&nbsp;p_delprd&nbsp;=&nbsp;co_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_dfkkinvdoc_h&nbsp;ASSIGNING&nbsp;&lt;r_fkkinvdoc_h&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;into&nbsp;ls_sim_coresp&nbsp;FROM&nbsp;dfkkcoh&nbsp;where&nbsp;data2&nbsp;=&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKCOHI<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkcohi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;cotyp&nbsp;=&nbsp;ls_sim_coresp-cotyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;cokey&nbsp;=&nbsp;ls_sim_coresp-cokey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;gpart&nbsp;=&nbsp;ls_sim_coresp-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vkont&nbsp;=&nbsp;ls_sim_coresp-vkont.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;DFKKCOH<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;dfkkcoh<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;data2&nbsp;=&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;delete&nbsp;dfkkinv_trig<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_invdocno&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concatenate&nbsp;'00000000'&nbsp;&lt;r_fkkinvdoc_h&gt;-invdocno&nbsp;into&nbsp;lv_invdocno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete&nbsp;from&nbsp;dfkkinv_trig&nbsp;where&nbsp;srcdocno&nbsp;=&nbsp;lv_invdocno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " DELETE_REST_SIM_INVDOCS<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;002&nbsp;Restriction&nbsp;of&nbsp;Selection<br />
+*&nbsp;003&nbsp;Restriction&nbsp;Period<br />
+*&nbsp;005&nbsp;Selection&nbsp;Options<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;PDELDAT2&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_BUDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete&nbsp;for&nbsp;Posting&nbsp;Date<br />
+*&nbsp;P_DELDAT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_DELPRD&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_DELTST&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_MDCAT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_PROT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_PROT_O&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_BILL&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_CRNAME&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_DOCTY&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_GPART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_INVPRC&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_VKONT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;FKKINV<br />
+*511&nbsp;&nbsp;&nbsp;Program&nbsp;was&nbsp;started&nbsp;as&nbsp;test&nbsp;run<br />
+*525&nbsp;&nbsp;&nbsp;Following&nbsp;data&nbsp;was&nbsp;deleted&nbsp;for&nbsp;invoicing&nbsp;document<br />
+*532&nbsp;&nbsp;&nbsp;&1&nbsp;records&nbsp;conform&nbsp;with&nbsp;selection&nbsp;criteria&nbsp;and&nbsp;residence&nbsp;time<br />
+*625&nbsp;&nbsp;&nbsp;Delete&nbsp;for&nbsp;Posting&nbsp;Date&nbsp;mandatory&nbsp;field<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCLK_SD_INV</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZCLK_SD_INV</h2>
+<h3> Description: Invoice List</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZCLK_SD_INV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fatih&nbsp;ACIRO#LU&nbsp;&nbsp;01.03.2005<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+report  zclk_sd_inv no standard page heading line-size 250.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&gt;&gt;&gt;&nbsp;ALV<br />
+   </div>
+   <div class="code">
+type-pools: slis.<br />
+data : er_layout type slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_fieldcat&nbsp;type&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_sp_group&nbsp;type&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_save(1)&nbsp;type&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_variant&nbsp;like&nbsp;disvariant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_events&nbsp;type&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_fieldcat&nbsp;type&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_sp_group&nbsp;type&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_layout&nbsp;type&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_events&nbsp;type&nbsp;slis_t_event.<br />
+data: gt_list_top_of_page type slis_t_listheader.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&lt;&lt;&lt;&nbsp;ALV<br />
+<br />
+   </div>
+   <div class="code">
+tables : vbrk , vbrp ,bkpf, kna1, adrc , vbak , tvaut,zzsd001,ekko,vbfa.<br />
+<br />
+data : begin of itab occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkdat&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-fkdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vgbel&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-vgbel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vgpos&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-vgpos,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkart&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-fkart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkorg&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-vkorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtweg&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-vtweg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inco1&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-inco1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inco2&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-inco2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zterm&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-zterm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunrg&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-kunrg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;kna1-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunag&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-kunag,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fkimg&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-fkimg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netwr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-netwr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netwr2&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-netwr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waerk&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-waerk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bktxt&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bkpf-bktxt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bkpf-xblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netwr3&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-netwr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gsber&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-gsber,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-arktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matkl&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-matkl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wgbez&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;t023t-wgbez60,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belma&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-belnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tutry&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-dmbtr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tuusd&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-dmbe2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cousd&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-dmbe2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aubel&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-aubel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aupos&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-aupos,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;augru&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbak-augru,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;tvaut-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln2&nbsp;&nbsp;&nbsp;like&nbsp;vbfa-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbelnr&nbsp;&nbsp;&nbsp;like&nbsp;zzsd001-belnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xblnr2&nbsp;&nbsp;&nbsp;like&nbsp;rbkp-xblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;rbkp-lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bldat&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;rbkp-bldat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers2&nbsp;&nbsp;&nbsp;like&nbsp;rbkp-waers,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ekgrp&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;ekko-ekgrp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brmfyt&nbsp;&nbsp;&nbsp;like&nbsp;vbrk-netwr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brmfytu&nbsp;&nbsp;like&nbsp;vbrk-netwr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hkont&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-hkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;teslimat&nbsp;like&nbsp;likp-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrkme&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbap-vrkme,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbrp-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netpr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbap-netpr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bkpf-belnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bkpf-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bkpf-gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saknr&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;bseg-saknr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lifnr1&nbsp;&nbsp;&nbsp;like&nbsp;vbpa-lifnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name11&nbsp;&nbsp;&nbsp;like&nbsp;lfa1-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zkompozisyon&nbsp;like&nbsp;zamara-zkompozisyon,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grp&nbsp;like&nbsp;zpp_ug_flst_001-grp&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lstpr&nbsp;like&nbsp;zpp_ug_flst_001-lstpr&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waers&nbsp;like&nbsp;zpp_ug_flst_001-waers&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;itab.<br />
+<br />
+data: begin of r_itab occurs 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mblnr&nbsp;like&nbsp;mseg-mblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mjahr&nbsp;like&nbsp;mseg-mjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zeile&nbsp;like&nbsp;mseg-zeile,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;r_itab.<br />
+data: begin of h_itab occurs 0  ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mblnr&nbsp;like&nbsp;mseg-mblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mjahr&nbsp;like&nbsp;mseg-mjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zeile&nbsp;like&nbsp;mseg-zeile,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sjahr&nbsp;like&nbsp;mseg-sjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smbln&nbsp;like&nbsp;mseg-smbln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smblp&nbsp;like&nbsp;mseg-smblp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;h_itab.<br />
+<br />
+data : i_awsys like acchd-awsys,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xline&nbsp;&nbsp;&nbsp;like&nbsp;sy-tabix.<br />
+data : ithead like thead.<br />
+data:  lines like tline occurs 1 with header line.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Seçim&nbsp;kriterleri...<br />
+   </div>
+   <div class="code">
+selection-screen:  begin of block b1 with frame title text-001.<br />
+<br />
+select-options:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vbeln&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_posnr&nbsp;&nbsp;for&nbsp;&nbsp;vbrp-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_fkart&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-fkart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vkorg&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-vkorg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vtweg&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-vtweg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_spart&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_kunrg&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-kunrg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_kunag&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-kunag,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_fkdat&nbsp;&nbsp;for&nbsp;&nbsp;vbrk-fkdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vgbel&nbsp;&nbsp;for&nbsp;&nbsp;vbrp-vgbel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_werks&nbsp;&nbsp;for&nbsp;&nbsp;vbrp-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;&nbsp;for&nbsp;&nbsp;vbrp-matnr.<br />
+<br />
+selection-screen: end of block b1.<br />
+<br />
+selection-screen: begin of block block2 with frame title text-t02 .<br />
+<br />
+parameters  :  p_gnl    radiobutton group pg4 , "genel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dty&nbsp;&nbsp;&nbsp;&nbsp;radiobutton&nbsp;group&nbsp;pg4&nbsp;.&nbsp;"detay<br />
+<br />
+selection-screen end of block block2 .<br />
+<br />
+data: user_grp(5).<br />
+<br />
+clear:user_grp.<br />
+select count(*) from zclk_user_grup<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bname&nbsp;eq&nbsp;sy-uname&nbsp;and&nbsp;class&nbsp;=&nbsp;'S2_GT'.<br />
+if sy-subrc eq 0.<br />
+&nbsp;&nbsp;user_grp&nbsp;=&nbsp;'GAPGD'.<br />
+endif.<br />
+<br />
+<br />
+start-of-selection.<br />
+&nbsp;&nbsp;perform&nbsp;get_awsys.<br />
+&nbsp;&nbsp;perform&nbsp;get_data.<br />
+<br />
+&nbsp;&nbsp;describe&nbsp;table&nbsp;itab&nbsp;lines&nbsp;xline.<br />
+&nbsp;&nbsp;check&nbsp;xline&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;message&nbsp;i999(zz)&nbsp;with<br />
+&nbsp;&nbsp;text-500.&nbsp;"'Seçim&nbsp;kriterlerine&nbsp;ili#kin&nbsp;veri&nbsp;bulunamad#!'.<br />
+<br />
+end-of-selection.<br />
+&nbsp;&nbsp;check&nbsp;xline&nbsp;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;perform&nbsp;write_alv.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;Get_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_data.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;p_dty&nbsp;=&nbsp;'X'&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;vbrk~vbeln&nbsp;&nbsp;vbrp~posnr&nbsp;&nbsp;vbrk~fkdat&nbsp;&nbsp;vbrp~vgbel&nbsp;&nbsp;vbrk~fkart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrk~vkorg&nbsp;&nbsp;vbrk~vtweg&nbsp;&nbsp;vbrk~inco1&nbsp;&nbsp;vbrk~inco2&nbsp;&nbsp;vbrk~zterm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrk~kunrg&nbsp;&nbsp;vbrk~kunag&nbsp;&nbsp;vbrk~spart&nbsp;&nbsp;vbrp~fkimg&nbsp;&nbsp;vbrp~vgpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrp~netwr&nbsp;&nbsp;vbrk~waerk&nbsp;&nbsp;vbrp~gsber&nbsp;&nbsp;vbrp~matkl&nbsp;&nbsp;vbrp~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkpf~belnr&nbsp;&nbsp;bkpf~bktxt&nbsp;&nbsp;bkpf~xblnr&nbsp;&nbsp;vbrp~arktx&nbsp;&nbsp;vbrp~aubel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrp~aupos&nbsp;&nbsp;vbrp~werks&nbsp;bkpf~bukrs&nbsp;bkpf~gjahr<br />
+&nbsp;&nbsp;&nbsp;from&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;join&nbsp;vbrp&nbsp;on&nbsp;vbrk~vbeln&nbsp;=&nbsp;vbrp~vbeln<br />
+&nbsp;&nbsp;&nbsp;left&nbsp;join&nbsp;bkpf<br />
+on bkpf~awtyp = 'VBRK'     and<br />
+&nbsp;&nbsp;&nbsp;bkpf~awkey&nbsp;=&nbsp;vbrk~vbeln&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;bkpf~bukrs&nbsp;=&nbsp;vbrk~bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;bkpf~blart&nbsp;eq&nbsp;'RV'<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;itab<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbrk~vbeln&nbsp;&nbsp;in&nbsp;s_vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrp~posnr&nbsp;&nbsp;in&nbsp;s_posnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fkart&nbsp;&nbsp;in&nbsp;s_fkart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~vkorg&nbsp;&nbsp;in&nbsp;s_vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~vtweg&nbsp;&nbsp;in&nbsp;s_vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~spart&nbsp;&nbsp;in&nbsp;s_spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~kunrg&nbsp;&nbsp;in&nbsp;s_kunrg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~kunag&nbsp;&nbsp;in&nbsp;s_kunag<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fkdat&nbsp;&nbsp;in&nbsp;s_fkdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrp~werks&nbsp;&nbsp;in&nbsp;s_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrp~matnr&nbsp;&nbsp;in&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fksto&nbsp;&nbsp;ne&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~sfakn&nbsp;&nbsp;eq&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;else.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;&nbsp;vbrk~vbeln&nbsp;&nbsp;&nbsp;&nbsp;vbrk~fkdat&nbsp;&nbsp;&nbsp;vbrk~fkart&nbsp;&nbsp;&nbsp;vbrk~vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrk~vtweg&nbsp;&nbsp;&nbsp;&nbsp;vbrk~inco1&nbsp;&nbsp;&nbsp;vbrk~inco2&nbsp;&nbsp;&nbsp;vbrk~zterm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrk~kunrg&nbsp;&nbsp;&nbsp;&nbsp;vbrk~kunag&nbsp;&nbsp;&nbsp;vbrk~spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbrk~netwr&nbsp;&nbsp;&nbsp;&nbsp;vbrk~waerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkpf~belnr&nbsp;&nbsp;&nbsp;&nbsp;bkpf~bktxt&nbsp;&nbsp;&nbsp;bkpf~xblnr<br />
+&nbsp;from&nbsp;vbrk<br />
+&nbsp;left&nbsp;join&nbsp;bkpf<br />
+&nbsp;&nbsp;&nbsp;on&nbsp;bkpf~awtyp&nbsp;=&nbsp;'VBRK'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkpf~awkey&nbsp;=&nbsp;vbrk~vbeln&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkpf~bukrs&nbsp;=&nbsp;vbrk~bukrs&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkpf~blart&nbsp;eq&nbsp;'RV'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbrk~vbeln&nbsp;&nbsp;in&nbsp;s_vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fkart&nbsp;&nbsp;in&nbsp;s_fkart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~vkorg&nbsp;&nbsp;in&nbsp;s_vkorg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~vtweg&nbsp;&nbsp;in&nbsp;s_vtweg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~spart&nbsp;&nbsp;in&nbsp;s_spart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~kunrg&nbsp;&nbsp;in&nbsp;s_kunrg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~kunag&nbsp;&nbsp;in&nbsp;s_kunag<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fkdat&nbsp;&nbsp;in&nbsp;s_fkdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~fksto&nbsp;&nbsp;ne&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbrk~sfakn&nbsp;&nbsp;eq&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;gncl.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;by&nbsp;rakcan&nbsp;27.11.06<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;netpr&nbsp;into&nbsp;itab-netpr&nbsp;from&nbsp;vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;itab-aubel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;posnr&nbsp;eq&nbsp;itab-aupos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;get_cousd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;itab-bktxt&nbsp;is&nbsp;initial.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;read_text.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;ana&nbsp;heap<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;hkont&nbsp;into&nbsp;itab-saknr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;=&nbsp;itab-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;belnr&nbsp;=&nbsp;itab-belnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;gjahr&nbsp;=&nbsp;itab-gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;hkont&nbsp;like&nbsp;&nbsp;'6%'.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;lfa1~lifnr&nbsp;lfa1~name1&nbsp;into&nbsp;(itab-lifnr1,itab-name11)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;vbpa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;lfa1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;vbpa~lifnr&nbsp;eq&nbsp;lfa1~lifnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbpa~vbeln&nbsp;=&nbsp;itab-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbpa~parvw&nbsp;=&nbsp;'ZT'.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;user_grp&nbsp;=&nbsp;'GAPGD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;zkompozisyon&nbsp;into&nbsp;itab-zkompozisyon&nbsp;from&nbsp;mara<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;matnr&nbsp;=&nbsp;itab-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;grp&nbsp;lstpr&nbsp;waers&nbsp;into&nbsp;(itab-grp,itab-lstpr,itab-waers)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;zpp_ug_flst_001&nbsp;where&nbsp;matnr&nbsp;=&nbsp;itab-matnr&nbsp;and&nbsp;onay&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;itab.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;endloop.<br />
+<br />
+endform . " Get_data<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;write_alv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form write_alv.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;de#i#tirme<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;perform&nbsp;e03_eventtab_build&nbsp;using&nbsp;er_events[].<br />
+&nbsp;&nbsp;perform&nbsp;e04_comment_build&nbsp;using&nbsp;gt_list_top_of_page[].<br />
+&nbsp;&nbsp;perform&nbsp;get_format.<br />
+&nbsp;&nbsp;perform&nbsp;alv_alv.<br />
+endform. " write_alv<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;e03_eventtab_build&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form e03_eventtab_build using e03_lt_events type slis_t_event.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;de#i#tirme<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;data:&nbsp;ls_event&nbsp;type&nbsp;slis_alv_event.<br />
+<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_EVENTS_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_list_type&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_events&nbsp;&nbsp;&nbsp;=&nbsp;e03_lt_events.<br />
+<br />
+&nbsp;&nbsp;read&nbsp;table&nbsp;e03_lt_events&nbsp;with&nbsp;key&nbsp;name&nbsp;=&nbsp;slis_ev_top_of_page<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;ls_event.<br />
+&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;move&nbsp;'SAYFA_BASI'&nbsp;to&nbsp;ls_event-form.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;ls_event&nbsp;to&nbsp;e03_lt_events.<br />
+&nbsp;&nbsp;endif.<br />
+endform.                    "e03_eventtab_build<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;e04_comment_build&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form e04_comment_build using e04_lt_top_of_page type slis_t_listheader.<br />
+&nbsp;&nbsp;data:&nbsp;ls_line&nbsp;type&nbsp;slis_listheader.<br />
+&nbsp;&nbsp;free&nbsp;:&nbsp;e04_lt_top_of_page.<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;_tarih(10).<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;_saat(10).<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ls_line-key&nbsp;=&nbsp;text-501.&nbsp;"'Rapor&nbsp;Ad#:'.<br />
+&nbsp;&nbsp;ls_line-info&nbsp;=&nbsp;text-502."'FATURA&nbsp;L#STES#'.<br />
+&nbsp;&nbsp;ls_line-info+35(10)&nbsp;=&nbsp;sy-tcode.<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;e04_lt_top_of_page.<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ls_line-key&nbsp;=&nbsp;text-200.&nbsp;"'Kullan#c#'.<br />
+&nbsp;&nbsp;ls_line-info&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;ls_line-info+35(10)&nbsp;=&nbsp;sy-tcode.<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;e04_lt_top_of_page.<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;ls_line-typ&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ls_line-key&nbsp;=&nbsp;text-201.&nbsp;"'Tarih'.<br />
+&nbsp;&nbsp;write&nbsp;sy-datum&nbsp;to&nbsp;_tarih&nbsp;dd/mm/yyyy.<br />
+&nbsp;&nbsp;write&nbsp;sy-uzeit&nbsp;to&nbsp;_saat&nbsp;.<br />
+&nbsp;&nbsp;ls_line-info&nbsp;=&nbsp;_tarih.<br />
+&nbsp;&nbsp;ls_line-info+20(10)&nbsp;=&nbsp;_saat.<br />
+&nbsp;&nbsp;append&nbsp;ls_line&nbsp;to&nbsp;e04_lt_top_of_page.<br />
+&nbsp;&nbsp;clear&nbsp;ls_line.<br />
+<br />
+endform.                    "e04_comment_build<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;get_format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_format.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_FIELDCATALOG_MERGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_program_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZCLK_SD_INV'&nbsp;&nbsp;"&nbsp;de#i#tir<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_internal_tabname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ITAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;de#i#tir<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_inclname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZCLK_SD_INV'&nbsp;&nbsp;"&nbsp;de#i#tir<br />
+&nbsp;&nbsp;&nbsp;&nbsp;changing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;er_fieldcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent_interface&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;perform&nbsp;fieldcat_modify&nbsp;using&nbsp;er_fieldcat[].<br />
+endform. " get_format<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FIELDCAT_MODIFY<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form fieldcat_modify using u_er_fieldcat type slis_t_fieldcat_alv.<br />
+&nbsp;&nbsp;data:&nbsp;xs_fieldcat&nbsp;type&nbsp;slis_fieldcat_alv.<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;u_er_fieldcat&nbsp;into&nbsp;xs_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;xs_fieldcat-fieldname.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;de#i#tir<br />
+*&nbsp;#TAB'#n&nbsp;Alan&nbsp;özellikleri<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'VBELN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-key&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;=&nbsp;text-102.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'VGBEL'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;p_gnl&nbsp;eq&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-100&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BELNR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-101&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'NETWR3'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-103&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'NETWR2'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-202."'USD&nbsp;Kar##l###'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BRMFYT'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-203.&nbsp;"'Belge&nbsp;Birim&nbsp;Fiyat'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BRMFYTU'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-204."'USD&nbsp;Birim&nbsp;Fiyat'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'TUTRY'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-205.&nbsp;"'Maliyet&nbsp;YTL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'TUUSD'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-206."'Maliyet&nbsp;USD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'COUSD'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-207."'CO&nbsp;USD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BELMA'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-208."'Maliyet&nbsp;Muh.&nbsp;Blg.&nbsp;NO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'VBELN2'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-209."'SAS&nbsp;No'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'WAERS2'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-210."'SAS&nbsp;Fatura&nbsp;P.B.'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'LIFNR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-211."'Sat#c#'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'XBLNR2'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-212."'SA&nbsp;Fatura&nbsp;No'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BLDAT'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-213."'SA&nbsp;Fatura&nbsp;Tarihi'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'EKGRP'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-214."'SA&nbsp;Gurubu'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'HKONT'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-215."<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Defteri&nbsp;kebir&nbsp;muhasebesi&nbsp;ana&nbsp;hesab#'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'SAKNR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-216."'Ana&nbsp;hesap'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'POSNR'&nbsp;or&nbsp;'VGPOS'&nbsp;or&nbsp;'FKIMG'&nbsp;or&nbsp;'NETWR'&nbsp;or<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'GSBER'&nbsp;or&nbsp;'MATNR'&nbsp;or&nbsp;'ARKTX'&nbsp;or&nbsp;'MATKL'&nbsp;or&nbsp;'AUBEL'&nbsp;or<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'AUPOS'&nbsp;or&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;p_gnl&nbsp;eq&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'NETPR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-217."'Sip.Birim&nbsp;fiyat#'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'LIFNR1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-218."'temin&nbsp;kod'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'NAME11'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_l&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;text-219."'temin&nbsp;ad#'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-ddictxt&nbsp;=&nbsp;'L'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endcase.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-reptext_ddic&nbsp;=&nbsp;xs_fieldcat-seltext_l.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_m&nbsp;=&nbsp;xs_fieldcat-seltext_l.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-seltext_s&nbsp;=&nbsp;xs_fieldcat-seltext_l.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;u_er_fieldcat&nbsp;from&nbsp;xs_fieldcat.<br />
+&nbsp;&nbsp;endloop.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;user_grp&nbsp;ne&nbsp;'GAPGD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;u_er_fieldcat&nbsp;into&nbsp;xs_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;xs_fieldcat-fieldname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;&nbsp;'ZKOMPOZISYON'&nbsp;or&nbsp;&nbsp;'GRP'&nbsp;or&nbsp;'LSTPR'&nbsp;or&nbsp;'WAERS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xs_fieldcat-tech&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endcase.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;u_er_fieldcat&nbsp;from&nbsp;xs_fieldcat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;endif.<br />
+endform.                    "fieldcat_modify<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;alv_alv<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form alv_alv.<br />
+&nbsp;&nbsp;er_layout-zebra&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZCLK_SD_INV'&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;de#i#tir<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;er_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;er_fieldcat[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_special_groups&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;er_sp_group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;e_variant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;er_events[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;de#i#tir<br />
+endform. " alv_alv<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;sayfa_basi<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form sayfa_basi.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_logo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'CALIK.BMP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;gt_list_top_of_page.<br />
+endform. " sayfa_basi<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;user_command<br />
+*&--------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form user_command using r_ucomm type sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rs_selfield&nbsp;type&nbsp;slis_selfield&nbsp;.<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;wa&nbsp;like&nbsp;itab.<br />
+&nbsp;&nbsp;case&nbsp;r_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&IC1'&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;seçilen&nbsp;sat#rda&nbsp;i#lem<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;rs_selfield-tabindex&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;itab&nbsp;into&nbsp;wa&nbsp;index&nbsp;rs_selfield-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;=&nbsp;'0'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;&nbsp;rs_selfield-sel_tab_field&nbsp;=&nbsp;'ITAB-VBELN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;rs_selfield-sel_tab_field&nbsp;=&nbsp;'ITAB-POSNR'&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'VF'&nbsp;field&nbsp;wa-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;transaction&nbsp;'VF03'&nbsp;and&nbsp;skip&nbsp;first&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;&nbsp;rs_selfield-sel_tab_field&nbsp;=&nbsp;'ITAB-BELNR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'BLN'&nbsp;field&nbsp;wa-belnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'BUK'&nbsp;field&nbsp;wa-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;parameter&nbsp;id&nbsp;'GJR'&nbsp;field&nbsp;wa-gjahr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;transaction&nbsp;'FB03'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif&nbsp;.<br />
+&nbsp;&nbsp;endcase&nbsp;.<br />
+endform.                    " user_command<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form gncl.<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;zkur&nbsp;like&nbsp;tcurr-ukurs.<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;zfbdt&nbsp;like&nbsp;vbrk-fkdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blart&nbsp;like&nbsp;bkpf-blart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;days&nbsp;type&nbsp;p.<br />
+<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;vbeln&nbsp;like&nbsp;vbfa-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnn&nbsp;like&nbsp;vbfa-posnn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buzei&nbsp;like&nbsp;mseg-buzei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wadat&nbsp;like&nbsp;likp-wadat_ist,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aworg&nbsp;like&nbsp;acchd-aworg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zadrnr&nbsp;like&nbsp;vbpa-adrnr.<br />
+<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;acc&nbsp;&nbsp;&nbsp;like&nbsp;acc_doc&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;adrnr&nbsp;from&nbsp;vbpa&nbsp;into&nbsp;zadrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;=&nbsp;itab-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;parvw&nbsp;=&nbsp;'RG'.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;name1&nbsp;from&nbsp;adrc&nbsp;into&nbsp;itab-name1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;addrnumber&nbsp;=&nbsp;zadrnr.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;wgbez60&nbsp;from&nbsp;t023t&nbsp;into&nbsp;itab-wgbez<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;spras&nbsp;=&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;matkl&nbsp;=&nbsp;itab-matkl.<br />
+<br />
+&nbsp;&nbsp;zfbdt&nbsp;=&nbsp;itab-fkdat&nbsp;.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'DAY_IN_WEEK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datum&nbsp;=&nbsp;zfbdt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wotnr&nbsp;=&nbsp;days.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;days&nbsp;eq&nbsp;6.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zfbdt&nbsp;=&nbsp;zfbdt&nbsp;+&nbsp;2.<br />
+&nbsp;&nbsp;elseif&nbsp;days&nbsp;eq&nbsp;7.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zfbdt&nbsp;=&nbsp;zfbdt&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;itab-waerk&nbsp;ne&nbsp;'TRY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'CONVERT_TO_FOREIGN_CURRENCY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;zfbdt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_currency&nbsp;=&nbsp;'TRY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab-netwr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_currency&nbsp;&nbsp;&nbsp;=&nbsp;itab-waerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type_of_rate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'M'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_amount&nbsp;&nbsp;&nbsp;=&nbsp;itab-netwr3.<br />
+<br />
+&nbsp;&nbsp;else.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-netwr3&nbsp;=&nbsp;itab-netwr.<br />
+<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;if&nbsp;itab-waerk&nbsp;ne&nbsp;'USD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'CONVERT_TO_FOREIGN_CURRENCY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;zfbdt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_currency&nbsp;=&nbsp;'USD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab-netwr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_currency&nbsp;&nbsp;&nbsp;=&nbsp;itab-waerk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type_of_rate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'M'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_amount&nbsp;&nbsp;&nbsp;=&nbsp;itab-netwr2.<br />
+<br />
+&nbsp;&nbsp;else.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-netwr2&nbsp;=&nbsp;itab-netwr.<br />
+<br />
+&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;break&nbsp;faciroglu.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;single&nbsp;vbeln&nbsp;&nbsp;into&nbsp;itab-vbeln2&nbsp;from&nbsp;vbfa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbelv&nbsp;&nbsp;&nbsp;=&nbsp;itab-aubel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;posnv&nbsp;&nbsp;&nbsp;=&nbsp;itab-aupos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;vbtyp_n&nbsp;=&nbsp;'V'.<br />
+&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;ekgrp&nbsp;into&nbsp;itab-ekgrp&nbsp;from&nbsp;ekko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;ebeln&nbsp;=&nbsp;itab-vbeln2.<br />
+&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+*---&lt;&lt;&lt;&nbsp;hkurt&nbsp;sipari#&nbsp;nedeni&nbsp;ekleme<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;clear&nbsp;:&nbsp;itab-augru&nbsp;,itab-bezei.<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;augru&nbsp;into&nbsp;itab-augru&nbsp;from&nbsp;vbak<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;itab-aubel.<br />
+&nbsp;&nbsp;if&nbsp;itab-augru&nbsp;ne&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;bezei&nbsp;into&nbsp;itab-bezei&nbsp;from&nbsp;tvaut<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;spras&nbsp;eq&nbsp;sy-langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;augru&nbsp;eq&nbsp;itab-augru.<br />
+&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+*---&gt;&gt;&gt;<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;select&nbsp;single&nbsp;vrkme&nbsp;into&nbsp;itab-vrkme&nbsp;from&nbsp;vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;itab-aubel&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;eq&nbsp;itab-aupos.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--------<br />
+*&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;vbeln&nbsp;posnn&nbsp;INTO&nbsp;(vbeln,&nbsp;posnn)&nbsp;FROM&nbsp;vbfa<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbelv&nbsp;&nbsp;&nbsp;=&nbsp;itab-vgbel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;posnv&nbsp;&nbsp;&nbsp;=&nbsp;itab-vgpos<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;vbtyp_n&nbsp;=&nbsp;'R'&nbsp;.<br />
+*&nbsp;ters&nbsp;belge&nbsp;kontrolu&nbsp;için<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;refresh&nbsp;:&nbsp;r_itab,h_itab.<br />
+&nbsp;&nbsp;select&nbsp;&nbsp;*&nbsp;from&nbsp;vbfa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbelv&nbsp;&nbsp;&nbsp;=&nbsp;itab-vgbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;posnv&nbsp;&nbsp;&nbsp;=&nbsp;itab-vgpos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;(&nbsp;vbtyp_n&nbsp;=&nbsp;'R'&nbsp;or&nbsp;vbtyp_n&nbsp;=&nbsp;'h'&nbsp;).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;R&nbsp;ve&nbsp;H&nbsp;tablo&nbsp;olu#tur<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;vbfa-vbtyp_n&nbsp;=&nbsp;'R'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_itab-mblnr&nbsp;=&nbsp;vbfa-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_itab-mjahr&nbsp;=&nbsp;vbfa-erdat(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_itab-zeile&nbsp;=&nbsp;vbfa-posnn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;r_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear&nbsp;r_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h_itab-mblnr&nbsp;=&nbsp;vbfa-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h_itab-mjahr&nbsp;=&nbsp;vbfa-erdat(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h_itab-zeile&nbsp;=&nbsp;vbfa-posnn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;h_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear&nbsp;h_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;posnn&nbsp;=&nbsp;vbfa-posnn.<br />
+&nbsp;&nbsp;endselect.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;H&nbsp;tablo&nbsp;ters&nbsp;belge&nbsp;olu#tur<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;loop&nbsp;at&nbsp;h_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;sjahr&nbsp;smbln&nbsp;smblp&nbsp;into&nbsp;(h_itab-sjahr,h_itab-smbln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;h_itab-smblp)&nbsp;from&nbsp;mseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;mblnr&nbsp;=&nbsp;h_itab-mblnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;mjahr&nbsp;=&nbsp;h_itab-mjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;zeile&nbsp;=&nbsp;h_itab-zeile.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;h_itab.<br />
+&nbsp;&nbsp;endloop.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;R&nbsp;den&nbsp;H&nbsp;da&nbsp;tersi&nbsp;olanlar#&nbsp;&nbsp;sil.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;loop&nbsp;at&nbsp;h_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;r_itab&nbsp;where&nbsp;mblnr&nbsp;=&nbsp;h_itab-smbln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;mjahr&nbsp;=&nbsp;h_itab-sjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;zeile&nbsp;=&nbsp;h_itab-smblp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete&nbsp;r_itab.&nbsp;delete&nbsp;h_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;check&nbsp;not&nbsp;r_itab[]&nbsp;is&nbsp;initial.<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;r_itab.<br />
+   </div>
+   <div class="codeComment">
+*----------------------------<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;wadat_ist&nbsp;&nbsp;into&nbsp;wadat&nbsp;from&nbsp;likp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;=&nbsp;itab-vgbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;aworg&nbsp;=&nbsp;wadat(4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-teslimat&nbsp;=&nbsp;itab-vgbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;refresh&nbsp;acc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'AC_DOCUMENT_RECORD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_awtyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'MKPF'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_awref&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vbeln<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_awref&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;r_itab-mblnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_aworg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;aworg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_awsys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_awsys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_dialog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_documents&nbsp;&nbsp;=&nbsp;acc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_reference&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_document&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;acc&nbsp;where&nbsp;awtyp&nbsp;=&nbsp;&nbsp;'BKPF'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;blart&nbsp;into&nbsp;blart&nbsp;from&nbsp;bkpf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;=&nbsp;acc-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;belnr&nbsp;=&nbsp;acc-docnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;gjahr&nbsp;=&nbsp;acc-ac_gjahr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;blart&nbsp;eq&nbsp;'WL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buzei&nbsp;=&nbsp;posnn&nbsp;*&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;belnr&nbsp;dmbtr&nbsp;dmbe2&nbsp;hkont&nbsp;into&nbsp;(itab-belma,itab-tutry,<br />
+itab-tuusd,itab-hkont) from bseg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;bukrs&nbsp;=&nbsp;acc-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;belnr&nbsp;=&nbsp;acc-docnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;gjahr&nbsp;=&nbsp;acc-ac_gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;buzei&nbsp;=&nbsp;buzei&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;(&nbsp;hkont&nbsp;=&nbsp;'6210000000'&nbsp;or&nbsp;hkont&nbsp;=&nbsp;'7400404999'&nbsp;).<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;endloop.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;break&nbsp;faciroglu.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;if&nbsp;p_dty&nbsp;=&nbsp;'X'&nbsp;and&nbsp;(&nbsp;itab-vkorg&nbsp;=&nbsp;'0300'&nbsp;or&nbsp;itab-vkorg&nbsp;=&nbsp;'0330').<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;belnr&nbsp;into&nbsp;itab-zbelnr&nbsp;from&nbsp;zzsd001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;itab-aubel&nbsp;and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;eq&nbsp;itab-aupos&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;xblnr&nbsp;bldat&nbsp;lifnr&nbsp;waers&nbsp;from&nbsp;rbkp&nbsp;into&nbsp;(itab-xblnr2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-bldat,itab-lifnr,itab-waers2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;belnr&nbsp;=&nbsp;itab-zbelnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endselect.<br />
+<br />
+&nbsp;&nbsp;endif.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&gt;&gt;--<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;if&nbsp;p_dty&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;itab-fkimg&nbsp;ne&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-brmfyt&nbsp;&nbsp;=&nbsp;itab-netwr&nbsp;&nbsp;/&nbsp;itab-fkimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-brmfytu&nbsp;=&nbsp;itab-netwr2&nbsp;/&nbsp;itab-fkimg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+**&lt;&lt;--<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;modify&nbsp;itab.<br />
+<br />
+endform.                    "gncl<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_AWSYS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_awsys .<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'OWN_LOGICAL_SYSTEM_GET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;own_logical_system&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_awsys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;own_logical_system_not_defined&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+endform.                    " GET_AWSYS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_cousd<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_cousd .<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'CONVERT_TO_FOREIGN_CURRENCY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab-fkdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_currency&nbsp;=&nbsp;'USD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab-tutry<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_currency&nbsp;&nbsp;&nbsp;=&nbsp;'TRY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type_of_rate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'M'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_amount&nbsp;&nbsp;&nbsp;=&nbsp;itab-cousd.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;from&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;itab-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;fkart&nbsp;eq&nbsp;'RE'.<br />
+&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-netwr&nbsp;=&nbsp;itab-netwr&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-netwr2&nbsp;=&nbsp;itab-netwr2&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-netwr3&nbsp;=&nbsp;itab-netwr3&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-tutry&nbsp;=&nbsp;itab-tutry&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-tuusd&nbsp;&nbsp;=&nbsp;itab-tuusd&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-cousd&nbsp;=&nbsp;itab-cousd&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-fkimg&nbsp;=&nbsp;itab-fkimg&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;endif.<br />
+endform.                    " get_cousd<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;read_text<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form read_text .<br />
+&nbsp;&nbsp;ithead-tdid&nbsp;=&nbsp;'ZF02'.<br />
+&nbsp;&nbsp;ithead-tdspras&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;ithead-tdname&nbsp;=&nbsp;itab-vbeln.<br />
+&nbsp;&nbsp;ithead-tdobject&nbsp;=&nbsp;'VBBK'.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'READ_TEXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ithead-tdid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ithead-tdspras<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ithead-tdname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ithead-tdobject<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lines<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference_check&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrong_access_to_archive&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;check&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;lines&nbsp;where&nbsp;tdline&nbsp;ne&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;itab-bktxt&nbsp;=&nbsp;lines-tdline.&nbsp;&nbsp;exit.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;condense&nbsp;text.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;concatenate&nbsp;text&nbsp;lines-tdline&nbsp;into&nbsp;text&nbsp;separated&nbsp;by&nbsp;space.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;endloop.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;condense&nbsp;text.<br />
+   </div>
+   <div class="code">
+endform.                    " read_text<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;100&nbsp;Ref.&nbsp;Doc.<br />
+*&nbsp;101&nbsp;Accounting&nbsp;Dc<br />
+*&nbsp;102&nbsp;BillingNm<br />
+*&nbsp;103&nbsp;Price&nbsp;(YTL)<br />
+*&nbsp;200&nbsp;Username<br />
+*&nbsp;201&nbsp;Date<br />
+*&nbsp;202&nbsp;Price(USD)<br />
+*&nbsp;203&nbsp;Document&nbsp;Unit&nbsp;Price<br />
+*&nbsp;204&nbsp;Unit&nbsp;Price(USD)<br />
+*&nbsp;205&nbsp;Cost&nbsp;YTL<br />
+*&nbsp;206&nbsp;Cost&nbsp;USD<br />
+*&nbsp;207&nbsp;CO&nbsp;USD<br />
+*&nbsp;209&nbsp;SAS&nbsp;Number<br />
+*&nbsp;210&nbsp;SAS&nbsp;Billing&nbsp;Curr.<br />
+*&nbsp;211&nbsp;Vendor<br />
+*&nbsp;212&nbsp;SA&nbsp;Billing&nbsp;D<br />
+*&nbsp;213&nbsp;SA&nbsp;Billing&nbsp;Date<br />
+*&nbsp;214&nbsp;SA&nbsp;Group<br />
+*&nbsp;215&nbsp;general&nbsp;ledger&nbsp;main&nbsp;account<br />
+*&nbsp;216&nbsp;main&nbsp;account<br />
+*&nbsp;217&nbsp;Order&nbsp;Unit&nbsp;Price<br />
+*&nbsp;218&nbsp;provide&nbsp;location<br />
+*&nbsp;500&nbsp;No&nbsp;data&nbsp;found&nbsp;for&nbsp;the&nbsp;selected&nbsp;criterias!<br />
+*&nbsp;501&nbsp;Report&nbsp;Name<br />
+*&nbsp;502&nbsp;Invoice&nbsp;List<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_DTY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail&nbsp;List<br />
+*&nbsp;P_GNL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;General&nbsp;List<br />
+*&nbsp;S_FKART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing&nbsp;Type<br />
+*&nbsp;S_FKDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing&nbsp;date<br />
+*&nbsp;S_KUNAG&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sold-to&nbsp;party<br />
+*&nbsp;S_KUNRG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payer<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Metarial&nbsp;Number<br />
+*&nbsp;S_POSNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing&nbsp;item<br />
+*&nbsp;S_SPART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Division<br />
+*&nbsp;S_VBELN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing&nbsp;Document<br />
+*&nbsp;S_VGBEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reference&nbsp;Document&nbsp;Number<br />
+*&nbsp;S_VKORG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sales&nbsp;Organization<br />
+*&nbsp;S_VTWEG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Distribution&nbsp;Channel<br />
+*&nbsp;S_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plant<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

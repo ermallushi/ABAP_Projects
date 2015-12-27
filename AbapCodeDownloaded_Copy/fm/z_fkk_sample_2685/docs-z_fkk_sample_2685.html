@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_2685</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_2685</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;INV:&nbsp;Correspondence&nbsp;-&nbsp;Create&nbsp;Invoicing<br />
+<br />
+&nbsp;trados&nbsp;=&nbsp;fi<br />
+&nbsp;Features<br />
+&nbsp;Event&nbsp;2685&nbsp;is&nbsp;triggered&nbsp;to&nbsp;create&nbsp;an&nbsp;invoicing&nbsp;print&nbsp;request.<br />
+&nbsp;Dependencies<br />
+&nbsp;You&nbsp;can&nbsp;print&nbsp;the&nbsp;invoicing&nbsp;document&nbsp;in&nbsp;&lt;DS:FU.FKK_SAMPLE_2686&gt;event<br />
+&nbsp;2686&lt;/&gt;.&nbsp;You&nbsp;have&nbsp;to&nbsp;maintain&nbsp;changes&nbsp;to&nbsp;the&nbsp;format&nbsp;of&nbsp;the<br />
+&nbsp;correspondence&nbsp;requests&nbsp;in&nbsp;both&nbsp;events.<br />
+&nbsp;Area&nbsp;of&nbsp;Implementation<br />
+&nbsp;Correspondence<br />
+&nbsp;Notes&nbsp;for&nbsp;Programming<br />
+&nbsp;You&nbsp;can&nbsp;use&nbsp;the&nbsp;functions&nbsp;of&nbsp;function&nbsp;group&nbsp;FKK2&nbsp;to&nbsp;create&nbsp;and&nbsp;read<br />
+&nbsp;correspondence&nbsp;requests.<br />
+&nbsp;For&nbsp;detailed&nbsp;information&nbsp;about&nbsp;implementing&nbsp;correspondence,&nbsp;see&nbsp;SAP&nbsp;note<br />
+&nbsp;194899.<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+E_FKKCOH_TAB                     Correspondence Table - Correspondence Header<br />
+I_DONT_WRITE_TO_DB               Checkbox<br />
+I_INVDOC_HEADER                  Invoicing Document Header<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

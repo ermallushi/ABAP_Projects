@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_RECON_KEYS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_RECON_KEYS</h2>
+<h3> Description: Reconciliation Keys from Invoice</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZRMCA_RECON_KEYS<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Eyup&nbsp;Ozdener<br />
+*&&nbsp;Creation&nbsp;date:&nbsp;16.07.2014<br />
+*&&nbsp;Project&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;List&nbsp;the&nbsp;reconciliation&nbsp;keys<br />
+*&&nbsp;Definition&nbsp;&nbsp;&nbsp;:&nbsp;List&nbsp;the&nbsp;reconciliation&nbsp;keys&nbsp;created&nbsp;by&nbsp;billing<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation&nbsp;and&nbsp;e-mail&nbsp;the&nbsp;list&nbsp;to&nbsp;the&nbsp;defined&nbsp;users<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT zrmca_recon_keys.<br />
+<br />
+include <a href ="zrmca_recon_keys_top.html">zrmca_recon_keys_top</a>. " GlobalData / Selection Screen<br />
+include <a href ="zrmca_recon_keys_f01.html">zrmca_recon_keys_f01</a>. " Form-Routines<br />
+include <a href ="zrmca_recon_keys_i01.html">zrmca_recon_keys_i01</a>. " Input Modules<br />
+include <a href ="zrmca_recon_keys_cls.html">zrmca_recon_keys_cls</a>. " Class<br />
+include <a href ="zrmca_recon_keys_o01.html">zrmca_recon_keys_o01</a>. " Output Modules<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_init_value.<br />
+<br />
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;PERFORM&nbsp;maintain_table.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;fetch_data.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gt_recon_keys[]&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;100.<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;text-004&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;T0100&nbsp;--&gt;&nbsp;Reconciliation&nbsp;Keys&nbsp;From&nbsp;Invoice<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;User&nbsp;:<br />
+*&nbsp;002&nbsp;Date&nbsp;:<br />
+*&nbsp;003&nbsp;Internal&nbsp;error!...<br />
+*&nbsp;004&nbsp;No&nbsp;record&nbsp;found&nbsp;for&nbsp;selected&nbsp;criteria!...<br />
+*&nbsp;005&nbsp;Send&nbsp;message<br />
+*&nbsp;006&nbsp;The&nbsp;request&nbsp;cancelled&nbsp;by&nbsp;the&nbsp;user...<br />
+*&nbsp;007&nbsp;Customizing&nbsp;Parameters<br />
+*&nbsp;008&nbsp;No&nbsp;email&nbsp;address&nbsp;found!&nbsp;Please&nbsp;maintain&nbsp;the&nbsp;table!...<br />
+*&nbsp;009&nbsp;Reconciliation&nbsp;Keys&nbsp;from&nbsp;Invoice<br />
+*&nbsp;010&nbsp;The&nbsp;listed&nbsp;keys&nbsp;will&nbsp;be&nbsp;sent&nbsp;to&nbsp;users...<br />
+*&nbsp;011&nbsp;Do&nbsp;you&nbsp;want&nbsp;to&nbsp;continue?<br />
+*&nbsp;012&nbsp;Yes<br />
+*&nbsp;013&nbsp;No<br />
+*&nbsp;014&nbsp;Reconciliation&nbsp;Key<br />
+*&nbsp;015&nbsp;Posting&nbsp;Date<br />
+*&nbsp;016&nbsp;Date&nbsp;of&nbsp;Entry<br />
+*&nbsp;017&nbsp;Entered&nbsp;by<br />
+*&nbsp;018&nbsp;Complete&nbsp;Name<br />
+*&nbsp;019&nbsp;Transfer&nbsp;All&nbsp;Data<br />
+*&nbsp;020&nbsp;Closed<br />
+*&nbsp;021&nbsp;The&nbsp;list&nbsp;of&nbsp;reconciliation&nbsp;keys&nbsp;sent&nbsp;to&nbsp;the&nbsp;requested&nbsp;users...<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_BUKRS&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;S_BUDAT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;EU<br />
+*059&nbsp;&nbsp;&nbsp;You&nbsp;do&nbsp;not&nbsp;have&nbsp;authorization&nbsp;for&nbsp;transaction&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_FKK_SAMPLE_2650</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_FKK_SAMPLE_2650</h2>
+<h3> Description: INV: Create Additional (Customer-Specific/Industry-Specific) Documents</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION z_fkk_sample_2650.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(I_INV_UNIT_PUBLIC) TYPE  FKKINV_UNIT_PUBLIC_DATA<br />
+*"  CHANGING<br />
+*"     REFERENCE(C_FKKKO_2650_TAB) TYPE  FKKKO_2650_TAB<br />
+*"     REFERENCE(C_FKKOP_2650_TAB) TYPE  FKKOP_2650_TAB<br />
+*"     REFERENCE(C_FKKOPK_2650_TAB) TYPE  FKKOPK_2650_TAB<br />
+*"     REFERENCE(C_INVDOC_I_2650_TAB) TYPE  FKKINVDOC_I_2650_TAB<br />
+*"----------------------------------------------------------------------<br />
+<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_fkk_sample_2650.html">Global data declarations</a></div><br />
+<div class="codeComment">*       <a href ="docs-z_fkk_sample_2650.html">Function module documentation</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;ws_invdoc_h&nbsp;TYPE&nbsp;fkkinvdoc_h,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_invdoc_i&nbsp;TYPE&nbsp;fkkinvdoc_i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_invtrig&nbsp;TYPE&nbsp;LINE&nbsp;OF&nbsp;fkkinv_trig_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko&nbsp;TYPE&nbsp;LINE&nbsp;OF&nbsp;fkkko_2650_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wt_fkkko&nbsp;TYPE&nbsp;fkkko_2650_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop&nbsp;TYPE&nbsp;LINE&nbsp;OF&nbsp;fkkop_2650_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk&nbsp;TYPE&nbsp;LINE&nbsp;OF&nbsp;fkkopk_2650_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkdoc&nbsp;TYPE&nbsp;fkkinv_fkkdoc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wsa_fkkdoc&nbsp;TYPE&nbsp;fkkinv_fkkdoc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_fkkdoc&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkinv_fkkdoc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab_fkkop&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;fkkinv_op,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bp_type(4)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correction&nbsp;TYPE&nbsp;saknr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;telnr&nbsp;TYPE&nbsp;ist_tnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short_tel&nbsp;TYPE&nbsp;ist_tnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curent_time_str&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;15,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curent_time&nbsp;TYPE&nbsp;timestamp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cocenter&nbsp;TYPE&nbsp;kostl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk_inv&nbsp;TYPE&nbsp;LINE&nbsp;OF&nbsp;fkkinv_opk_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop_inv&nbsp;TYPE&nbsp;fkkinv_op,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_costcenter&nbsp;TYPE&nbsp;bapi0012_ccoutputlist,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bapi_message&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapiret2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc_seq(5)&nbsp;TYPE&nbsp;c.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bpkind&nbsp;INTO&nbsp;bp_type&nbsp;FROM&nbsp;but000&nbsp;WHERE&nbsp;partner&nbsp;EQ&nbsp;i_inv_unit_public-master_data-ca-fkkvkp-gpart.<br />
+&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_inv_unit_public-t_fkkdoc&nbsp;INTO&nbsp;ws_fkkdoc&nbsp;WITH&nbsp;KEY&nbsp;opbel_tmp&nbsp;=&nbsp;'//0BIL/00001'.<br />
+   </div>
+   <div class="codeComment">
+*"------------------------------------------------------------------------------------<br />
+*"<br />
+*"  09.10.2013 DBITANGA:<br />
+*"  Development of solution for internal lines.<br />
+*"<br />
+*"------------------------------------------------------------------------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ws_fkkdoc&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;(&nbsp;bp_type&nbsp;&nbsp;=&nbsp;'G110'&nbsp;OR&nbsp;bp_type&nbsp;&nbsp;=&nbsp;'G120'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ws_fkkdoc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;i_inv_unit_public-t_fkkdoc&nbsp;TO&nbsp;tab_fkkdoc.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;tab_fkkdoc&nbsp;INTO&nbsp;ws_fkkdoc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko&nbsp;=&nbsp;ws_fkkdoc-fkkinv_ko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-cadoctype&nbsp;=&nbsp;''.<br />
+   </div>
+   <div class="codeComment">
+*     SH CHANGES<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc_seq&nbsp;=&nbsp;substring(&nbsp;val&nbsp;=&nbsp;ws_fkkdoc-opbel_tmp&nbsp;off&nbsp;=&nbsp;7&nbsp;len&nbsp;=&nbsp;5&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'//ADD0/'&nbsp;doc_seq&nbsp;INTO&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkko&nbsp;TO&nbsp;c_fkkko_2650_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;tab_fkkop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ws_fkkdoc-t_fkkinv_op&nbsp;INTO&nbsp;ws_fkkop_inv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkop_inv&nbsp;TO&nbsp;tab_fkkop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop&nbsp;=&nbsp;ws_fkkop_inv.<br />
+   </div>
+   <div class="codeComment">
+*       SH CHANGES<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-opbel&nbsp;=&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;curent_time.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;syst-datum&nbsp;syst-uzeit&nbsp;INTO&nbsp;curent_time_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curent_time&nbsp;=&nbsp;curent_time_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;&nbsp;telnum&nbsp;INTO&nbsp;telnr&nbsp;FROM&nbsp;ist_tdata&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order_refnr&nbsp;EQ&nbsp;ws_fkkop_inv-vtref&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_from&nbsp;&lt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_to&nbsp;&gt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;EQ&nbsp;ws_fkkop_inv-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;telnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;&nbsp;telnum&nbsp;INTO&nbsp;telnr&nbsp;FROM&nbsp;ist_tdata&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order_refnr&nbsp;EQ&nbsp;ws_fkkop_inv-vtref&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_from&nbsp;&lt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;EQ&nbsp;ws_fkkop_inv-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;=&nbsp;strlen(&nbsp;telnr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;length&nbsp;=&nbsp;'9'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short_tel&nbsp;=&nbsp;telnr+1(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'355'&nbsp;short_tel&nbsp;INTO&nbsp;telnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;co_center&nbsp;INTO&nbsp;cocenter&nbsp;FROM&nbsp;zco_il_costctr&nbsp;WHERE&nbsp;telno&nbsp;EQ&nbsp;short_tel&nbsp;OR&nbsp;telno&nbsp;EQ&nbsp;telnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;'4'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;CO&nbsp;center&nbsp;assigned&nbsp;to&nbsp;telephone&nbsp;number'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_COSTCENTER_GETDETAIL1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;controllingarea&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'AT00'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costcenter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;cocenter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keydate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datlo<br />
+   </div>
+   <div class="codeComment">
+*           MASTER_DATA_INACTIVE = ' '<br />
+*           LANGUAGE             =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costcenterdetail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ws_costcenter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;bapi_message<br />
+   </div>
+   <div class="codeComment">
+*           EXTENSIONIN          =<br />
+*           EXTENSIONOUT         =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-gsber&nbsp;=&nbsp;ws_costcenter-bus_area.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-itemtype&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-betrw&nbsp;=&nbsp;ws_fkkop-betrw&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkop-mwskz&nbsp;=&nbsp;'A6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-mwskz&nbsp;=&nbsp;'V6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ws_fkkop-mwskz&nbsp;=&nbsp;'A0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-mwskz&nbsp;=&nbsp;'V0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkop&nbsp;TO&nbsp;c_fkkop_2650_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ws_fkkdoc-t_fkkinv_opk&nbsp;INTO&nbsp;ws_fkkopk_inv.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk&nbsp;=&nbsp;ws_fkkopk_inv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-betrw&nbsp;=&nbsp;ws_fkkopk-betrw&nbsp;*&nbsp;-1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-sbasw&nbsp;=&nbsp;ws_fkkopk-sbasw&nbsp;*&nbsp;-1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*"-----------------------------------------------------------------------------<br />
+*"  Selection of correction account for internal lines<br />
+*"        form customizing table zgl_int_lines<br />
+*"-----------------------------------------------------------------------------<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;correction_gl&nbsp;INTO&nbsp;correction&nbsp;FROM&nbsp;zgl_int_lines&nbsp;WHERE&nbsp;invoice_gl&nbsp;EQ&nbsp;ws_fkkopk-hkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;'4'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;correction&nbsp;account&nbsp;in&nbsp;ZGL_INT_LINES&nbsp;table.'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-hkont&nbsp;=&nbsp;correction.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*"-----------------------------------------------------------------------------<br />
+*"  Selection of CO center for internal lines<br />
+*"        form table ZCO_IL_COSTCTR<br />
+*"-----------------------------------------------------------------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkopk_inv-ktosl&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;tab_fkkop&nbsp;INTO&nbsp;ws_fkkop_inv&nbsp;WITH&nbsp;KEY&nbsp;srcdocno&nbsp;=&nbsp;ws_fkkopk_inv-srcdocno.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;curent_time.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;syst-datum&nbsp;syst-uzeit&nbsp;INTO&nbsp;curent_time_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curent_time&nbsp;=&nbsp;curent_time_str.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;&nbsp;telnum&nbsp;INTO&nbsp;telnr&nbsp;FROM&nbsp;ist_tdata&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order_refnr&nbsp;EQ&nbsp;ws_fkkop_inv-vtref&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_from&nbsp;&lt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_to&nbsp;&gt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;EQ&nbsp;ws_fkkop_inv-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;telnr&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;&nbsp;telnum&nbsp;INTO&nbsp;telnr&nbsp;FROM&nbsp;ist_tdata&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order_refnr&nbsp;EQ&nbsp;ws_fkkop_inv-vtref&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid_from&nbsp;&lt;&nbsp;curent_time&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;EQ&nbsp;ws_fkkop_inv-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;length.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;=&nbsp;strlen(&nbsp;telnr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;length&nbsp;=&nbsp;'9'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short_tel&nbsp;=&nbsp;telnr+1(8).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'355'&nbsp;short_tel&nbsp;INTO&nbsp;telnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;co_center&nbsp;INTO&nbsp;ws_fkkopk-kostl&nbsp;FROM&nbsp;zco_il_costctr&nbsp;WHERE&nbsp;telno&nbsp;EQ&nbsp;short_tel&nbsp;OR&nbsp;telno&nbsp;EQ&nbsp;telnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;'4'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;CO&nbsp;center&nbsp;assigned&nbsp;to&nbsp;telephone&nbsp;number'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ws_costcenter.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_COSTCENTER_GETDETAIL1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;controllingarea&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'AT00'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costcenter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ws_fkkopk-kostl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keydate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datlo<br />
+   </div>
+   <div class="codeComment">
+*             MASTER_DATA_INACTIVE = ' '<br />
+*             LANGUAGE             =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costcenterdetail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ws_costcenter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;bapi_message<br />
+   </div>
+   <div class="codeComment">
+*             EXTENSIONIN          =<br />
+*             EXTENSIONOUT         =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-gsber&nbsp;=&nbsp;ws_costcenter-bus_area.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-prctr&nbsp;=&nbsp;ws_costcenter-profit_ctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkopk-mwskz&nbsp;=&nbsp;'A6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-mwskz&nbsp;=&nbsp;'V6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ws_fkkopk-mwskz&nbsp;=&nbsp;'A0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-mwskz&nbsp;=&nbsp;'V0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkopk-mwszkz&nbsp;=&nbsp;'A6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-mwszkz&nbsp;=&nbsp;'V6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ws_fkkopk-mwszkz&nbsp;=&nbsp;'A0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-mwszkz&nbsp;=&nbsp;'V0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkopk-ktosl&nbsp;=&nbsp;'MWS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-ktosl&nbsp;=&nbsp;'VST'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ws_fkkopk-kschl&nbsp;=&nbsp;'MWAS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-kschl&nbsp;=&nbsp;'MWVS'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*       SH CHANGES<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkopk-opbel&nbsp;=&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkopk&nbsp;TO&nbsp;c_fkkopk_2650_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ws_fkkop_inv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*"------------------------------------------------------------------------------------------------------------------------------<br />
+*"<br />
+*"   24.07.2013. DBITANGA<br />
+*"   Development of event for posting additional document in invoicing if no invoicing document from billing document<br />
+*"   Created document has 0 posting. By this development we trigger creation of official document number for invoicing document.<br />
+*"<br />
+*"------------------------------------------------------------------------------------------------------------------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ws_invdoc_h&nbsp;=&nbsp;i_inv_unit_public-invdoc-invdoc_h.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_inv_unit_public-invdoc-invdoc_i_tab&nbsp;INTO&nbsp;ws_invdoc_i&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_inv_unit_public-t_invtrig&nbsp;INTO&nbsp;ws_invtrig&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ws_fkkdoc.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_inv_unit_public-t_fkkdoc&nbsp;INTO&nbsp;ws_fkkdoc&nbsp;WITH&nbsp;KEY&nbsp;opbel_tmp&nbsp;=&nbsp;'//0BIL/00001'.<br />
+   </div>
+   <div class="codeComment">
+*    READ TABLE i_inv_unit_public-t_fkkdoc INTO wsa_fkkdoc WITH KEY opbel_tmp = '//0ACT/00001'.<br />
+<br />
+<br />
+<br />
+*    IF wsa_fkkdoc IS NOT INITIAL.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;ws_fkkdoc&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;c_fkkko_2650_tab&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;counter.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*  Defining document header<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-opbel&nbsp;=&nbsp;'000000000001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-fikey&nbsp;=&nbsp;i_inv_unit_public-params-fikey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-applk&nbsp;=&nbsp;i_inv_unit_public-params-applk.<br />
+   </div>
+   <div class="codeComment">
+*  YA is document type assignet to ivoicing and onlly document type that generates official docuemnt number<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-blart&nbsp;=&nbsp;'YA'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-herkf&nbsp;=&nbsp;i_inv_unit_public-params-herkf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-ernam&nbsp;=&nbsp;ws_invdoc_h-crname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-cpudt&nbsp;=&nbsp;ws_invdoc_h-crdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-cputm&nbsp;=&nbsp;ws_invdoc_h-crtime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-waers&nbsp;=&nbsp;ws_invdoc_h-total_curr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-bldat&nbsp;=&nbsp;ws_invdoc_h-bldat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkko-budat&nbsp;=&nbsp;ws_invdoc_h-budat.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*  Defining document line item<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-opbel&nbsp;=&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-opupw&nbsp;=&nbsp;'000'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-opupk&nbsp;=&nbsp;'001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-bukrs&nbsp;=&nbsp;ws_invtrig-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-gsber&nbsp;=&nbsp;i_inv_unit_public-master_data-ca-fkkvkp-gsber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-gpart&nbsp;=&nbsp;ws_invtrig-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-vkont&nbsp;=&nbsp;ws_invtrig-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-applk&nbsp;=&nbsp;i_inv_unit_public-params-applk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-hvorg&nbsp;=&nbsp;'A200'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-tvorg&nbsp;=&nbsp;'FB00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-kofiz&nbsp;=&nbsp;i_inv_unit_public-master_data-ca-fkkvkp-kofiz_sd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-hkont&nbsp;=&nbsp;'4110103060'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-mwskz&nbsp;=&nbsp;ws_invdoc_i-mwskz.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-bldat&nbsp;=&nbsp;ws_invdoc_h-bldat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-budat&nbsp;=&nbsp;ws_invdoc_h-budat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-optxt&nbsp;=&nbsp;'CI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-waers&nbsp;=&nbsp;ws_invdoc_h-total_curr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-faedn&nbsp;=&nbsp;ws_invdoc_h-faedn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-faeds&nbsp;=&nbsp;ws_invdoc_h-faeds.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-sktpz&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-kursf&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-betrh&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-betrw&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-betr2&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-betr3&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-skfbt&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-sbeth&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-sbetw&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-sbet2&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-sbet3&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_inv_unit_public-params-inv_process&nbsp;=&nbsp;'M1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-spart&nbsp;=&nbsp;'20'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_inv_unit_public-params-inv_process&nbsp;=&nbsp;'A1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ws_fkkop-spart&nbsp;=&nbsp;'10'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Appending tables for posting<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkko&nbsp;TO&nbsp;c_fkkko_2650_tab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ws_fkkop&nbsp;TO&nbsp;c_fkkop_2650_tab.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*    ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;ws_fkkko.<br />
+&nbsp;&nbsp;CLEAR&nbsp;ws_fkkop.<br />
+&nbsp;&nbsp;CLEAR&nbsp;counter.<br />
+&nbsp;&nbsp;MOVE&nbsp;c_fkkko_2650_tab&nbsp;TO&nbsp;wt_fkkko.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;wt_fkkko&nbsp;INTO&nbsp;ws_fkkko.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;c_fkkop_2650_tab&nbsp;INTO&nbsp;ws_fkkop&nbsp;WHERE&nbsp;opbel&nbsp;EQ&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter&nbsp;=&nbsp;counter&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;c_fkkko_2650_tab&nbsp;WHERE&nbsp;opbel&nbsp;=&nbsp;ws_fkkko-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;DELETE&nbsp;c_fkkko_2650_tab&nbsp;WHERE&nbsp;fikey&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;ernam&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;herkf&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+ENDFUNCTION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+* Message class: AM<br />
+*287   Address cannot be maintained; entry in table TSADRV missing<br />
+*290   Entry missing in TSADRV; new address maintenance cannot be called<br />
+*291   Entry missing in TSADRV; new address maintenance cannot be called<br />
+*298   Address group & not defined; delete flag for address not possible<br />
+*<br />
+* Message class: EC<br />
+*089   Internal error: Unable to read screen data<br />
+*<br />
+* Message class: Hard coded<br />
+*   No CO center assigned to telephone number<br />
+*<br />
+* Message class: SCPR<br />
+*026   Table & is too wide. It cannot be processed<br />
+*028   The table/view & has no generated maintenance dialog<br />
+*035   Dictionary interface error: Contact SAP<br />
+*120   Table/view & not found<br />
+*273   Function module call error<br />
+*320   BC Set processing error<br />
+*395   Internal field description read error<br />
+*399   No data record activation information<br />
+*408   Table key not supported by activation links<br />
+*<br />
+* Message class: SV<br />
+*001   The selected function is not supported<br />
+*002   Number of retrieved entries: &<br />
+*004   No entries found that match selection criteria<br />
+*005   One entry chosen<br />
+*006   Number of chosen entries: &<br />
+*007   No previous entry exists<br />
+*008   No next entry exists<br />
+*009   An entry already exists with the same key<br />
+*010   An entry with this key is marked for deletion<br />
+*011   Number of deleted entries: &<br />
+*012   Number of changed entries: &<br />
+*013   Entry deleted<br />
+*014   Number of entries copied: &<br />
+*015   Target key must be different from source key<br />
+*016   Number of reset entries: &<br />
+*017   Entry reset<br />
+*018   Data was saved<br />
+*019   Choose the key from the allowed namespace<br />
+*024   Specify target entries<br />
+*025   Specify target entries<br />
+*026   Select entries before performing the function<br />
+*028   Table & not in DDIC<br />
+*032   Position the cursor on a valid entry<br />
+*033   Specify the key within the work area<br />
+*037   The maintenance dialog for & is incomplete or not defined<br />
+*039   Table & has no relevant fields<br />
+*040   & entries reset, & original and & new entries are still marked<br />
+*041   & entries reset, & original entries are still marked<br />
+*042   & entries reset, & new entries are still marked<br />
+*043   Data already saved<br />
+*044   Read access only<br />
+*045   Enter a start date that is before the end date<br />
+*046   Enter an end date that is after the start date<br />
+*047   Overlapping records are deleted or delimited<br />
+*049   Data locked by user & (display only)<br />
+*050   System error: Unable to lock table/view &<br />
+*051   No data maintenance authorization; display only<br />
+*053   No display authorization for requested data<br />
+*054   Maintenance of data in current client & not permitted<br />
+*055   Address for object & not found<br />
+*056   Mark at least one entry before selecting this function<br />
+*057   The selected entry is new and has no original<br />
+*058   The selected entries are new and have no original<br />
+*059   The selected entry is still in its original state<br />
+*060   The selected entries are still in their original state<br />
+*061   & entries are still originals, & new entries have no original<br />
+*065   No entries exist, double-click for long text<br />
+*066   Select block end<br />
+*084   No values can be displayed<br />
+*092   Change task & is being processed<br />
+*095   System error changing change task &<br />
+*096   Task & was changed<br />
+*098   Entry flagged for inclusion in task &<br />
+*099   Entry was flagged for deletion from task &<br />
+*105   & entries were flagged for inclusion in task &<br />
+*106   & entries were flagged for deletion from task &<br />
+*107   Entry was already in task &<br />
+*108   & entries were already in task &<br />
+*109   & entries included, & entries were contained: &<br />
+*110   Entry was not in task &<br />
+*111   & entries deleted, & entries were not included: &<br />
+*112   & entries were not in task &<br />
+*113   Entry could not be retrieved<br />
+*114   & entries could not be retrieved<br />
+*115   Entry could not be deleted<br />
+*116   & entries could not be deleted<br />
+*117   Do not make any changes (SAP entry)<br />
+*120   Other entries are retrieved and modified if necessary<br />
+*121   Deleted entry will be recovered and possibly changed<br />
+*122   Entry was delimited<br />
+*123   Number of delimited entries: &<br />
+*124   Process delimited entries<br />
+*125   Process delimited entry<br />
+*127   Delimit area of validity<br />
+*128   Delivery class &, transport not possible<br />
+*129   Related objects in various tasks<br />
+*130   Client & is local, transport not permitted<br />
+*132   Object locked for task &1, user &2 only display permitted<br />
+*134   Inconsistency in object definition, only display permitted<br />
+*136   Change with caution, entry belongs to customer<br />
+*138   Check maintenance object &1 or update function group &2<br />
+*139   Address data is not taken over<br />
+*140   &1 entries deleted, &2 entries taken over<br />
+*141   Individual entries cannot be put into the change request<br />
+*142   Transport is not possible for the specified data<br />
+*153   No language was chosen<br />
+*160   The installed system codepage does not allow any other languages<br />
+*161   Put the cursor on a form name<br />
+*162   The object &1 &2 &3 cannot be put in a request<br />
+*164   Table/view &1 is not in the Dictionary<br />
+*173   Function group &1 inconsistent<br />
+*174   Enter values in work area for non-key fields<br />
+*175   The selected BC Set function is not supported<br />
+*177   Data record contains fix value from BC Set and cannot be deleted<br />
+*183   Error in remote access to central Customizing Distribution system<br />
+*184   Data record contains fixed value from BC Set and cannot be changed<br />
+*202   You are not authorized to change fields with fixed BC Set values<br />
+*306   Table/view & is not active<br />
+*538   Dropdown lists are not supported in view clusters<br />
+*757   You have no maintenance authorization for this table key<br />
+*763   You have no maintenance authorization for the displayed data records<br />
+*764   Changed data record selection<br />
+*766   Restricted display of datasets<br />
+*808   Not all columns in the table can be displayed in the list<br />
+*810   View &1 is more than 1000 characters long<br />
+*818   &1 of &2 Business Configuration Set entries imported<br />
+*819   Business Configuration Set imported<br />
+*830   Last selected entry has been reached<br />
+*831   First selected entry has been reached<br />
+*<br />
+* Message class: TB<br />
+*109   No maintenance authorization for cross-client tables (see Help)<br />
+*<br />
+* Message class: TK<br />
+*430   Client &1 has status 'not modifiable'<br />
+*729   Changes to Repository objects are not permitted in this client<br />
+*730   Changes to Repository or cross-client Customizing are not permitted<br />
+*731   You are not allowed to change cross-client Customizing<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

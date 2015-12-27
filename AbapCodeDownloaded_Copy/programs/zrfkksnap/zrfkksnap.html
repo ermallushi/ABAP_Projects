@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRFKKSNAP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRFKKSNAP</h2>
+<h3> Description: Account Balance: Creation of Snapshots</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;RFKKSNAP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;This&nbsp;program&nbsp;creates&nbsp;snapshots&nbsp;of&nbsp;account&nbsp;balance&nbsp;displays&nbsp;(FPL9)&nbsp;&nbsp;&nbsp;*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT  ZRFKKSNAP MESSAGE-ID &gt;4.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;Data&nbsp;Definitions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+*&nbsp;tables<br />
+   </div>
+   <div class="code">
+TABLES: FKKEPOSC,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FKKOP,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TFK021_SNAP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;structures<br />
+   </div>
+   <div class="code">
+DATA:   COMMENTS    LIKE FKK_COMMENT OCCURS 0 WITH HEADER LINE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;internal&nbsp;tables<br />
+   </div>
+   <div class="code">
+DATA:   BEGIN OF LT_SELHEAD OCCURS 1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE&nbsp;STRUCTURE&nbsp;FKKEPOSS1.<br />
+DATA:   END   OF LT_SELHEAD.<br />
+DATA:   LT_TOTALS    LIKE FKKEPOS_TOTALS   OCCURS 10 WITH HEADER LINE.<br />
+DATA:   LT_POSTAB    LIKE FKKEPOS          OCCURS 10 WITH HEADER LINE.<br />
+DATA:   LT_ADDTOT    LIKE FKKEPOS_TOT      OCCURS 10 WITH HEADER LINE.<br />
+DATA:   LT_PAYMENTS  TYPE FKKEPOS_PAY_INT  OCCURS 2.<br />
+DATA:   LT_CLEARING  TYPE FKKEPOS_PAY_CLR  OCCURS 2.<br />
+DATA:   LT_ONACCOUNT TYPE FKKL8_ACO       OCCURS 2.<br />
+DATA:   LT_PYOTAB    TYPE DFKKPOH          OCCURS 2.<br />
+DATA:   LT_CHRTAB    TYPE FKKEPOS_CHR      OCCURS 2.<br />
+DATA:   LT_STATAB    TYPE FKKEPOS_SNAPSTAT OCCURS 2.<br />
+DATA:   BEGIN OF GPATAB OCCURS 1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPART&nbsp;&nbsp;TYPE&nbsp;GPART_KK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;OF&nbsp;GPATAB.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;fields<br />
+   </div>
+   <div class="code">
+DATA:   LD_VERSION(3) TYPE N.<br />
+DATA:   RFDTID_VERS   LIKE RFDT-SRTFD.<br />
+DATA:   RFDTID_SNAP   LIKE RFDT-SRTFD.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;version,&nbsp;sharing&nbsp;with&nbsp;FPL9<br />
+   </div>
+   <div class="code">
+INCLUDE LFKL9TO2.<br />
+<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+*&nbsp;Selection&nbsp;screen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+************************************************************************<br />
+*&nbsp;business&nbsp;partner<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK 1 WITH FRAME TITLE TEXT-001.<br />
+SELECT-OPTIONS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SO_GPART&nbsp;FOR&nbsp;&nbsp;FKKOP-GPART.<br />
+SELECTION-SCREEN END   OF BLOCK 1.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;process&nbsp;control<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN BEGIN OF BLOCK 2 WITH FRAME TITLE TEXT-002.<br />
+PARAMETERS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XECHT&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ALLGECHT&nbsp;DEFAULT&nbsp;'X'.<br />
+SELECTION-SCREEN END   OF BLOCK 2.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Size&nbsp;for&nbsp;packages&nbsp;in&nbsp;case&nbsp;of&nbsp;huge&nbsp;data&nbsp;volumes&nbsp;(Note&nbsp;1474340)<br />
+   </div>
+   <div class="code">
+parameters: p_size type i default 50000 no-display.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**************************************************************<br />
+*&nbsp;INITIALIZATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**************************************************************<br />
+*&nbsp;AT&nbsp;SELECTION-SCREEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**************************************************************<br />
+*&nbsp;START-OF-SELECTION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************<br />
+   </div>
+   <div class="code">
+START-OF-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;enqueue&nbsp;table&nbsp;TFK021_SNAP<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;enqueue&nbsp;TABLES&nbsp;so_gpart.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;table&nbsp;of&nbsp;GPARTs&nbsp;to&nbsp;be&nbsp;selected<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;TFK021_SNAP&nbsp;WHERE&nbsp;GPART&nbsp;IN&nbsp;SO_GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GPATAB-GPART&nbsp;=&nbsp;TFK021_SNAP-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;GPATAB.<br />
+&nbsp;&nbsp;ENDSELECT.<br />
+&nbsp;&nbsp;SORT&nbsp;GPATAB.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;control&nbsp;structure&nbsp;(for&nbsp;every&nbsp;call)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;FKKEPOSC-TCODE&nbsp;=&nbsp;'FPL9'.<br />
+&nbsp;&nbsp;FKKEPOSC-NOLST&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;FKKEPOSC-STAKZ&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"include&nbsp;all&nbsp;statistical&nbsp;items<br />
+&nbsp;&nbsp;FKKEPOSC-XNOAU&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;FKKEPOSC-XSNAP&nbsp;=&nbsp;'C'.<br />
+&nbsp;&nbsp;FKKEPOSC-XSTAP&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"include&nbsp;payment&nbsp;status<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;FKKEPOSC-XALLF&nbsp;=&nbsp;'X'.<br />
+<br />
+*&nbsp;start&nbsp;LOOP<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;GPATAB.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;prepare&nbsp;interface&nbsp;for&nbsp;collection<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;LT_SELHEAD,&nbsp;&nbsp;LT_SELHEAD[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;LT_TOTALS[],&nbsp;LT_POSTAB[],&nbsp;&nbsp;&nbsp;LT_ADDTOT[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_CHRTAB[],&nbsp;LT_PAYMENTS[],&nbsp;LT_PYOTAB[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LT_SELHEAD-GPART&nbsp;=&nbsp;GPATAB-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LT_SELHEAD-SELNR&nbsp;=&nbsp;'0001'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LT_SELHEAD-XAWOP&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LT_SELHEAD-XAWAP&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LT_SELHEAD.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;collect&nbsp;the&nbsp;data&nbsp;for&nbsp;each&nbsp;snapshot<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_LINE_ITEMS_WITH_SELECTIONS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING&nbsp;I_FKKEPOSC&nbsp;=&nbsp;FKKEPOSC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_SELHEAD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_SELHEAD<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_TOTALS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_TOTALS&nbsp;&nbsp;&nbsp;"calc&nbsp;from&nbsp;items<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_POSTAB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_POSTAB<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_CHRTAB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_CHRTAB&nbsp;&nbsp;&nbsp;"calc&nbsp;from&nbsp;items<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_PAYMENTS_INT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_PAYMENTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_PAYMENTS_CLR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_CLEARING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_PAYMENTS_ONA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_ONACCOUNT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_PAYMENT_ORDERS&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_PYOTAB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T_STATISTICS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;LT_STATAB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERROR_MESSAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;XECHT&nbsp;NE&nbsp;SPACE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;export&nbsp;version&nbsp;to&nbsp;RFDT&nbsp;(SNAPV&nbsp;with&nbsp;V&nbsp;like&nbsp;Version)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_VERS&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'FPL9/SNAPV/'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_VERS+11&nbsp;=&nbsp;GPATAB-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LD_VERSION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;GD_VERSION.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;LD_VERSION&nbsp;TO&nbsp;DATABASE&nbsp;RFDT(CA)&nbsp;ID&nbsp;RFDTID_VERS.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;export&nbsp;statistics&nbsp;to&nbsp;RFDT&nbsp;(SNAPS&nbsp;with&nbsp;S&nbsp;like&nbsp;Statistics)<br />
+*&nbsp;(separate&nbsp;from&nbsp;data,&nbsp;because&nbsp;statistics&nbsp;serve&nbsp;as&nbsp;a&nbsp;criteria&nbsp;if<br />
+*&nbsp;&nbsp;data&nbsp;should&nbsp;be&nbsp;imported&nbsp;from&nbsp;RFDT&nbsp;or&nbsp;rather&nbsp;actual)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_VERS&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'FPL9/SNAPS/'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_VERS+11&nbsp;=&nbsp;GPATAB-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;LT_STATAB&nbsp;TO&nbsp;DATABASE&nbsp;RFDT(CA)&nbsp;ID&nbsp;RFDTID_VERS.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;export&nbsp;all&nbsp;data&nbsp;to&nbsp;RFDT&nbsp;(SNAPD&nbsp;with&nbsp;D&nbsp;like&nbsp;Data)&nbsp;"Note&nbsp;1474340<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rfdtid_snap&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'FPL9/SNAPD/'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rfdtid_snap+11&nbsp;=&nbsp;gpatab-gpart.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;lt_postab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_payments<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_clearing<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_onaccount<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_pyotab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;DATABASE&nbsp;rfdt(ca)&nbsp;ID&nbsp;rfdtid_snap.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;perform&nbsp;snapshot_write_data(saplfkl9)&nbsp;tables&nbsp;lt_postab&nbsp;"Note&nbsp;1474340<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_PAYMENTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_CLEARING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_ONACCOUNT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_PYOTAB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;&nbsp;gpatab-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_size.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;test:&nbsp;extract&nbsp;only&nbsp;open&nbsp;items&nbsp;separately<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;LT_POSTAB&nbsp;WHERE&nbsp;AUGBL&nbsp;NE&nbsp;SPACE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_SNAP&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'FPL9/SNAPO/'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFDTID_SNAP+11&nbsp;=&nbsp;GPATAB-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;LT_POSTAB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_PAYMENTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_CLEARING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_ONACCOUNT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LT_PYOTAB<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TO&nbsp;DATABASE&nbsp;RFDT(CA)&nbsp;ID&nbsp;RFDTID_SNAP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;enter&nbsp;extraction&nbsp;time&nbsp;in&nbsp;TFK021_SNAP.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UPDATE&nbsp;TFK021_SNAP&nbsp;SET&nbsp;&nbsp;&nbsp;CPUDT&nbsp;=&nbsp;SY-DATUM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPUTM&nbsp;=&nbsp;SY-UZEIT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;GPART&nbsp;=&nbsp;GPATAB-GPART.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;fill&nbsp;comment&nbsp;table&nbsp;for&nbsp;ALV<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMENTS-TEXT100&nbsp;=&nbsp;TEXT-003.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&1'&nbsp;WITH&nbsp;GPATAB-GPART&nbsp;INTO&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;COMMENTS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMENTS-TEXT100&nbsp;=&nbsp;TEXT-004.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&1'&nbsp;WITH&nbsp;GPATAB-GPART&nbsp;INTO&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&2'&nbsp;WITH&nbsp;SY-MSGID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&3'&nbsp;WITH&nbsp;SY-MSGNO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;COMMENTS-TEXT100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;COMMENTS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;output:&nbsp;simple&nbsp;ALV<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;XECHT&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;WRITE_TEXT(RFKK_ALV_SIMPLE_TEXTS)&nbsp;TABLES&nbsp;COMMENTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;TEXT-T02.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;WRITE_TEXT(RFKK_ALV_SIMPLE_TEXTS)&nbsp;TABLES&nbsp;COMMENTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;TEXT-T01.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;ENQUEUE<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM enqueue TABLES iv_gpart STRUCTURE fkkr_gpart.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_sellist&nbsp;TYPE&nbsp;vimsellist,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_sellist&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;vimsellist.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;xecht&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;iv_gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lt_sellist,&nbsp;lt_sellist[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-viewfield&nbsp;=&nbsp;'GPART'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-operator&nbsp;&nbsp;=&nbsp;'GE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_gpart-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-ddic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-and_or&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'AND'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_sellist&nbsp;TO&nbsp;lt_sellist.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-viewfield&nbsp;=&nbsp;'GPART'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-operator&nbsp;&nbsp;=&nbsp;'LE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;iv_gpart-high&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_gpart-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;iv_gpart-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-ddic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sellist-and_or&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'AND'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_sellist&nbsp;TO&nbsp;lt_sellist.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_ENQUEUE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'E'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enqueue_mode&nbsp;&nbsp;=&nbsp;'E'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'TFK021_SNAP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enqueue_range&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sellist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sellist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign_lock&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "ENQUEUE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;Business&nbsp;Partner&nbsp;Selection<br />
+*&nbsp;002&nbsp;Processing&nbsp;Options<br />
+*&nbsp;003&nbsp;Snapshot&nbsp;for&nbsp;business&nbsp;partner&nbsp;&1&nbsp;successfully&nbsp;created<br />
+*&nbsp;004&nbsp;Error&nbsp;creating&nbsp;snapshot&nbsp;for&nbsp;business&nbsp;partner&nbsp;&1&nbsp;(error&nbsp;&2&nbsp;&3)<br />
+*&nbsp;T01&nbsp;Account&nbsp;Balance:&nbsp;Creation&nbsp;of&nbsp;Snapshots&nbsp;(Update&nbsp;Run)<br />
+*&nbsp;T02&nbsp;Account&nbsp;Balance:&nbsp;Creation&nbsp;of&nbsp;Snapshots&nbsp;(Test&nbsp;Run)<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;SO_GPART&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Business&nbsp;Partners<br />
+*&nbsp;XECHT&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update&nbsp;Run<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

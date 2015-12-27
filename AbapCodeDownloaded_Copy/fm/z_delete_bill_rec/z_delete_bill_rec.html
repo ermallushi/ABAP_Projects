@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Z_DELETE_BILL_REC</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function Z_DELETE_BILL_REC</h2>
+<h3> Description: Delete billable records</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION Z_DELETE_BILL_REC.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     REFERENCE(I_DATE) TYPE  DATS<br />
+*"     REFERENCE(I_VKONT) TYPE  CHAR12 OPTIONAL<br />
+*"     REFERENCE(I_GPART) TYPE  CHAR10 OPTIONAL<br />
+*"     REFERENCE(I_VTREF) TYPE  CHAR20 OPTIONAL<br />
+*"     REFERENCE(I_TEST) TYPE  BOOLEAN OPTIONAL<br />
+*"----------------------------------------------------------------------<br />
+<br />
+
+<div class="codeComment">*       <a href ="global-z_delete_bill_rec.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;ls_t_tables,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name(4)&nbsp;TYPE&nbsp;C,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ls_t_tables.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;BEGIN&nbsp;OF&nbsp;ls_t_lines,<br />
+   </div>
+   <div class="codeComment">
+*          VKONT(32) TYPE C,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BILL_FIRST&nbsp;TYPE&nbsp;DATS,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ls_t_lines.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_lines&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_t_lines.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_tables&nbsp;LIKE&nbsp;TABLE&nbsp;OF&nbsp;ls_t_tables.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_d_itab&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_tables.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ld_tableStr(256)&nbsp;TYPE&nbsp;C.<br />
+&nbsp;&nbsp;DATA:&nbsp;ld_tableWhereStr(256)&nbsp;TYPE&nbsp;C.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* performance timer<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;v_time_stamp01&nbsp;TYPE&nbsp;TIMESTAMPL.<br />
+&nbsp;&nbsp;DATA:&nbsp;v_time_stamp02&nbsp;TYPE&nbsp;TIMESTAMPL.<br />
+&nbsp;&nbsp;DATA:&nbsp;v_time_stamp1&nbsp;TYPE&nbsp;TIMESTAMPL.<br />
+&nbsp;&nbsp;DATA:&nbsp;v_time_stamp2&nbsp;TYPE&nbsp;TIMESTAMPL.<br />
+&nbsp;&nbsp;DATA:&nbsp;seconds&nbsp;TYPE&nbsp;I.<br />
+&nbsp;&nbsp;DATA:&nbsp;strTime&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA:&nbsp;strSeconds&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;OREF&nbsp;type&nbsp;ref&nbsp;to&nbsp;CX_SY_DYNAMIC_OSQL_SEMANTICS.<br />
+<br />
+&nbsp;&nbsp;GET&nbsp;TIME&nbsp;STAMP&nbsp;FIELD&nbsp;v_time_stamp01.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+* LOG file (SLG1)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;ls_log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bal_s_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lv_log_handle&nbsp;&nbsp;&nbsp;TYPE&nbsp;balloghndl.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lt_log_handle&nbsp;&nbsp;&nbsp;TYPE&nbsp;bal_t_logh,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_log_num&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bal_t_lgnm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lt_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;bal_s_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;ls_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lt_msg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_log-object&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Z_ALB_MD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_log-alprog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_CREATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_log_handle&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_header_inconsistent&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;'Error&nbsp;while&nbsp;creating&nbsp;log&nbsp;object!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;sy-subrc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*      WRITE: / 'Log object created...'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'MANDT&nbsp;='&nbsp;sy-mandt&nbsp;'AND&nbsp;(&nbsp;BITTYPE&nbsp;LIKE&nbsp;&nbsp;''Z%''&nbsp;OR&nbsp;&nbsp;BITTYPE&nbsp;LIKE&nbsp;''PM%''&nbsp;)&nbsp;AND&nbsp;POSTREL&nbsp;&lt;&gt;&nbsp;''X''&nbsp;AND&nbsp;PRINTREL&nbsp;&lt;&gt;&nbsp;''X''&nbsp;AND&nbsp;BILL_FIRST&nbsp;&lt;=&nbsp;I_DATE'&nbsp;INTO&nbsp;ld_tableWhereStr&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;I_VKONT&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ld_tableWhereStr&nbsp;'AND&nbsp;VKONT&nbsp;='&nbsp;I_VKONT&nbsp;INTO&nbsp;ld_tableWhereStr&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;I_GPART&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ld_tableWhereStr&nbsp;'AND&nbsp;GPART&nbsp;='&nbsp;I_GPART&nbsp;INTO&nbsp;ld_tableWhereStr&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;I_VTREF&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;ld_Var(64)&nbsp;TYPE&nbsp;C.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'''%'&nbsp;I_VTREF&nbsp;''''&nbsp;INTO&nbsp;ld_Var.&nbsp;"&nbsp;value&nbsp;is&nbsp;of&nbsp;string&nbsp;type&nbsp;so&nbsp;wrap&nbsp;it&nbsp;in&nbsp;quotation&nbsp;marks<br />
+   </div>
+   <div class="codeComment">
+*    ld_Var = I_VTREF. " value is of string type so wrap it in quotation marks<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ld_tableWhereStr&nbsp;'AND&nbsp;VTREF&nbsp;LIKE'&nbsp;ld_Var&nbsp;INTO&nbsp;ld_tableWhereStr&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+* get a list of all tables<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;BITCAT&nbsp;INTO&nbsp;TABLE&nbsp;lt_tables&nbsp;FROM&nbsp;TFK8101.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_tables&nbsp;INTO&nbsp;lt_d_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GET&nbsp;TIME&nbsp;STAMP&nbsp;FIELD&nbsp;v_time_stamp1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;TABLE&nbsp;“/1FE/0xxxx2IT“&nbsp;gdje&nbsp;je&nbsp;xxxx&nbsp;sadržaj&nbsp;polja&nbsp;TFK8101-BITCAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'/1FE/0'&nbsp;lt_d_itab-name&nbsp;'2IT'&nbsp;INTO&nbsp;ld_tableStr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;query_res&nbsp;TYPE&nbsp;INT4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;query_cnt&nbsp;TYPE&nbsp;INT4.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;squery_res&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;squery_cnt&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;strDbgTable&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;strDbgRecFound&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;strDbgErrorCode&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;I_TEST&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;I_TEST&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;BILL_FIRST&nbsp;INTO&nbsp;TABLE&nbsp;lt_lines&nbsp;FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ld_tableStr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ld_tableWhereStr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ld_tableStr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ld_tableWhereStr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* backup values cause cl_abap_tstmp=&gt;subtract might mess them up<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query_res&nbsp;=&nbsp;SY-SUBRC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query_cnt&nbsp;=&nbsp;SY-DBCNT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET&nbsp;TIME&nbsp;STAMP&nbsp;FIELD&nbsp;v_time_stamp2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seconds&nbsp;=&nbsp;cl_abap_tstmp=&gt;subtract(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp1&nbsp;=&nbsp;v_time_stamp2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp2&nbsp;=&nbsp;v_time_stamp1&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strSeconds&nbsp;=&nbsp;seconds.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Time&nbsp;spent:&nbsp;'&nbsp;strSeconds&nbsp;'seconds'&nbsp;INTO&nbsp;strTime&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;squery_cnt&nbsp;=&nbsp;query_cnt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;squery_res&nbsp;=&nbsp;query_res.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Table:'&nbsp;ld_tableStr&nbsp;INTO&nbsp;strDbgTable&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Records&nbsp;found:'&nbsp;squery_cnt&nbsp;INTO&nbsp;strDbgRecFound&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Error&nbsp;code:'&nbsp;squery_res&nbsp;INTO&nbsp;strDbgErrorCode&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;query_res&nbsp;=&nbsp;0.&nbsp;"&nbsp;If&nbsp;at&nbsp;least&nbsp;one&nbsp;line&nbsp;is&nbsp;deleted,&nbsp;the&nbsp;system&nbsp;sets&nbsp;SY-SUBRC&nbsp;to&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;ld_tableStr,&nbsp;query_cnt,&nbsp;'&nbsp;records&nbsp;found.&nbsp;',&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"SY-DBCNT&nbsp;contains&nbsp;the&nbsp;number&nbsp;of&nbsp;lines&nbsp;deleted.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;ls_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;=&nbsp;'398'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;=&nbsp;'Found&nbsp;some&nbsp;records!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;=&nbsp;strDbgTable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;=&nbsp;strDbgRecFound.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;=&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_msg&nbsp;TO&nbsp;lt_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;ld_tableStr,&nbsp;'&nbsp;error!&nbsp;',&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;ls_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;=&nbsp;'398'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;=&nbsp;'ERROR!!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;=&nbsp;strDbgTable.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;=&nbsp;strDbgErrorCode.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;=&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_msg&nbsp;TO&nbsp;lt_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;CX_SY_DYNAMIC_OSQL_SEMANTICS&nbsp;INTO&nbsp;OREF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET&nbsp;TIME&nbsp;STAMP&nbsp;FIELD&nbsp;v_time_stamp2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seconds&nbsp;=&nbsp;cl_abap_tstmp=&gt;subtract(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp1&nbsp;=&nbsp;v_time_stamp2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp2&nbsp;=&nbsp;v_time_stamp1&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strSeconds&nbsp;=&nbsp;seconds.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;oTEXT&nbsp;type&nbsp;STRING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oTEXT&nbsp;=&nbsp;OREF-&gt;GET_TEXT(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Time&nbsp;spent:&nbsp;'&nbsp;strSeconds&nbsp;'seconds'&nbsp;INTO&nbsp;strTime&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE:&nbsp;/&nbsp;ld_tableStr,&nbsp;'EXCEPTION',&nbsp;oTEXT,&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;ls_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgty&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgid&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgno&nbsp;=&nbsp;'398'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv1&nbsp;=&nbsp;'EXCEPTION!!'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv2&nbsp;=&nbsp;ld_tableStr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv3&nbsp;=&nbsp;oTEXT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_msg-msgv4&nbsp;=&nbsp;strTime.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_msg&nbsp;TO&nbsp;lt_msg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;GET&nbsp;TIME&nbsp;STAMP&nbsp;FIELD&nbsp;v_time_stamp02.<br />
+<br />
+&nbsp;&nbsp;seconds&nbsp;=&nbsp;cl_abap_tstmp=&gt;subtract(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp1&nbsp;=&nbsp;v_time_stamp02<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tstmp2&nbsp;=&nbsp;v_time_stamp01&nbsp;).<br />
+&nbsp;&nbsp;strSeconds&nbsp;=&nbsp;seconds.<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;'Total&nbsp;time:&nbsp;'&nbsp;strSeconds&nbsp;'seconds'&nbsp;INTO&nbsp;strTime&nbsp;SEPARATED&nbsp;BY&nbsp;SPACE.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;ls_msg.<br />
+&nbsp;&nbsp;ls_msg-msgty&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;ls_msg-msgid&nbsp;=&nbsp;'00'.<br />
+&nbsp;&nbsp;ls_msg-msgno&nbsp;=&nbsp;'398'.<br />
+&nbsp;&nbsp;ls_msg-msgv1&nbsp;=&nbsp;'FINISHED!'.<br />
+&nbsp;&nbsp;ls_msg-msgv2&nbsp;=&nbsp;strTime.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_msg&nbsp;TO&nbsp;lt_msg.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+* save LOG file<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_msg&nbsp;INTO&nbsp;ls_msg.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_LOG_MSG_ADD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_log_handle&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_s_msg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_msg<br />
+   </div>
+   <div class="codeComment">
+*      IMPORTING<br />
+*        E_S_MSG_HANDLE            = E_S_MSG_HANDLE<br />
+*        E_MSG_WAS_LOGGED          = E_MSG_WAS_LOGGED<br />
+*        E_MSG_WAS_DISPLAYED       = E_MSG_WAS_DISPLAYED<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg_inconsistent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_is_full&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*        CONCATENATE sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO DBG_CHAR SEPARATED BY SPACE.<br />
+*        WRITE: DBG_CHAR.<br />
+*        error_noflush( l_text1 = 'Error while flushing log queue (BAL_LOG_MSG_ADD)' l_text2 = DBG_CHAR ).<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Clear message queue<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;&nbsp;lt_msg.<br />
+<br />
+   </div>
+   <div class="codeComment">
+* Save Logs to DB<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;lv_log_handle&nbsp;INTO&nbsp;lt_log_handle&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAL_DB_SAVE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_client&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-mandt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save_all&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_t_log_handle&nbsp;&nbsp;&nbsp;=&nbsp;lt_log_handle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_new_lognumbers&nbsp;=&nbsp;lt_log_num<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log_not_found&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;save_not_allowed&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numbering_error&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*        CONCATENATE sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO DBG_CHAR SEPARATED BY SPACE.<br />
+*        WRITE: DBG_CHAR.<br />
+*        error_noflush( l_text1 = 'Error while flushing log queue (BAL_DB_SAVE)' l_text2 = DBG_CHAR ).<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*      WRITE: / 'Log Generated'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFUNCTION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

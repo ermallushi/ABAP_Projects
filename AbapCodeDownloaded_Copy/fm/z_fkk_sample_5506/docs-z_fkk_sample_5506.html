@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_5506</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_5506</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Beispiel&nbsp;5506:&nbsp;Prüfen,&nbsp;ob&nbsp;Ratenplan&nbsp;bestätigt&nbsp;werden&nbsp;muss<br />
+<br />
+&nbsp;trados&nbsp;=&nbsp;docu&nbsp;-&gt;&nbsp;fi&nbsp;-&gt;&nbsp;fica<br />
+FUNCTIONALITY <br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;processed&nbsp;in&nbsp;event&nbsp;5506&nbsp;decides&nbsp;whether&nbsp;an<br />
+&nbsp;installment&nbsp;plan&nbsp;has&nbsp;to&nbsp;be&nbsp;confirmed&nbsp;on&nbsp;creation.<br />
+&nbsp;The&nbsp;following&nbsp;document&nbsp;data&nbsp;is&nbsp;available:<br />
+&nbsp;<br />
+&nbsp;&lt;ZH&gt;I_FKKKO&lt;/&gt;,,,,Document&nbsp;header<br />
+&nbsp;&lt;ZH&gt;T_FKKOP&lt;/&gt;&nbsp;,,,,Business&nbsp;partner&nbsp;items<br />
+&nbsp;&lt;ZH&gt;T_FKKOPW&lt;/&gt;,,,,<br />
+&nbsp;Repetition&nbsp;specifications&nbsp;(installment&nbsp;plans,&nbsp;budget&nbsp;billing<br />
+&nbsp;plans)<br />
+&nbsp;&lt;ZH&gt;T_FFE_FKKOP&lt;/&gt;,,Installment&nbsp;plan&nbsp;charges<br />
+&nbsp;&lt;ZH&gt;T_INT_FKKOP&lt;/&gt;,,Installment&nbsp;plan&nbsp;interest<br />
+&nbsp;If&nbsp;a&nbsp;workflow&nbsp;is&nbsp;to&nbsp;be&nbsp;started&nbsp;for&nbsp;confirmation,&nbsp;you&nbsp;have&nbsp;to&nbsp;return&nbsp;the<br />
+&nbsp;reason&nbsp;for&nbsp;the&nbsp;confirmation&nbsp;required&nbsp;in&nbsp;the&nbsp;parameter&nbsp;&lt;ZH&gt;E_C4EYE&lt;/&gt;.<br />
+&nbsp;In&nbsp;parameter&nbsp;&lt;ZH&gt;E_C4LEV&lt;/&gt;,&nbsp;you&nbsp;can&nbsp;specify&nbsp;the&nbsp;number&nbsp;of<br />
+&nbsp;parallel&nbsp;checks&nbsp;to<br />
+&nbsp;be&nbsp;processed.<br />
+&nbsp;In&nbsp;the&nbsp;dual&nbsp;control&nbsp;principle,&nbsp;E_C4LEV&nbsp;has&nbsp;the&nbsp;value&nbsp;one,&nbsp;meaning&nbsp;that<br />
+&nbsp;one&nbsp;additional&nbsp;person&nbsp;must&nbsp;confirm&nbsp;the&nbsp;posting.&nbsp;In&nbsp;the&nbsp;triple&nbsp;control<br />
+&nbsp;principle,&nbsp;E_C4LEV&nbsp;must&nbsp;have&nbsp;the&nbsp;value&nbsp;2.&nbsp;The&nbsp;maximum&nbsp;possible&nbsp;value&nbsp;is<br />
+&nbsp;9.&nbsp;If&nbsp;no&nbsp;value&nbsp;is&nbsp;returned,&nbsp;1&nbsp;is&nbsp;set&nbsp;as&nbsp;the&nbsp;default&nbsp;value.<br />
+&nbsp;You&nbsp;can&nbsp;also&nbsp;return&nbsp;further&nbsp;data&nbsp;in&nbsp;&lt;ZH&gt;E_C4EYE_PAR&lt;/&gt;&nbsp;(optional);<br />
+&nbsp;you&nbsp;can&nbsp;use<br />
+&nbsp;this&nbsp;data&nbsp;for&nbsp;role&nbsp;resolution&nbsp;(determination&nbsp;of&nbsp;workflow&nbsp;addressees).<br />
+&nbsp;There&nbsp;are&nbsp;three&nbsp;fields&nbsp;of&nbsp;length&nbsp;20&nbsp;available.&nbsp;You&nbsp;define&nbsp;the&nbsp;meaning&nbsp;of<br />
+&nbsp;these&nbsp;fields&nbsp;specific&nbsp;to&nbsp;the&nbsp;installation.<br />
+EXAMPLE <br />
+&nbsp;If&nbsp;the&nbsp;recipients&nbsp;of&nbsp;the&nbsp;workflow&nbsp;are&nbsp;to&nbsp;be&nbsp;determined&nbsp;dependent&nbsp;on&nbsp;the<br />
+&nbsp;company&nbsp;code&nbsp;of&nbsp;the&nbsp;business&nbsp;partner&nbsp;item&nbsp;and&nbsp;an&nbsp;amount&nbsp;category,&nbsp;you<br />
+&nbsp;can&nbsp;return&nbsp;the&nbsp;company&nbsp;code&nbsp;in&nbsp;the&nbsp;field&nbsp;&lt;ZH&gt;E_C4EYE_PAR-WFP01&lt;/&gt;<br />
+&nbsp;and&nbsp;the<br />
+&nbsp;amount&nbsp;category,&nbsp;for&nbsp;example,<br />
+&nbsp;<br />
+&nbsp;1&nbsp;Amounts&nbsp;to&nbsp;500&nbsp;EUR<br />
+&nbsp;2&nbsp;Amounts&nbsp;to&nbsp;5000&nbsp;EUR<br />
+&nbsp;3&nbsp;Amounts&nbsp;over&nbsp;5000&nbsp;ER<br />
+&nbsp;in&nbsp;parameter&nbsp;&lt;ZH&gt;E_C4EYE_PAR-WFP02&lt;/&gt;.<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_APPLIST                        Approval Using Approval List<br />
+E_C4EYE                          Reason for Required Confirmation<br />
+E_C4EYE_PAR                      Additional Parameters for Role Determination<br />
+E_C4LEV                          Number of Parallel Checks<br />
+T_INT_FKKOP                      Installment Plan Interest<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

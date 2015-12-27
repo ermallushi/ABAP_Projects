@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_5070</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_5070</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;Ausbuchen:&nbsp;Steuerzeilen&nbsp;(Besonderheiten)<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;processed&nbsp;in&nbsp;event&nbsp;5070&nbsp;is&nbsp;called&nbsp;up&nbsp;before&nbsp;posting<br />
+&nbsp;during&nbsp;the&nbsp;writing-off&nbsp;process.&nbsp;Here,&nbsp;you&nbsp;can&nbsp;carry&nbsp;out&nbsp;special&nbsp;checks<br />
+&nbsp;and&nbsp;changes&nbsp;to&nbsp;tax&nbsp;items.<br />
+&nbsp;The&nbsp;write-off&nbsp;information&nbsp;and&nbsp;the&nbsp;items&nbsp;to&nbsp;be&nbsp;written&nbsp;off&nbsp;are&nbsp;provided.<br />
+&nbsp;Table&nbsp;&lt;ZH&gt;T_FKKOPK&lt;/&gt;&nbsp;contains&nbsp;the&nbsp;tax&nbsp;items&nbsp;for&nbsp;the&nbsp;write-off&nbsp;document.<br />
+&nbsp;The&nbsp;additional&nbsp;parameters&nbsp;provide&nbsp;the&nbsp;information&nbsp;for&nbsp;the&nbsp;items&nbsp;written<br />
+&nbsp;off&nbsp;and&nbsp;the&nbsp;information&nbsp;about&nbsp;whether&nbsp;there&nbsp;is&nbsp;a&nbsp;tax&nbsp;item&nbsp;in&nbsp;a&nbsp;document<br />
+&nbsp;to&nbsp;be&nbsp;written&nbsp;off.<br />
+EXAMPLE <br />
+&nbsp;<br />
+HINTS <br />
+&nbsp;In&nbsp;event&nbsp;&lt;ZH&gt;5075&lt;/&gt;,&nbsp;you&nbsp;can&nbsp;make&nbsp;changes&nbsp;to&nbsp;revenue&nbsp;items.<br />
+FURTHER_SOURCES_OF_INF <br />
+&nbsp;<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+C_TAX_EXIST                      Data Element for BOOLE Domain: TRUE (='X') and FALSE (=' ')<br />
+I_AUGBW                          Clearing Amount in Transaction Currency (With +/- Sign)<br />
+I_FKKCL                          Clearing Items for Document in Contract Accounts Receivable and Payable<br />
+T_FKKCL_SPLIT                    Business Partner Items: Amount and Currency<br />
+T_FKKOPK                         G/L Account Items in Open Item Account Document<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

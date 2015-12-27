@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZSD_PGI</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for function ZSD_PGI</h2>
+<h3> Description: post good issue</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+function zsd_pgi.<br />
+   </div>
+   <div class="codeComment">
+*"----------------------------------------------------------------------<br />
+*"*"Local Interface:<br />
+*"  IMPORTING<br />
+*"     VALUE(EVENT) LIKE  SWETYPECOU-EVENT<br />
+*"     VALUE(RECTYPE) LIKE  SWETYPECOU-RECTYPE<br />
+*"     VALUE(OBJTYPE) LIKE  SWETYPECOU-OBJTYPE<br />
+*"     VALUE(OBJKEY) LIKE  SWEINSTCOU-OBJKEY<br />
+*"     VALUE(EXCEPTIONS_ALLOWED) LIKE  SWEFLAGS-EXC_OK DEFAULT SPACE<br />
+*"  EXPORTING<br />
+*"     VALUE(REC_ID) LIKE  SWELOG-RECID<br />
+*"  TABLES<br />
+*"      EVENT_CONTAINER STRUCTURE  SWCONT<br />
+*"  EXCEPTIONS<br />
+*"      READ_FAILED<br />
+*"      CREATE_FAILED<br />
+*"----------------------------------------------------------------------<br />
+
+<div class="codeComment">*       <a href ="global-zsd_pgi.html">Global data declarations</a></div><br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;tables&nbsp;:&nbsp;shp_idx_gdsi&nbsp;,vbfa&nbsp;,&nbsp;lips,&nbsp;likp&nbsp;.<br />
+&nbsp;&nbsp;data&nbsp;:&nbsp;i_goodis&nbsp;&nbsp;like&nbsp;lipov&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_success&nbsp;like&nbsp;lipov&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_error&nbsp;&nbsp;&nbsp;like&nbsp;lipov&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wt_lips&nbsp;&nbsp;&nbsp;type&nbsp;table&nbsp;of&nbsp;lips&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbfs&nbsp;&nbsp;&nbsp;&nbsp;like&nbsp;vbfs&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_vbeln&nbsp;type&nbsp;vbeln&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lfart&nbsp;type&nbsp;lfart&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_pgi&nbsp;like&nbsp;zsd_autopgi&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_objkey&nbsp;type&nbsp;vbeln&nbsp;.<br />
+<br />
+&nbsp;&nbsp;data&nbsp;x(1)&nbsp;type&nbsp;c&nbsp;.<br />
+&nbsp;&nbsp;x&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;WHILE&nbsp;X&nbsp;=&nbsp;'X'&nbsp;.<br />
+&nbsp;&nbsp;ENDWHILE&nbsp;.<br />
+&nbsp;&nbsp;include&nbsp;&lt;cntn01&gt;.<br />
+&nbsp;&nbsp;swc_container&nbsp;container.<br />
+&nbsp;&nbsp;unpack&nbsp;objkey&nbsp;to&nbsp;i_objkey.<br />
+&nbsp;&nbsp;refresh&nbsp;wt_lips.<br />
+&nbsp;&nbsp;select&nbsp;*&nbsp;into&nbsp;table&nbsp;wt_lips<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;lips<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;vbeln&nbsp;eq&nbsp;i_objkey.<br />
+&nbsp;&nbsp;check&nbsp;sy-subrc&nbsp;is&nbsp;initial.<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;lfart&nbsp;from&nbsp;likp&nbsp;into&nbsp;lv_lfart&nbsp;where&nbsp;vbeln&nbsp;=&nbsp;i_objkey.<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;from&nbsp;zsd_autopgi&nbsp;into&nbsp;ls_pgi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;lfart&nbsp;eq&nbsp;lv_lfart&nbsp;.<br />
+&nbsp;&nbsp;check&nbsp;not&nbsp;ls_pgi-zcheck&nbsp;is&nbsp;initial.<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;wt_lips.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_goodis-vbeln&nbsp;=&nbsp;wt_lips-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_goodis-posnr&nbsp;=&nbsp;wt_lips-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_goodis-matnr&nbsp;=&nbsp;wt_lips-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_goodis-werks&nbsp;=&nbsp;wt_lips-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_goodis-lgort&nbsp;=&nbsp;wt_lips-lgort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;append&nbsp;i_goodis.<br />
+&nbsp;&nbsp;endloop.<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'WS_LM_GOODS_MOVEMENT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if_bitype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'N'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if_wadat_ist&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_worktab&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_goodis<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_success&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_success<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_error<br />
+   </div>
+   <div class="codeComment">
+*     ET_TVST       =<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et_vbfs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbfs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_permission&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;is&nbsp;&nbsp;initial.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'BAPI_TRANSACTION_COMMIT'.<br />
+&nbsp;&nbsp;else.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'BAPI_TRANSACTION_ROLLBACK'.<br />
+&nbsp;&nbsp;endif.<br />
+endfunction.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 700</td>
+   </tr>
+</table>
+</body>
+</html>

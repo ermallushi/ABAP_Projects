@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>Documentation - Z_FKK_SAMPLE_0300</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: Documentation - Z_FKK_SAMPLE_0300</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+SHORT TEXT<br />
+&nbsp;INTERN&nbsp;FI-CA&nbsp;Mahnen:&nbsp;Mahnvorschlag&nbsp;nachbearbeiten<br />
+<br />
+FUNCTIONALITY <br />
+&nbsp;The&nbsp;function&nbsp;module&nbsp;called&nbsp;up&nbsp;at&nbsp;event&nbsp;0300&nbsp;enables&nbsp;you&nbsp;to&nbsp;postprocess<br />
+&nbsp;the&nbsp;dunning&nbsp;proposal&nbsp;created&nbsp;in&nbsp;the&nbsp;dunning&nbsp;proposal&nbsp;run.<br />
+&nbsp;Notes&nbsp;for&nbsp;Programming<br />
+&nbsp;Internal&nbsp;table&nbsp;&lt;ZH&gt;I_FKKMAGRP&lt;/&gt;&nbsp;contains&nbsp;the&nbsp;dunning&nbsp;group&nbsp;that&nbsp;later<br />
+&nbsp;corresponds&nbsp;to&nbsp;the&nbsp;dunning&nbsp;header&nbsp;in&nbsp;the&nbsp;dunning&nbsp;proposal.&nbsp;Internal<br />
+&nbsp;table&nbsp;&lt;ZH&gt;I_FKKMAVS&lt;/&gt;&nbsp;contains&nbsp;the&nbsp;dunnable&nbsp;items&nbsp;which&nbsp;then&nbsp;form&nbsp;the<br />
+&nbsp;dunning&nbsp;items&nbsp;in&nbsp;the&nbsp;dunning&nbsp;proposal.<br />
+&nbsp;The&nbsp;reference&nbsp;is&nbsp;created&nbsp;via&nbsp;field&nbsp;&lt;ZH&gt;MGRPX&lt;/&gt;,&nbsp;which&nbsp;is&nbsp;contained&nbsp;in<br />
+&nbsp;both&nbsp;structures.<br />
+&nbsp;The&nbsp;dunning&nbsp;groups&nbsp;that&nbsp;arise&nbsp;in&nbsp;this&nbsp;event&nbsp;do&nbsp;not&nbsp;necessarily&nbsp;form<br />
+&nbsp;dunning&nbsp;notices.&nbsp;Dunning&nbsp;groups&nbsp;where&nbsp;either&nbsp;of&nbsp;the&nbsp;table&nbsp;fields<br />
+&nbsp;&lt;ZH&gt;XLMST&lt;/&gt;&nbsp;or&nbsp;&lt;ZH&gt;XMGRH&lt;/&gt;&nbsp;is&nbsp;set&nbsp;are&nbsp;ignored&nbsp;for&nbsp;the&nbsp;creation&nbsp;of&nbsp;the<br />
+&nbsp;dunning&nbsp;proposal.<br />
+&nbsp;These&nbsp;fields&nbsp;can&nbsp;also&nbsp;be&nbsp;set&nbsp;in&nbsp;this&nbsp;event&nbsp;in&nbsp;order&nbsp;to&nbsp;integrate<br />
+&nbsp;additional&nbsp;dunning&nbsp;notices.<br />
+&nbsp;The&nbsp;dunning&nbsp;levels&nbsp;set&nbsp;by&nbsp;the&nbsp;dunning&nbsp;program&nbsp;are&nbsp;available&nbsp;in&nbsp;field<br />
+&nbsp;&lt;ZH&gt;MAHNN&lt;/&gt;.&nbsp;You&nbsp;can&nbsp;also&nbsp;change&nbsp;them&nbsp;there&nbsp;if&nbsp;necessary.&nbsp;If&nbsp;you&nbsp;do<br />
+&nbsp;modify&nbsp;them,&nbsp;you&nbsp;should&nbsp;also&nbsp;modify&nbsp;the&nbsp;field&nbsp;&lt;ZH&gt;MSTNN&lt;/&gt;&nbsp;(new&nbsp;dunning<br />
+&nbsp;level&nbsp;type).<br />
+&nbsp;The&nbsp;dunning&nbsp;levels&nbsp;of&nbsp;the&nbsp;documents&nbsp;before&nbsp;dunning&nbsp;are&nbsp;contained&nbsp;in<br />
+&nbsp;field&nbsp;&lt;ZH&gt;MAHNS&lt;/&gt;&nbsp;for&nbsp;information&nbsp;purposes.<br />
+&nbsp;If&nbsp;you&nbsp;want&nbsp;to&nbsp;make&nbsp;changes&nbsp;to&nbsp;dunning&nbsp;notices&nbsp;in&nbsp;event&nbsp;0300,&nbsp;you&nbsp;have<br />
+&nbsp;to&nbsp;write&nbsp;corresponding&nbsp;messages&nbsp;in&nbsp;the&nbsp;application&nbsp;log&nbsp;of&nbsp;the&nbsp;mass<br />
+&nbsp;activity,&nbsp;since&nbsp;a&nbsp;message&nbsp;about&nbsp;the&nbsp;creation&nbsp;of&nbsp;a&nbsp;duning&nbsp;notice&nbsp;may&nbsp;have<br />
+&nbsp;already&nbsp;been&nbsp;written&nbsp;to&nbsp;the&nbsp;log&nbsp;(in&nbsp;event&nbsp;0302).<br />
+&nbsp;<br />
+&nbsp;INCLUDE&nbsp;FICA_HINW_EVENT&nbsp;OBJECT&nbsp;DOKU&nbsp;ID&nbsp;TX<br />
+<br />
+   </div>
+   <div class="codeComment">
+*PARAMETER&nbsp;DOCUMENTATION<br />
+*-----------------------<br />
+<br />
+   </div>
+   <div class="code">
+I_FKKMARED                       Dunning: Structure for Dunning Reductions<br />
+I_FKKMAVS                        Dunning Proposal<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

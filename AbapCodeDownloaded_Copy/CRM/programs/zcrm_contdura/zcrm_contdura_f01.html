@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZCRM_CONTDURA_F01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZCRM_CONTDURA_F01</h2>
+<h3> Description: Include ZCRM_CONTDURA_F01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZCRM_CONTDURA_F01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FETCH_DATA_ITA3<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fetch_data_ita3 .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fetch&nbsp;data&nbsp;from&nbsp;table&nbsp;crmd_ist_ita3...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;h~a3extref&nbsp;i~guid&nbsp;s~txt_pub_id&nbsp;i~order_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_ita3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;crmd_ist_ita3&nbsp;AS&nbsp;h<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;crmd_orderadm_i&nbsp;AS&nbsp;i&nbsp;ON&nbsp;h~guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;i~guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;crmd_link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;c&nbsp;ON&nbsp;i~guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQ&nbsp;c~guid_hi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;scapptseg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AS&nbsp;s&nbsp;ON&nbsp;c~guid_set&nbsp;EQ&nbsp;s~appl_guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;h~a3extref&nbsp;&nbsp;IN&nbsp;s_contr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;h~a3extref&nbsp;&nbsp;&nbsp;&nbsp;NE&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;c~objtype_set&nbsp;EQ&nbsp;'30'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;s~appt_type&nbsp;&nbsp;&nbsp;EQ&nbsp;'CONTDURA'.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;SORT&nbsp;gt_ita3&nbsp;BY&nbsp;a3extref.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SORT&nbsp;gt_ita3&nbsp;BY&nbsp;a3extref&nbsp;DESCENDING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order_date&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;gt_cont_num&nbsp;=&nbsp;gt_ita3.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;sort&nbsp;gt_cont_num&nbsp;by&nbsp;order_date&nbsp;DESCENDING.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;GT_CONT_NUM&nbsp;COMPARING&nbsp;a3extref.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;gt_cont_num&nbsp;COMPARING&nbsp;a3extref.<br />
+<br />
+**&nbsp;Fetch&nbsp;the&nbsp;status&nbsp;of&nbsp;contracts&nbsp;from&nbsp;table&nbsp;crm_jest...<br />
+*&nbsp;&nbsp;SELECT&nbsp;objnr&nbsp;FROM&nbsp;crm_jest&nbsp;INTO&nbsp;TABLE&nbsp;gt_jest<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;gt_ita3<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objnr&nbsp;EQ&nbsp;gt_ita3-guid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;stat&nbsp;&nbsp;EQ&nbsp;'I1032'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;inact&nbsp;EQ&nbsp;space.<br />
+*<br />
+*&nbsp;&nbsp;SORT&nbsp;gt_jest&nbsp;BY&nbsp;objnr.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " FETCH_DATA_ITA3<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data .<br />
+&nbsp;&nbsp;DATA&nbsp;lv_stat&nbsp;TYPE&nbsp;crm_jest-stat.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_val_size.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_cont_num&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_cont_num.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_ita3&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_ita3&nbsp;WHERE&nbsp;a3extref&nbsp;EQ&nbsp;gr_cont_num-&gt;a3extref.<br />
+<br />
+*&nbsp;Check&nbsp;the&nbsp;cancellation&nbsp;from&nbsp;status&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;stat&nbsp;FROM&nbsp;crm_jest&nbsp;INTO&nbsp;lv_stat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;objnr&nbsp;EQ&nbsp;gr_cont_num-&gt;guid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;stat&nbsp;&nbsp;EQ&nbsp;'I1032'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;inact&nbsp;EQ&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;convert_txt_id.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " PROCESS_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CONVERT_TXT_ID<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM convert_txt_id.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Convert&nbsp;ruleid&nbsp;in&nbsp;scapptseg&nbsp;in&nbsp;duration&nbsp;format.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;lv_endian&nbsp;&nbsp;TYPE&nbsp;abap_endian,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_count&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_2_count&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_byte&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;x.<br />
+<br />
+&nbsp;&nbsp;FIELD-SYMBOLS:&nbsp;&lt;xvalue&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xvalue_temp&gt;&nbsp;TYPE&nbsp;x,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xcontainer&gt;&nbsp;&nbsp;TYPE&nbsp;x.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_duration_rule&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;crmt_date_duration_as_rule.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_duration_rule.<br />
+<br />
+&nbsp;&nbsp;lv_endian&nbsp;=&nbsp;gr_cont_num-&gt;txt_pub_id+18(1).<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gv_endian_val&nbsp;=&nbsp;lv_endian&nbsp;AND&nbsp;gv_char_size&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;ls_duration_rule&nbsp;TO&nbsp;&lt;xvalue&gt;&nbsp;CASTING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;gr_cont_num-&gt;txt_pub_id&nbsp;TO&nbsp;&lt;xcontainer&gt;&nbsp;CASTING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xvalue&gt;&nbsp;=&nbsp;&lt;xcontainer&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_duration_rule-time_unit+11.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;gv_endian_val&nbsp;&lt;&gt;&nbsp;lv_endian&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;gv_endian_val&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;lv_endian&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;gv_char_size&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;ls_duration_rule&nbsp;TO&nbsp;&lt;xvalue&gt;&nbsp;CASTING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;gr_cont_num-&gt;txt_pub_id&nbsp;TO&nbsp;&lt;xcontainer&gt;&nbsp;CASTING.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xvalue&gt;&nbsp;=&nbsp;&lt;xcontainer&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ASSIGN&nbsp;&lt;xvalue&gt;+6(8)&nbsp;TO&nbsp;&lt;xvalue_temp&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_count&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DO&nbsp;4&nbsp;TIMES.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_2_count&nbsp;=&nbsp;lv_count&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_byte&nbsp;=&nbsp;&lt;xvalue_temp&gt;+lv_count(1).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xvalue_temp&gt;+lv_count(1)&nbsp;=&nbsp;&lt;xvalue_temp&gt;+lv_2_count(1).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xvalue_temp&gt;+lv_2_count(1)&nbsp;=&nbsp;lv_byte.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_byte.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_count&nbsp;=&nbsp;lv_count&nbsp;+&nbsp;2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDDO.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_duration_rule-time_unit+11.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;lv_endian&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_abap_container_utilities=&gt;read_container_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;im_container&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gr_cont_num-&gt;txt_pub_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex_value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_duration_rule<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;illegal_parameter_type&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;ID&nbsp;sy-msgid&nbsp;TYPE&nbsp;sy-msgty&nbsp;NUMBER&nbsp;sy-msgno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;sy-msgv1&nbsp;sy-msgv2&nbsp;sy-msgv3&nbsp;sy-msgv4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;CHECK&nbsp;ls_duration_rule-time_unit&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Set&nbsp;the&nbsp;duration&nbsp;to&nbsp;the&nbsp;internal&nbsp;table...<br />
+   </div>
+   <div class="code">
+&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;gt_contdura&nbsp;REFERENCE&nbsp;INTO&nbsp;gr_contdura.<br />
+<br />
+&nbsp;&nbsp;gr_contdura-&gt;duration&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_duration_rule-duration.<br />
+&nbsp;&nbsp;gr_contdura-&gt;time_unit&nbsp;&nbsp;&nbsp;=&nbsp;ls_duration_rule-time_unit.<br />
+&nbsp;&nbsp;gr_contdura-&gt;contract_no&nbsp;=&nbsp;gr_cont_num-&gt;a3extref.<br />
+&nbsp;&nbsp;gr_contdura-&gt;datum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_datum.<br />
+&nbsp;&nbsp;gr_contdura-&gt;uzeit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_uzeit.<br />
+&nbsp;&nbsp;gr_contdura-&gt;uname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;gr_contdura-&gt;guid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gr_cont_num-&gt;guid.<br />
+&nbsp;&nbsp;gr_contdura-&gt;order_date&nbsp;&nbsp;=&nbsp;gr_cont_num-&gt;order_date.<br />
+<br />
+ENDFORM.                    " CONVERT_TXT_ID<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;INSERT_INTODB<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM insert_intodb.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;First&nbsp;delete&nbsp;the&nbsp;data&nbsp;from&nbsp;db&nbsp;and&nbsp;then&nbsp;insert&nbsp;the&nbsp;fetched&nbsp;data...<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;s_contr[]&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;zcrm_contdura.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;INSERT&nbsp;zcrm_contdura&nbsp;FROM&nbsp;TABLE&nbsp;gt_contdura&nbsp;ACCEPTING&nbsp;DUPLICATE&nbsp;KEYS.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;MODIFY&nbsp;zcrm_contdura&nbsp;FROM&nbsp;TABLE&nbsp;gt_contdura.<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+<br />
+&nbsp;&nbsp;MESSAGE&nbsp;text-001&nbsp;TYPE&nbsp;'S'.<br />
+ENDFORM.                    " INSERT_INTODB<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_DATE_TIME<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_date_time .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;set&nbsp;current&nbsp;date&nbsp;and&nbsp;time.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gv_datum&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;gv_uzeit&nbsp;=&nbsp;sy-uzeit.<br />
+ENDFORM.                    " SET_DATE_TIME<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_VAL_SIZE<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_val_size .<br />
+<br />
+&nbsp;&nbsp;gv_char_size&nbsp;&nbsp;=&nbsp;cl_abap_char_utilities=&gt;charsize.<br />
+&nbsp;&nbsp;gv_endian_val&nbsp;=&nbsp;cl_abap_char_utilities=&gt;endian&nbsp;.<br />
+ENDFORM.                    " GET_VAL_SIZE<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

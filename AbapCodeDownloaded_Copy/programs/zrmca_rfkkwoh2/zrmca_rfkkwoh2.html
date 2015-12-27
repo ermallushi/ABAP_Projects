@@ -1,0 +1,1739 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZRMCA_RFKKWOH2</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZRMCA_RFKKWOH2</h2>
+<h3> Description: Display Write-Off History</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZRMCA_RFKKWOH2<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Eyup&nbsp;Ozdener<br />
+*&&nbsp;Creation&nbsp;date:&nbsp;29.10.2014<br />
+*&&nbsp;Project&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Display&nbsp;Wrife-Off&nbsp;History<br />
+*&&nbsp;Definition&nbsp;&nbsp;&nbsp;:&nbsp;Copied&nbsp;from&nbsp;RFKKWOH2&nbsp;to&nbsp;add&nbsp;field&nbsp;business&nbsp;area<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT  zrmca_rfkkwoh2.<br />
+<br />
+CONSTANTS: co_checked TYPE boolean VALUE 'X'.<br />
+CONSTANTS: co_unchecked TYPE boolean VALUE ' '.<br />
+<br />
+include <a href ="zrmca_kwoh2top.html">zrmca_kwoh2top</a>.<br />
+<br />
+TABLES: dfkkwoh, fkkop.<br />
+TABLES: fkk_enh_vtref.<br />
+DATA:   i_fbstab LIKE tfkfbc        OCCURS 10 WITH HEADER LINE.<br />
+DATA:   BEGIN  OF events,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1201&nbsp;&nbsp;&nbsp;LIKE&nbsp;tfkfbc-funcc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;&nbsp;OF&nbsp;events.<br />
+DATA:   gv_active TYPE xfeld.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;gt_where&nbsp;OCCURS&nbsp;0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line(72)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gt_where.<br />
+<br />
+DATA  zeile_gt_outtab TYPE i.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;------&nbsp;Selection&nbsp;Screen&nbsp;---------------------------------------------*<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN SKIP 1.<br />
+SELECTION-SCREEN BEGIN OF BLOCK rahmen1 WITH FRAME TITLE text-001.<br />
+SELECTION-SCREEN BEGIN OF BLOCK rahmen2 WITH FRAME TITLE text-002.<br />
+SELECT-OPTIONS:<br />
+&nbsp;&nbsp;gpart&nbsp;FOR&nbsp;dfkkwoh-gpart,<br />
+&nbsp;&nbsp;vkont&nbsp;FOR&nbsp;dfkkwoh-vkont,<br />
+&nbsp;&nbsp;vtref&nbsp;FOR&nbsp;fkkop-vtref&nbsp;MODIF&nbsp;ID&nbsp;vtr,<br />
+&nbsp;&nbsp;abbel&nbsp;FOR&nbsp;dfkkwoh-abbel,<br />
+&nbsp;&nbsp;opbel&nbsp;FOR&nbsp;dfkkwoh-opbel,<br />
+&nbsp;&nbsp;abdat&nbsp;FOR&nbsp;dfkkwoh-abdat.<br />
+PARAMETERS: p_laufd LIKE dfkkwoh-laufd MODIF ID 095,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi&nbsp;LIKE&nbsp;dfkkwoh-laufi&nbsp;MODIF&nbsp;ID&nbsp;095.<br />
+SELECTION-SCREEN END OF BLOCK rahmen2.<br />
+SELECTION-SCREEN BEGIN OF BLOCK rahmen3 WITH FRAME TITLE text-003.<br />
+PARAMETERS: xrvsd LIKE dfkkwoh-xrvsd DEFAULT co_checked,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xstkz&nbsp;TYPE&nbsp;xstkz_kk&nbsp;DEFAULT&nbsp;co_checked.<br />
+SELECTION-SCREEN END OF BLOCK rahmen3.<br />
+SELECTION-SCREEN BEGIN OF BLOCK rahmen4 WITH FRAME TITLE text-004.<br />
+PARAMETERS:<br />
+&nbsp;&nbsp;p_full&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dsp,<br />
+&nbsp;&nbsp;p_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dsp,<br />
+&nbsp;&nbsp;p_vari&nbsp;TYPE&nbsp;disvariant-variant&nbsp;DEFAULT&nbsp;co_unchecked.<br />
+SELECTION-SCREEN END OF BLOCK rahmen4.<br />
+SELECTION-SCREEN END OF BLOCK rahmen1.<br />
+<br />
+SET TITLEBAR 'WOH'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS&nbsp;lcl_handle_events&nbsp;DEFINITION<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local&nbsp;class&nbsp;to&nbsp;handle&nbsp;alv&nbsp;events&nbsp;(user_command,&nbsp;link_click)<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+CLASS lcl_handle_events DEFINITION.<br />
+&nbsp;&nbsp;PUBLIC&nbsp;SECTION.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS:&nbsp;on_user_command&nbsp;FOR&nbsp;EVENT&nbsp;added_function&nbsp;OF&nbsp;cl_salv_events<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING&nbsp;e_salv_function.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS:&nbsp;on_link_click&nbsp;FOR&nbsp;EVENT&nbsp;link_click&nbsp;OF&nbsp;cl_salv_events_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING&nbsp;row&nbsp;column.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS:&nbsp;on_double_click&nbsp;FOR&nbsp;EVENT&nbsp;double_click&nbsp;OF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_events_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING&nbsp;row&nbsp;column.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLASS-METHODS:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_r_table&nbsp;IMPORTING&nbsp;im_r_table&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_table.<br />
+<br />
+&nbsp;&nbsp;PRIVATE&nbsp;SECTION.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLASS-DATA:&nbsp;r_table&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_table.<br />
+ENDCLASS.                    "lcl_handle_events DEFINITION<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS&nbsp;lcl_handle_events&nbsp;IMPLEMENTATION<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lokale&nbsp;Klasse,&nbsp;die&nbsp;die&nbsp;AlV&nbsp;Events&nbsp;verarbeitet<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+CLASS lcl_handle_events IMPLEMENTATION.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*on_user_command&nbsp;is&nbsp;activated&nbsp;when&nbsp;user&nbsp;hits&nbsp;one&nbsp;of&nbsp;the&nbsp;status&nbsp;buttons*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;METHOD&nbsp;on_user_command.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;r_selection&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_selections.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;cell&nbsp;TYPE&nbsp;salv_s_cell.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****gets&nbsp;the&nbsp;selected&nbsp;cell&nbsp;and&nbsp;hands&nbsp;it&nbsp;over&nbsp;to&nbsp;user_command****<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;r_selection&nbsp;=&nbsp;r_table-&gt;get_selections(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cell&nbsp;=&nbsp;r_selection-&gt;get_current_cell(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;user_command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;e_salv_function&nbsp;cell.<br />
+<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"on_user_command<br />
+<br />
+   </div>
+   <div class="codeComment">
+*on_link_click&nbsp;is&nbsp;activated&nbsp;when&nbsp;a&nbsp;hotspot&nbsp;is&nbsp;clicked*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;METHOD&nbsp;on_link_click.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;link_click&nbsp;USING&nbsp;row&nbsp;column.<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"on_single_click<br />
+<br />
+   </div>
+   <div class="codeComment">
+*r_table&nbsp;must&nbsp;be&nbsp;set&nbsp;before&nbsp;using&nbsp;on_user_command,<br />
+*otherwise&nbsp;r_table&nbsp;=&nbsp;null&nbsp;--&gt;&nbsp;exception<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;METHOD&nbsp;set_r_table.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;r_table&nbsp;=&nbsp;im_r_table.<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"set_r_table<br />
+&nbsp;&nbsp;"lcl_handle_events&nbsp;IMPLEMENTATION<br />
+<br />
+&nbsp;&nbsp;METHOD&nbsp;on_double_click.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;double_click&nbsp;USING&nbsp;row&nbsp;column.<br />
+&nbsp;&nbsp;ENDMETHOD.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"on_double_click<br />
+ENDCLASS.                    "lcl_handle_events IMPLEMENTATION<br />
+   </div>
+   <div class="codeComment">
+*----------------------------------------------------------------------*<br />
+*END&nbsp;of&nbsp;local&nbsp;class<br />
+*----------------------------------------------------------------------*<br />
+<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;AT&nbsp;SELECTION-SCREEN&nbsp;ON&nbsp;VALUE-REQUEST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_vari.<br />
+&nbsp;&nbsp;PERFORM&nbsp;f4_layouts&nbsp;USING&nbsp;if_salv_c_layout=&gt;restrict_none&nbsp;CHANGING<br />
+p_vari.<br />
+<br />
+INITIALIZATION.<br />
+&nbsp;&nbsp;SET&nbsp;TITLEBAR&nbsp;'WOH'.<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_default_layout&nbsp;USING&nbsp;if_salv_c_layout=&gt;restrict_none<br />
+CHANGING p_vari.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;------&nbsp;Default&nbsp;value&nbsp;for&nbsp;business&nbsp;partner&nbsp;---------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;GET&nbsp;PARAMETER&nbsp;ID&nbsp;'BPA'&nbsp;FIELD&nbsp;gpart-low.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gpart-low&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gpart-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gpart-option&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gpart-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gpart.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;------&nbsp;Default&nbsp;value&nbsp;for&nbsp;contract&nbsp;account&nbsp;---------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;GET&nbsp;PARAMETER&nbsp;ID&nbsp;'KTO'&nbsp;FIELD&nbsp;vkont-low.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;vkont-low&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vkont-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vkont-option&nbsp;='EQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;vkont-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;vkont.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;------&nbsp;Default&nbsp;value&nbsp;for&nbsp;write&nbsp;off&nbsp;document&nbsp;-------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;GET&nbsp;PARAMETER&nbsp;ID&nbsp;'ASB'&nbsp;FIELD&nbsp;abbel-low.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;abbel-low&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;abbel-sign&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;abbel-option&nbsp;=&nbsp;'EQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;abbel-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;abbel.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR gpart-low.<br />
+&nbsp;&nbsp;PERFORM&nbsp;f4_for_gpart.<br />
+<br />
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR gpart-high.<br />
+&nbsp;&nbsp;PERFORM&nbsp;f4_for_gpart.<br />
+<br />
+<br />
+AT SELECTION-SCREEN.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;------&nbsp;Berechtigungsprüfung&nbsp;-----------------------------------------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;AUTHORITY-CHECK&nbsp;OBJECT&nbsp;'F_KKWOFF'&nbsp;ID&nbsp;'ACTVT'&nbsp;FIELD&nbsp;'B5'.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e474(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;SCREEN.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;PERFORM&nbsp;initial_value_check.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;pai_of_selection_screen.<br />
+<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN OUTPUT.<br />
+   </div>
+   <div class="codeComment">
+*-----------&nbsp;Output&nbsp;für&nbsp;Laufidentikation&nbsp;aus&nbsp;Massenaktivität&nbsp;----------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_laufd&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'095'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'095'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*-----&nbsp;VTREF&nbsp;only&nbsp;if&nbsp;switch&nbsp;FICA_EHP6D&nbsp;is&nbsp;active&nbsp;-------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ENHANCEMENT_STATUS_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_table&nbsp;&nbsp;=&nbsp;'DFKKWOH'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_field&nbsp;&nbsp;=&nbsp;'VTREF'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_active&nbsp;=&nbsp;gv_active.<br />
+&nbsp;&nbsp;IF&nbsp;gv_active&nbsp;NE&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'VTR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--&nbsp;Determine&nbsp;event&nbsp;module&nbsp;for&nbsp;event&nbsp;1201&nbsp;for&nbsp;navigation&nbsp;to&nbsp;contract<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;event_get_functions&nbsp;USING&nbsp;'1201'.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_fbstab&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;events-1201&nbsp;=&nbsp;i_fbstab-funcc.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;build&nbsp;WHERETAB&nbsp;if&nbsp;VTREF&nbsp;is&nbsp;active<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;gv_active&nbsp;NE&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;create_wheretab.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---Select_Data&nbsp;for&nbsp;gt_outtab<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_data&nbsp;CHANGING&nbsp;gt_outtab.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_additional_fields.<br />
+<br />
+END-OF-SELECTION.<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_outtab.<br />
+&nbsp;&nbsp;IF&nbsp;sy-tfill&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tfill&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tfill&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s526(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-tfill&nbsp;EQ&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gpart-option&nbsp;=&nbsp;'EQ'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpart-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s479(&gt;3)&nbsp;WITH&nbsp;gpart-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;gpart-option&nbsp;=&nbsp;'BT'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpart-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gpart-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gpart-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s479(&gt;3)&nbsp;WITH&nbsp;gpart-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s526(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s526(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;sy-tfill&nbsp;EQ&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;vkont-option&nbsp;=&nbsp;'EQ'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s480(&gt;3)&nbsp;WITH&nbsp;vkont-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;vkont-option&nbsp;=&nbsp;'BT'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;vkont-high.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s480(&gt;3)&nbsp;WITH&nbsp;vkont-low.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s526(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;s526(&gt;3).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;g_sort.<br />
+<br />
+*--------------Initialization&nbsp;of&nbsp;ALVs&nbsp;---------*<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA:&nbsp;gr_table&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_table.<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_functions&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_functions_list.<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_columns&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_columns.<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_column&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_column_table.<br />
+&nbsp;&nbsp;DATA:&nbsp;gr_events&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;lcl_handle_events.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_display&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_display_settings.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_title&nbsp;TYPE&nbsp;lvc_title.<br />
+&nbsp;&nbsp;DATA:&nbsp;lines&nbsp;TYPE&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;DATA:&nbsp;str_line&nbsp;TYPE&nbsp;string.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*------------------------------------------------------<br />
+*fill&nbsp;alv&nbsp;full-grid&nbsp;with&nbsp;data&nbsp;of&nbsp;table&nbsp;gt_outtab<br />
+*------------------------------------------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_full&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_table=&gt;factory(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_salv_table&nbsp;=&nbsp;gr_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_outtab&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_msg.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;title&nbsp;of&nbsp;alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_outtab&nbsp;LINES&nbsp;lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;str_line&nbsp;=&nbsp;lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_display&nbsp;=&nbsp;gr_table-&gt;get_display_settings(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_title&nbsp;=&nbsp;text-006.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;'&1'&nbsp;WITH&nbsp;str_line&nbsp;INTO&nbsp;lv_title.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_display-&gt;set_list_header(&nbsp;lv_title&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;status&nbsp;for&nbsp;alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gr_table-&gt;set_screen_status(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pfstatus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'STATUSA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_functions&nbsp;=&nbsp;gr_table-&gt;c_functions_all&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;generic&nbsp;alv&nbsp;functions<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions&nbsp;=&nbsp;gr_table-&gt;get_functions(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions-&gt;set_default(&nbsp;abap_true&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions-&gt;set_export_localfile(&nbsp;abap_true&nbsp;).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1168633<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions-&gt;set_export_spreadsheet(&nbsp;abap_true&nbsp;).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1168633<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions-&gt;set_export_wordprocessor(&nbsp;abap_true&nbsp;).&nbsp;&nbsp;&nbsp;&nbsp;"1168633<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;the&nbsp;columns&nbsp;technical<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_columns&nbsp;=&nbsp;gr_table-&gt;get_columns(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_columns-&gt;set_optimize(&nbsp;abap_true&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_columns_technical&nbsp;USING&nbsp;lr_columns.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;layout<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lr_layout&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_layout,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_key&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;salv_s_layout_key.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout&nbsp;=&nbsp;gr_table-&gt;get_layout(&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;the&nbsp;Layout&nbsp;Key<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_key-report&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_key(&nbsp;ls_key&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;usage&nbsp;of&nbsp;default&nbsp;Layouts<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_default(&nbsp;abap_true&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;Layout&nbsp;save&nbsp;restriction<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_save_restriction(&nbsp;if_salv_c_layout=&gt;restrict_none&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;initial&nbsp;Layout<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_initial_layout(&nbsp;p_vari&nbsp;).<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;hotspot&nbsp;columns<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;?=&nbsp;lr_columns-&gt;get_column(&nbsp;'GPART'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_cell_type(&nbsp;if_salv_c_cell_type=&gt;hotspot&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;?=&nbsp;lr_columns-&gt;get_column(&nbsp;'VKONT'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_cell_type(&nbsp;if_salv_c_cell_type=&gt;hotspot&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;?=&nbsp;lr_columns-&gt;get_column(&nbsp;'VTREF'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_cell_type(&nbsp;if_salv_c_cell_type=&gt;hotspot&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;events&nbsp;of&nbsp;cl_salv_table<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lr_events&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_events_table.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_events&nbsp;=&nbsp;gr_table-&gt;get_event(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;gr_events.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lcl_handle_events=&gt;set_r_table(&nbsp;EXPORTING&nbsp;im_r_table&nbsp;=&nbsp;gr_table&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;event&nbsp;USER_COMMAND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_user_command&nbsp;FOR&nbsp;lr_events.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;event&nbsp;LINK_CLICK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_link_click&nbsp;FOR&nbsp;lr_events.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;double&nbsp;click<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_double_click&nbsp;FOR&nbsp;lr_events.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*display&nbsp;alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gr_table-&gt;display(&nbsp;).<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*------------------------------------------------------<br />
+*fill&nbsp;alv&nbsp;list&nbsp;with&nbsp;data&nbsp;of&nbsp;table&nbsp;gt_outtab<br />
+*------------------------------------------------------<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_list&nbsp;=&nbsp;co_checked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_table=&gt;factory(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_display&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_salv_table&nbsp;=&nbsp;gr_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_outtab&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_msg.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;status&nbsp;for&nbsp;alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gr_table-&gt;set_screen_status(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pfstatus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;'STATUSA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_functions&nbsp;=&nbsp;gr_table-&gt;c_functions_all&nbsp;).<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;generic&nbsp;alv&nbsp;funtions<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions&nbsp;=&nbsp;gr_table-&gt;get_functions(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_functions-&gt;set_default(&nbsp;abap_true&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;the&nbsp;columns&nbsp;technical<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_columns&nbsp;=&nbsp;gr_table-&gt;get_columns(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_columns-&gt;set_optimize(&nbsp;abap_true&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;set_columns_technical&nbsp;USING&nbsp;lr_columns.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;layout<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout&nbsp;=&nbsp;gr_table-&gt;get_layout(&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;the&nbsp;Layout&nbsp;Key<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_key-report&nbsp;=&nbsp;sy-repid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_key(&nbsp;ls_key&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;usage&nbsp;of&nbsp;default&nbsp;Layouts<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_default(&nbsp;abap_true&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;Layout&nbsp;save&nbsp;restriction<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_save_restriction(&nbsp;if_salv_c_layout=&gt;restrict_none&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;initial&nbsp;Layout<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_layout-&gt;set_initial_layout(&nbsp;p_vari&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*set&nbsp;hotspot&nbsp;columns<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;?=&nbsp;lr_columns-&gt;get_column(&nbsp;'GPART'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_cell_type(&nbsp;if_salv_c_cell_type=&gt;hotspot&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;?=&nbsp;lr_columns-&gt;get_column(&nbsp;'VKONT'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_cell_type(&nbsp;if_salv_c_cell_type=&gt;hotspot&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;events&nbsp;of&nbsp;cl_salv_table<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;lr_events&nbsp;=&nbsp;gr_table-&gt;get_event(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;gr_events.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lcl_handle_events=&gt;set_r_table(&nbsp;EXPORTING&nbsp;im_r_table&nbsp;=&nbsp;gr_table&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;event&nbsp;USER_COMMAND<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_user_command&nbsp;FOR&nbsp;lr_events.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;to&nbsp;the&nbsp;event&nbsp;LINK_CLICK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_link_click&nbsp;FOR&nbsp;lr_events.<br />
+   </div>
+   <div class="codeComment">
+*register&nbsp;double&nbsp;click<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;HANDLER&nbsp;gr_events-&gt;on_double_click&nbsp;FOR&nbsp;lr_events.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*display&nbsp;alv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gr_table-&gt;display(&nbsp;).<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;VARIANT_INIT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*FORM&nbsp;variant_init.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;g_variant.<br />
+*&nbsp;&nbsp;g_variant-report&nbsp;=&nbsp;g_repid.<br />
+*&nbsp;&nbsp;g_variant-handle&nbsp;=&nbsp;'0001'.<br />
+*ENDFORM.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;VARIANT_INIT<br />
+<br />
+*-----------------------------------------------------------------------<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;CREATE_WHERETAB<br />
+*-----------------------------------------------------------------------<br />
+   </div>
+   <div class="code">
+FORM create_wheretab.<br />
+&nbsp;&nbsp;gt_where-line&nbsp;=&nbsp;'(&nbsp;VTREF&nbsp;IN&nbsp;VTREF&nbsp;)'.<br />
+&nbsp;&nbsp;APPEND&nbsp;gt_where.<br />
+ENDFORM.                    "CREATE_WHERETAB<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------<br />
+*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;F4_FOR_GPART<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM f4_for_gpart.<br />
+&nbsp;&nbsp;DATA:&nbsp;fld(30)&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpfields&nbsp;TYPE&nbsp;dynpread&nbsp;OCCURS&nbsp;1&nbsp;WITH&nbsp;HEADER&nbsp;LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ptn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;dfkkrh-gpart.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BUP_PARTNER_F4'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_partner&nbsp;=&nbsp;ptn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;GET&nbsp;CURSOR&nbsp;FIELD&nbsp;fld.<br />
+&nbsp;&nbsp;REFRESH&nbsp;dynpfields.&nbsp;CLEAR&nbsp;dynpfields.<br />
+&nbsp;&nbsp;dynpfields-fieldname&nbsp;=&nbsp;fld.<br />
+&nbsp;&nbsp;dynpfields-fieldvalue&nbsp;=&nbsp;ptn.<br />
+&nbsp;&nbsp;APPEND&nbsp;dynpfields.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'DYNP_VALUES_UPDATE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dyname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-cprog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynumb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1000'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpfields&nbsp;=&nbsp;dynpfields<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+ENDFORM.                               " F4_FOR_GPART<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;f4_layouts<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F4&nbsp;Layouts<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_layout&nbsp;provides&nbsp;a&nbsp;method&nbsp;for&nbsp;handling&nbsp;the&nbsp;f4&nbsp;help&nbsp;of&nbsp;the<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layouts&nbsp;for&nbsp;the&nbsp;specified&nbsp;layout&nbsp;key.&nbsp;It&nbsp;is&nbsp;also&nbsp;possible&nbsp;to&nbsp;use<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;static&nbsp;class&nbsp;cl_salv_layout_service.<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM f4_layouts USING i_restrict TYPE salv_de_layout_restriction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;c_layout&nbsp;TYPE&nbsp;disvariant-variant.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_layout&nbsp;TYPE&nbsp;salv_s_layout_info,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_key&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;salv_s_layout_key.<br />
+<br />
+&nbsp;&nbsp;ls_key-report&nbsp;=&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;ls_layout&nbsp;=&nbsp;cl_salv_layout_service=&gt;f4_layouts(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;s_key&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;restrict&nbsp;=&nbsp;i_restrict&nbsp;).<br />
+<br />
+&nbsp;&nbsp;c_layout&nbsp;=&nbsp;ls_layout-layout.<br />
+<br />
+ENDFORM.                    " f4_layouts<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GT_OUTTAB&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*FORM&nbsp;select_data&nbsp;TABLES&nbsp;rt_outtab&nbsp;LIKE&nbsp;gt_outtab.<br />
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;text-005.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;&nbsp;&nbsp;rt_outtab.<br />
+*&nbsp;&nbsp;REFRESH&nbsp;rt_outtab.<br />
+*&nbsp;&nbsp;IF&nbsp;p_laufd&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;rt_outtab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel.<br />
+*&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;rt_outtab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;EQ&nbsp;p_laufi.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;IF&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;rt_outtab&nbsp;WHERE&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;IF&nbsp;NOT&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;rt_outtab&nbsp;WHERE&nbsp;NOT&nbsp;stakz&nbsp;IS&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*ENDFORM.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;SELECT_DATA<br />
+<br />
+   </div>
+   <div class="code">
+FORM select_data CHANGING it_outtab LIKE gt_outtab.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;l_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;gt_outtab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_begru_auth&nbsp;TYPE&nbsp;xfeld,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_bukrs_auth&nbsp;TYPE&nbsp;xfeld,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_fkkvkp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;fkkvkp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;dfkkwoh-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_begru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;fkkvkp-begru&nbsp;&nbsp;VALUE&nbsp;'*',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;dfkkwoh-bukrs&nbsp;VALUE&nbsp;'*',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;dfkkwoh-gpart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;dfkkwoh-vkont,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;dfkkwoh-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_rc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-subrc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_xskip&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xfeld.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SAPGUI_PROGRESS_INDICATOR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;text-005.<br />
+&nbsp;&nbsp;CLEAR&nbsp;it_outtab[].<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--&nbsp;select&nbsp;for&nbsp;p_laufi&nbsp;is&nbsp;initial&nbsp;and&nbsp;p_laufd&nbsp;is&nbsp;initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;p_laufd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;p_laufi&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;NOT&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xrvsd&nbsp;EQ&nbsp;co_unchecked<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stakz&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;NOT&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stakz&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xrvsd&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--&nbsp;select&nbsp;for&nbsp;p_laufi&nbsp;not&nbsp;initial&nbsp;and&nbsp;p_laufd&nbsp;not&nbsp;initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;NOT&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;EQ&nbsp;p_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xrvsd&nbsp;EQ&nbsp;co_unchecked<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stakz&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;NOT&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;EQ&nbsp;p_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stakz&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;xrvsd&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;xstkz&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;EQ&nbsp;p_laufi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xrvsd&nbsp;EQ&nbsp;co_unchecked.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;dfkkwoh&nbsp;INTO&nbsp;TABLE&nbsp;it_outtab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;&nbsp;gpart&nbsp;IN&nbsp;gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkont&nbsp;IN&nbsp;vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gt_where)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IN&nbsp;abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;IN&nbsp;opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IN&nbsp;abdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufd&nbsp;EQ&nbsp;p_laufd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laufi&nbsp;EQ&nbsp;p_laufi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;check&nbsp;document&nbsp;authorizations&nbsp;for&nbsp;each&nbsp;entry:<br />
+*&nbsp;-&nbsp;business&nbsp;area&nbsp;is&nbsp;not&nbsp;available&nbsp;-&gt;&nbsp;can't&nbsp;be&nbsp;checked<br />
+*&nbsp;-&nbsp;company&nbsp;code&nbsp;not&nbsp;available&nbsp;in&nbsp;older&nbsp;releases:&nbsp;field&nbsp;is&nbsp;only<br />
+*&nbsp;&nbsp;&nbsp;filled&nbsp;for&nbsp;new&nbsp;write-off&nbsp;entries&nbsp;(-&gt;&nbsp;only&nbsp;checked&nbsp;if&nbsp;filled)<br />
+<br />
+*&nbsp;check&nbsp;if&nbsp;authorization&nbsp;for&nbsp;all&nbsp;company&nbsp;codes&nbsp;available<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOC_AUTHORITY_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;all_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'03'&nbsp;&nbsp;"&nbsp;03&nbsp;is&nbsp;display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_bukrs_auth&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;check&nbsp;if&nbsp;authorization&nbsp;for&nbsp;all&nbsp;authorization&nbsp;groups&nbsp;available<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOC_AUTHORITY_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;all_begru<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'03'&nbsp;&nbsp;"&nbsp;03&nbsp;is&nbsp;display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_begru_auth&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;l_has_full_bukrs_auth&nbsp;=&nbsp;'&nbsp;'&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_begru_auth&nbsp;=&nbsp;'&nbsp;'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;it_outtab&nbsp;BY&nbsp;bukrs&nbsp;gpart&nbsp;vkont.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_outtab&nbsp;INTO&nbsp;l_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;l_rc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_bukrs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;l_outtab-bukrs&nbsp;EQ&nbsp;space&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;l_outtab-bukrs&nbsp;IS&nbsp;INITIAL.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;value&nbsp;of&nbsp;company&nbsp;code&nbsp;if&nbsp;filled<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_bukrs&nbsp;=&nbsp;l_outtab-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;(&nbsp;l_outtab-gpart&nbsp;NE&nbsp;old_gpart&nbsp;&nbsp;&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_outtab-vkont&nbsp;NE&nbsp;old_vkont&nbsp;)&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_begru_auth&nbsp;=&nbsp;'&nbsp;'&nbsp;)&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;l_bukrs&nbsp;NE&nbsp;old_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_has_full_bukrs_auth&nbsp;=&nbsp;'&nbsp;'&nbsp;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_has_full_begru_auth&nbsp;=&nbsp;'&nbsp;'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Normal&nbsp;case.&nbsp;Determine&nbsp;authorization&nbsp;group&nbsp;from&nbsp;master&nbsp;data:<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ACCOUNT_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vkont&nbsp;&nbsp;=&nbsp;l_outtab-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;&nbsp;=&nbsp;l_outtab-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_fkkvkp&nbsp;=&nbsp;l_fkkvkp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;=&nbsp;0.&nbsp;"&nbsp;ignore&nbsp;problems&nbsp;with&nbsp;READ<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;company&nbsp;code&nbsp;and&nbsp;authorization&nbsp;group<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOC_AUTHORITY_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_begru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_fkkvkp-begru<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'03'&nbsp;&nbsp;&nbsp;"display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_rc&nbsp;=&nbsp;sy-subrc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;company&nbsp;code<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOC_AUTHORITY_CHECK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bukrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_actvt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'03'&nbsp;&nbsp;&nbsp;"display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_rc&nbsp;=&nbsp;sy-subrc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_gpart&nbsp;=&nbsp;l_outtab-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_vkont&nbsp;=&nbsp;l_outtab-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_bukrs&nbsp;=&nbsp;l_bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_rc&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l_rc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same&nbsp;data&nbsp;as&nbsp;in&nbsp;last&nbsp;loop:&nbsp;same&nbsp;authorization<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_rc&nbsp;=&nbsp;old_rc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_rc&nbsp;NE&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user&nbsp;is&nbsp;not&nbsp;authorized&nbsp;to&nbsp;see&nbsp;this&nbsp;line&nbsp;-&gt;&nbsp;delete&nbsp;line<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_xskip&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;l_xskip&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;i330(&gt;3).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Es&nbsp;wurden&nbsp;Einträge&nbsp;aufgrund&nbsp;fehlender&nbsp;Berechtigung&nbsp;ausgeblendet<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "select_data<br />
+<br />
+" G_SORT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;status_set<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM status_set USING rt_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;g_status&nbsp;EXCLUDING&nbsp;rt_extab.<br />
+&nbsp;&nbsp;SET&nbsp;TITLEBAR&nbsp;'WOH'.<br />
+ENDFORM.                               " G_USER_STATUS<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;USER_COMMAND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;react&nbsp;on&nbsp;user&nbsp;commands&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;R_UCOMM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;&nbsp;r_cell&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM user_command USING r_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_cell&nbsp;TYPE&nbsp;salv_s_cell.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;wa_gt_outtab&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;gt_outtab.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;r_ucomm&nbsp;=&nbsp;'&IC1'&nbsp;AND&nbsp;r_cell-columnname&nbsp;=&nbsp;'ABBEL'<br />
+&nbsp;&nbsp;OR&nbsp;r_ucomm&nbsp;=&nbsp;'BELE'&nbsp;AND&nbsp;r_cell-columnname&nbsp;=&nbsp;'ABBEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zeile_gt_outtab&nbsp;=&nbsp;r_cell-row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;zeile_gt_outtab&nbsp;NE&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nur&nbsp;gültige&nbsp;Zeile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;zeile_gt_outtab&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;l_e_count&nbsp;TYPE&nbsp;i.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**********************************************************<br />
+*Test&nbsp;if&nbsp;abbel&nbsp;can&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOCUMENT_HEADER_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_opbel&nbsp;=&nbsp;wa_gt_outtab-abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_count&nbsp;=&nbsp;l_e_count.<br />
+   </div>
+   <div class="codeComment">
+*can&nbsp;not&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_e_count&nbsp;NE&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e840(&gt;3)&nbsp;WITH&nbsp;wa_gt_outtab-abbel.<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;transaction&nbsp;FPE3<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_INIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_START_TRANSACTION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;'FPE3'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;&nbsp;=&nbsp;wa_gt_outtab-abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e036(&gt;4)&nbsp;WITH&nbsp;wa_gt_outtab-abbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;zeile_gt_outtab&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e104(&gt;3).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Kein&nbsp;Posten&nbsp;ausgewaehlt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;r_ucomm&nbsp;=&nbsp;'&IC1'&nbsp;AND&nbsp;r_cell-columnname&nbsp;=&nbsp;'OPBEL'<br />
+&nbsp;&nbsp;OR&nbsp;r_ucomm&nbsp;=&nbsp;'BELE'&nbsp;AND&nbsp;r_cell-columnname&nbsp;=&nbsp;'OPBEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zeile_gt_outtab&nbsp;=&nbsp;r_cell-row.&nbsp;&nbsp;&nbsp;"doppelgeklickte&nbsp;Zeile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;zeile_gt_outtab&nbsp;NE&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nur&nbsp;gültige&nbsp;Zeile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;zeile_gt_outtab&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Test&nbsp;if&nbsp;opbel&nbsp;can&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOCUMENT_HEADER_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_opbel&nbsp;=&nbsp;wa_gt_outtab-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_count&nbsp;=&nbsp;l_e_count.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*can&nbsp;not&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_e_count&nbsp;NE&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e840(&gt;3)&nbsp;WITH&nbsp;wa_gt_outtab-opbel.<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;transaction&nbsp;FPE3<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_INIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_START_TRANSACTION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;'FPE3'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;&nbsp;=&nbsp;wa_gt_outtab-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e036(&gt;4)&nbsp;WITH&nbsp;wa_gt_outtab-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;zeile_gt_outtab&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e104(&gt;3).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Kein&nbsp;Posten&nbsp;ausgewaehlt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*-Gpart/VKONT&nbsp;anzeigen<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;r_ucomm&nbsp;=&nbsp;'&IC1'&nbsp;AND&nbsp;r_cell-columnname&nbsp;&nbsp;=&nbsp;'GPART'<br />
+&nbsp;&nbsp;OR&nbsp;r_ucomm&nbsp;=&nbsp;'GPART'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;r_cell-row&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;r_cell-row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_BUPA_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_partner&nbsp;=&nbsp;wa_gt_outtab-gpart.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BPA'&nbsp;FIELD&nbsp;wa_gt_outtab-gpart.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'BP'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_CALLTA<br />
+*Ungültige&nbsp;Zeile&nbsp;!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;r_cell-row&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e315(f4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+**********************Verzeigen&nbsp;in&nbsp;VKont********************************<br />
+*&nbsp;dies&nbsp;kann&nbsp;durch&nbsp;Menue&nbsp;oder&nbsp;Link&nbsp;erfolgen<br />
+***********************************************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;r_ucomm&nbsp;=&nbsp;'&IC1'&nbsp;AND&nbsp;r_cell-columnname&nbsp;&nbsp;=&nbsp;'VKONT'<br />
+&nbsp;&nbsp;OR&nbsp;r_ucomm&nbsp;=&nbsp;'VKONT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;r_cell-row&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;r_cell-row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'KTO'&nbsp;FIELD&nbsp;wa_gt_outtab-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BPA'&nbsp;FIELD&nbsp;wa_gt_outtab-gpart.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;fkk_account_change&nbsp;to&nbsp;display&nbsp;the&nbsp;vkont<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ACCOUNT_CHANGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_gt_outtab-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_gt_outtab-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_ch_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_other&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_change&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;go&nbsp;to&nbsp;contract&nbsp;display<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;r_ucomm&nbsp;=&nbsp;'&IC1'&nbsp;AND&nbsp;r_cell-columnname&nbsp;&nbsp;=&nbsp;'VTREF'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;OR&nbsp;r_ucomm&nbsp;=&nbsp;'VTREF'.&nbsp;&nbsp;&nbsp;&nbsp;"user&nbsp;function&nbsp;does&nbsp;not&nbsp;exist<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;r_cell-row&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;r_cell-row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;wa_gt_outtab&nbsp;TO&nbsp;fkk_enh_vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;events-1201<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vtref&nbsp;=&nbsp;fkk_enh_vtref-vtref<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_subap&nbsp;=&nbsp;fkk_enh_vtref-subap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;=&nbsp;wa_gt_outtab-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*Ungültige&nbsp;Zeile&nbsp;!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;r_cell-row&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e315(f4).<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "user_command<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;INITIAL_VALUE_CHECK<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM initial_value_check.<br />
+&nbsp;&nbsp;IF&nbsp;gpart&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;vkont&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;vtref&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abbel&nbsp;IS&nbsp;INITIAL&nbsp;AND&nbsp;opbel&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufd&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_laufi&nbsp;IS&nbsp;INITIAL&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abdat&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e508(&gt;3).<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                               " INITIAL_VALUE_CHECK<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_columns_technical<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hides&nbsp;the&nbsp;columns&nbsp;that&nbsp;are&nbsp;not&nbsp;needed&nbsp;to&nbsp;be&nbsp;displayed<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;IR_COLUMNS&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_columns_technical USING ir_columns TYPE REF TO cl_salv_columns.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lr_column&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_salv_column.<br />
+<br />
+&nbsp;&nbsp;TRY.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column&nbsp;=&nbsp;ir_columns-&gt;get_column(&nbsp;'MANDT'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lr_column-&gt;set_technical(&nbsp;if_salv_c_bool_sap=&gt;true&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;cx_salv_not_found.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;NO_HANDLER<br />
+&nbsp;&nbsp;ENDTRY.<br />
+<br />
+ENDFORM.                    "set_columns_technical<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;link_click<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;react&nbsp;on&nbsp;link&nbsp;clicks<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;R_CELL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM link_click USING row TYPE salv_de_row<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column&nbsp;TYPE&nbsp;salv_de_column&nbsp;.<br />
+&nbsp;&nbsp;DATA:&nbsp;wa_gt_outtab&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;gt_outtab.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;column&nbsp;&nbsp;=&nbsp;'GPART'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;row&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BPA'&nbsp;FIELD&nbsp;wa_gt_outtab-gpart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'BP'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#EC&nbsp;CI_CALLTA<br />
+   </div>
+   <div class="codeComment">
+*Ungültige&nbsp;Zeile&nbsp;!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;row&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e315(f4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+**********************Verzeigen&nbsp;in&nbsp;VKont********************************<br />
+*&nbsp;dies&nbsp;kann&nbsp;durch&nbsp;Link&nbsp;erfolgen<br />
+************************************************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;column&nbsp;=&nbsp;'VKONT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;row&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'KTO'&nbsp;FIELD&nbsp;wa_gt_outtab-vkont.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BPA'&nbsp;FIELD&nbsp;wa_gt_outtab-gpart.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;fkk_account_change&nbsp;to&nbsp;display&nbsp;the&nbsp;vkont<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_ACCOUNT_CHANGE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vkont&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_gt_outtab-vkont<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_gt_outtab-gpart<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_ch_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_other&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_change&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_message&nbsp;=&nbsp;1.<br />
+   </div>
+   <div class="codeComment">
+*Ungültige&nbsp;Zeile&nbsp;!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;row&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e315(f4).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;column&nbsp;=&nbsp;'VTREF'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;row&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;wa_gt_outtab&nbsp;TO&nbsp;fkk_enh_vtref.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;events-1201<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vtref&nbsp;=&nbsp;fkk_enh_vtref-vtref<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_subap&nbsp;=&nbsp;fkk_enh_vtref-subap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_gpart&nbsp;=&nbsp;wa_gt_outtab-gpart.<br />
+   </div>
+   <div class="codeComment">
+*Ungültige&nbsp;Zeile&nbsp;!<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;row&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e315(f4).<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "link_click<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**********************************************************************<br />
+*&--------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;double_click<br />
+*&--------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;react&nbsp;on&nbsp;link&nbsp;clicks<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;R_CELL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM double_click USING row TYPE salv_de_row<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column&nbsp;TYPE&nbsp;salv_de_column&nbsp;.<br />
+&nbsp;&nbsp;DATA:&nbsp;wa_gt_outtab&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;gt_outtab.<br />
+&nbsp;&nbsp;DATA:&nbsp;l_e_count&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;column&nbsp;EQ&nbsp;'ABBEL'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zeile_gt_outtab&nbsp;=&nbsp;row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;zeile_gt_outtab&nbsp;NE&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nur&nbsp;gültige&nbsp;Zeile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;zeile_gt_outtab&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Test&nbsp;if&nbsp;opbel&nbsp;or&nbsp;abbel&nbsp;can&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOCUMENT_HEADER_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_opbel&nbsp;=&nbsp;wa_gt_outtab-abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_count&nbsp;=&nbsp;l_e_count.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*can&nbsp;not&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_e_count&nbsp;NE&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e840(&gt;3)&nbsp;WITH&nbsp;wa_gt_outtab-abbel.<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;transaction&nbsp;FPE3<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_INIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_START_TRANSACTION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;'FPE3'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;&nbsp;=&nbsp;wa_gt_outtab-abbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e036(&gt;4)&nbsp;WITH&nbsp;wa_gt_outtab-abbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;zeile_gt_outtab&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e104(&gt;3).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Kein&nbsp;Posten&nbsp;ausgewaehlt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;column&nbsp;EQ&nbsp;'OPBEL'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zeile_gt_outtab&nbsp;=&nbsp;row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;zeile_gt_outtab&nbsp;NE&nbsp;0.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nur&nbsp;gültige&nbsp;Zeile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_outtab&nbsp;INDEX&nbsp;zeile_gt_outtab&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Test&nbsp;if&nbsp;opbel&nbsp;or&nbsp;abbel&nbsp;can&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_DOCUMENT_HEADER_SELECT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_opbel&nbsp;=&nbsp;wa_gt_outtab-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_count&nbsp;=&nbsp;l_e_count.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*can&nbsp;not&nbsp;be&nbsp;displayed<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;l_e_count&nbsp;NE&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e840(&gt;3)&nbsp;WITH&nbsp;wa_gt_outtab-opbel.<br />
+   </div>
+   <div class="codeComment">
+*call&nbsp;transaction&nbsp;FPE3<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_INIT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FPE0_START_TRANSACTION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcode&nbsp;&nbsp;=&nbsp;'FPE3'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opbel&nbsp;&nbsp;=&nbsp;wa_gt_outtab-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e036(&gt;4)&nbsp;WITH&nbsp;wa_gt_outtab-opbel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;zeile_gt_outtab&nbsp;=&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e104(&gt;3).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Kein&nbsp;Posten&nbsp;ausgewaehlt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "double_link_click<br />
+   </div>
+   <div class="codeComment">
+***********************************************************************<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;get_default_layout<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get&nbsp;Default&nbsp;Layout<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_layout&nbsp;provides&nbsp;a&nbsp;method&nbsp;for&nbsp;recieving&nbsp;the&nbsp;valid&nbsp;default<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layout.&nbsp;It&nbsp;is&nbsp;also&nbsp;possible&nbsp;to&nbsp;use&nbsp;the&nbsp;static&nbsp;class<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_layout_service.&nbsp;The&nbsp;rules&nbsp;for&nbsp;determinig&nbsp;the&nbsp;valid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default&nbsp;Layout&nbsp;is&nbsp;as&nbsp;follows:<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)&nbsp;check&nbsp;if&nbsp;user-dependant&nbsp;default&nbsp;layout&nbsp;exists&nbsp;if&nbsp;yes&nbsp;then<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;layout&nbsp;is&nbsp;loaded<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;check&nbsp;if&nbsp;user-independant&nbsp;standard&nbsp;layout&nbsp;exists&nbsp;if&nbsp;yes&nbsp;then<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;layout&nbsp;is&nbsp;loaded<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)&nbsp;check&nbsp;if&nbsp;user-independant&nbsp;SAP&nbsp;standard&nbsp;layout&nbsp;exists&nbsp;if&nbsp;yes<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;this&nbsp;layout&nbsp;is&nbsp;loaded<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_default_layout USING i_restrict TYPE salv_de_layout_restriction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;c_layout&nbsp;TYPE&nbsp;disvariant-variant.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_layout&nbsp;TYPE&nbsp;salv_s_layout_info,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_key&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;salv_s_layout_key.<br />
+<br />
+&nbsp;&nbsp;ls_key-report&nbsp;=&nbsp;sy-repid.<br />
+<br />
+&nbsp;&nbsp;ls_layout&nbsp;=&nbsp;cl_salv_layout_service=&gt;get_default_layout(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;s_key&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;restrict&nbsp;=&nbsp;i_restrict&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;c_layout&nbsp;=&nbsp;ls_layout-layout.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " get_default_layout<br />
+<br />
+   </div>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORM&nbsp;&nbsp;&nbsp;EVENT_GET_FUNCTIONS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;function&nbsp;modules&nbsp;to&nbsp;be&nbsp;called&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+*---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM event_get_functions USING fbeve.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_applk&nbsp;TYPE&nbsp;applk_kk.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_GET_APPLICATION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_applk&nbsp;=&nbsp;lv_applk.<br />
+&nbsp;&nbsp;REFRESH:&nbsp;i_fbstab.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'FKK_FUNC_MODULE_DETERMINE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_applk&nbsp;&nbsp;=&nbsp;lv_applk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_fbeve&nbsp;&nbsp;=&nbsp;fbeve<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_fbstab&nbsp;=&nbsp;i_fbstab.<br />
+ENDFORM.                    "EVENT_GET_FUNCTIONS<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SET_ADDITIONAL_FIELDS<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_additional_fields .<br />
+&nbsp;&nbsp;DATA:&nbsp;wa_gt_outtab&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;gt_outtab.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_outtab&nbsp;INTO&nbsp;wa_gt_outtab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;gsber&nbsp;INTO&nbsp;wa_gt_outtab-gsber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;opbel&nbsp;EQ&nbsp;wa_gt_outtab-opbel<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;opupw&nbsp;EQ&nbsp;wa_gt_outtab-opupw<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;opupk&nbsp;EQ&nbsp;wa_gt_outtab-opupk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;opupz&nbsp;EQ&nbsp;wa_gt_outtab-opupz.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;fikey&nbsp;ernam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;(wa_gt_outtab-fikey,wa_gt_outtab-ernam)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;dfkkko<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;opbel&nbsp;EQ&nbsp;wa_gt_outtab-abbel.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_outtab&nbsp;FROM&nbsp;wa_gt_outtab.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDFORM.                    " SET_ADDITIONAL_FIELDS<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;WOH&nbsp;--&gt;&nbsp;Ausbuchungshistorie&nbsp;anzeigen<br />
+*&nbsp;WOH&nbsp;--&gt;&nbsp;Display&nbsp;Write-Off&nbsp;History<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;Display&nbsp;Write-Off&nbsp;History<br />
+*&nbsp;002&nbsp;General&nbsp;Selections<br />
+*&nbsp;003&nbsp;Additional&nbsp;Details<br />
+*&nbsp;004&nbsp;Layout<br />
+*&nbsp;005&nbsp;Data&nbsp;is&nbsp;being&nbsp;read<br />
+*&nbsp;006&nbsp;Write-Off&nbsp;History&nbsp;(&1&nbsp;Items&nbsp;Selected)<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;ABBEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Write-Off&nbsp;Document&nbsp;Number<br />
+*&nbsp;ABDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Write-Off&nbsp;Date<br />
+*&nbsp;GPART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Business&nbsp;Partners<br />
+*&nbsp;OPBEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Document&nbsp;Number<br />
+*&nbsp;P_FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fullscreen&nbsp;Grid<br />
+*&nbsp;P_LIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Standard&nbsp;List<br />
+*&nbsp;P_VARI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Layout<br />
+*&nbsp;VKONT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract&nbsp;Account<br />
+*&nbsp;VTREF&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;XRVSD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Reversed&nbsp;Items<br />
+*&nbsp;XSTKZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Statistical&nbsp;Items<br />
+*&nbsp;P_LAUFD&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;P_LAUFI&nbsp;D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;3<br />
+*104&nbsp;&nbsp;&nbsp;Choose&nbsp;items<br />
+*330&nbsp;&nbsp;&nbsp;Entries&nbsp;suppressed&nbsp;due&nbsp;to&nbsp;missing&nbsp;authorization<br />
+*474&nbsp;&nbsp;&nbsp;You&nbsp;are&nbsp;not&nbsp;authorized&nbsp;to&nbsp;display&nbsp;write-off&nbsp;history<br />
+*479&nbsp;&nbsp;&nbsp;No&nbsp;write-off&nbsp;history&nbsp;exists&nbsp;for&nbsp;business&nbsp;partner&nbsp;&1<br />
+*480&nbsp;&nbsp;&nbsp;No&nbsp;write-off&nbsp;history&nbsp;exists&nbsp;for&nbsp;contract&nbsp;account&nbsp;&1<br />
+*508&nbsp;&nbsp;&nbsp;Specify&nbsp;values&nbsp;for&nbsp;selection<br />
+*526&nbsp;&nbsp;&nbsp;There&nbsp;is&nbsp;no&nbsp;data&nbsp;for&nbsp;your&nbsp;selection<br />
+*840&nbsp;&nbsp;&nbsp;Document&nbsp;&1&nbsp;does&nbsp;not&nbsp;exist<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;&gt;4<br />
+*036&nbsp;&nbsp;&nbsp;Document&nbsp;&1&nbsp;does&nbsp;not&nbsp;exist<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;F4<br />
+*315&nbsp;&nbsp;&nbsp;Position&nbsp;cursor<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">* Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2015. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>
